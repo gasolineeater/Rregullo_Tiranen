@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raporto Problemin - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/report.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Ballina</a></li>
+                    <li><a href="report.html" class="active">Raporto</a></li>
+                    <li><a href="#">Shiko Hartën</a></li>
+                    <li><a href="#">Rreth Nesh</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="report-hero">
+        <div class="container">
+            <h2>Raporto një Problem</h2>
+            <p>Ndihmo në përmirësimin e Tiranës duke raportuar problemet e infrastrukturës, 
+               mbeturinave, apo çështje të tjera urbane që kërkojnë vëmendje.</p>
+        </div>
+    </section>
+
+    <section class="report-form-section">
+        <div class="container">
+            <form id="issue-report-form" class="report-form">
+                <div class="form-group">
+                    <h3>Informacion mbi Problemin</h3>
+                    
+                    <div class="form-field">
+                        <label for="issue-type">Lloji i Problemit</label>
+                        <select id="issue-type" name="issue-type" required>
+                            <option value="" selected disabled>Zgjidhni një kategori</option>
+                            <option value="road">Problem rruge (gropa, dëmtime)</option>
+                            <option value="sidewalk">Problem trotuari</option>
+                            <option value="lighting">Ndriçim publik</option>
+                            <option value="trash">Mbeturina/Pastrim</option>
+                            <option value="water">Problem uji/kanalizimi</option>
+                            <option value="park">Hapësira të gjelbërta/Parqe</option>
+                            <option value="graffiti">Grafite/Dëmtime ndërtesash</option>
+                            <option value="other">Tjetër</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="issue-title">Titulli i Problemit</label>
+                        <input type="text" id="issue-title" name="issue-title" 
+                               placeholder="p.sh. Gropë e madhe në rrugën 'Myslym Shyri'" required>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="issue-description">Përshkrimi i Problemit</label>
+                        <textarea id="issue-description" name="issue-description" rows="4" 
+                                 placeholder="Jepni detaje të problemit dhe si ndikon në zonë" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <h3>Vendndodhja</h3>
+                    
+                    <div class="form-field">
+                        <label for="location-address">Adresa</label>
+                        <input type="text" id="location-address" name="location-address" 
+                               placeholder="p.sh. Rruga 'Myslym Shyri', nr. 43" required>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="location-neighborhood">Lagjja/Zona</label>
+                        <select id="location-neighborhood" name="location-neighborhood" required>
+                            <option value="" selected disabled>Zgjidhni një zonë</option>
+                            <option value="njesia1">Njësia Administrative 1</option>
+                            <option value="njesia2">Njësia Administrative 2</option>
+                            <option value="njesia3">Njësia Administrative 3</option>
+                            <option value="njesia4">Njësia Administrative 4</option>
+                            <option value="njesia5">Njësia Administrative 5</option>
+                            <option value="njesia6">Njësia Administrative 6</option>
+                            <option value="njesia7">Njësia Administrative 7</option>
+                            <option value="njesia8">Njësia Administrative 8</option>
+                            <option value="njesia9">Njësia Administrative 9</option>
+                            <option value="njesia10">Njësia Administrative 10</option>
+                            <option value="njesia11">Njësia Administrative 11</option>
+                        </select>
+                    </div>
+                    
+                    <div class="map-picker">
+                        <label>Zgjidhni vendndodhjen në hartë</label>
+                        <div id="report-map" class="report-map-container">
+                            <!-- Map will be loaded here with JavaScript -->
+                            <div class="map-placeholder">Harta do të ngarkohet këtu</div>
+                        </div>
+                        <div class="map-coordinates">
+                            <input type="hidden" id="location-lat" name="location-lat">
+                            <input type="hidden" id="location-lng" name="location-lng">
+                            <span id="selected-coordinates">Asnjë vendndodhje e zgjedhur</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <h3>Foto dhe Detaje Shtesë</h3>
+                    
+                    <div class="form-field">
+                        <label for="issue-photos">Ngarko Foto (opsionale)</label>
+                        <input type="file" id="issue-photos" name="issue-photos" accept="image/*" multiple>
+                        <div id="photo-preview" class="photo-preview"></div>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="issue-severity">Serioziteti i Problemit</label>
+                        <select id="issue-severity" name="issue-severity">
+                            <option value="low">I ulët - Nuk paraqet rrezik të menjëhershëm</option>
+                            <option value="medium" selected>Mesatar - Duhet adresuar së shpejti</option>
+                            <option value="high">I lartë - Kërkon vëmendje të shpejtë</option>
+                            <option value="urgent">Urgjent - Rrezik për sigurinë publike</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <h3>Informacioni Juaj (opsional)</h3>
+                    
+                    <div class="form-field">
+                        <label for="reporter-name">Emri</label>
+                        <input type="text" id="reporter-name" name="reporter-name" placeholder="Emri juaj (opsional)">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="reporter-email">Email</label>
+                        <input type="email" id="reporter-email" name="reporter-email" 
+                               placeholder="adresa@email.com (për t'ju njoftuar kur problemi zgjidhet)">
+                    </div>
+                    
+                    <div class="form-field checkbox-field">
+                        <input type="checkbox" id="reporter-anonymous" name="reporter-anonymous" checked>
+                        <label for="reporter-anonymous">Dëshiroj të raportoj në mënyrë anonime</label>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Dërgo Raportin</button>
+                    <button type="reset" class="btn btn-secondary">Pastro Formën</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="report.html">Raporto Problem</a></li>
+                        <li><a href="#">Shiko Hartën</a></li>
+                        <li><a href="#">Si Funksionon</a></li>
+                        <li><a href="#">Kontakto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/report.js"></script>
+</body>
+</html>
