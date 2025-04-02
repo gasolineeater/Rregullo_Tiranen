@@ -1,0 +1,130 @@
+:root {
+    --color-primary: #C41E3A;
+    --color-text: #333333;
+    --color-background: #F8F8F8;
+    
+    --color-secondary: #506D84;
+    --color-success: #4A8C6F; 
+    --color-progress: #D4AC0D;
+    
+    --container-width: 1200px;
+    --spacing-small: 1rem;
+    --spacing-medium: 2rem;
+    --spacing-large: 4rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-small);
+}
+
+h1, h2, h3, h4 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #a31a31;
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #3e5566;
+}
+
+.main-header {
+    padding: var(--spacing-small) 0;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: 0;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+}
+
+.main-nav li {
+    margin-left: var(--spacing-small);
+}
+
+.main-nav a {
+    padding: 0.5rem;
+}
+
+.main-nav a.active,
+.main-nav a:hover {
+    color: var(--color-primary);
+}
+
+.hero {
+    background-color: var(--color-secondary);
+    color: white;
+    padding: var(--spacing-large) 0;
+    margin-bottom: var(--spacing-medium);
+}
+
+.hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-small);
+}
+
+.hero p {
+    margin-bottom: var(--spacing-medium);
+}
