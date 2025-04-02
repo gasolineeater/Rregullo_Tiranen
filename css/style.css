@@ -230,3 +230,18 @@ footer {
         display: none;
     }
 }
+
+.disabled-field input,
+.disabled-field textarea,
+.disabled-field select {
+    background-color: var(--color-disabled, #f0f0f0) !important;
+    color: var(--color-disabled-text, #999) !important;
+    cursor: not-allowed;
+}
+
+.dark-mode .disabled-field input,
+.dark-mode .disabled-field textarea,
+.dark-mode .disabled-field select {
+    background-color: var(--color-disabled, #333) !important;
+    color: var(--color-disabled-text, #777) !important;
+}
