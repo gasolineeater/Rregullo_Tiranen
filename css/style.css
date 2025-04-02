@@ -1,16 +1,29 @@
 :root {
+    /* Light Theme Colors (Default) */
     --color-primary: #C41E3A;
     --color-text: #333333;
     --color-background: #F8F8F8;
-    
+    --color-card-bg: #ffffff;
     --color-secondary: #506D84;
-    --color-success: #4A8C6F; 
+    --color-success: #4A8C6F;
     --color-progress: #D4AC0D;
-    
+    --color-header-bg: #ffffff;
+    --color-footer-bg: #e0e0e0;
+    --color-shadow: rgba(0,0,0,0.1);
     --container-width: 1200px;
     --spacing-small: 1rem;
     --spacing-medium: 2rem;
     --spacing-large: 4rem;
+}
+
+    /* Dark Theme Colors */
+.dark-mode {
+    --color-text: #f0f0f0;
+    --color-background: #1a1a1a;
+    --color-card-bg: #2d2d2d;
+    --color-header-bg: #252525;
+    --color-footer-bg: #252525;
+    --color-shadow: rgba(0,0,0,0.3);
 }
 
 * {
@@ -24,6 +37,7 @@ body {
     color: var(--color-text);
     background-color: var(--color-background);
     line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -75,6 +89,7 @@ a {
     padding: var(--spacing-small) 0;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
 }
 
 .main-header .container {
@@ -87,6 +102,11 @@ a {
     font-size: 1.5rem;
     color: var(--color-primary);
     margin-bottom: 0;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
 }
 
 .main-nav ul {
@@ -127,4 +147,86 @@ a {
 
 .hero p {
     margin-bottom: var(--spacing-medium);
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: 1px solid var(--color-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    margin-left: 1rem;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: rgba(80, 109, 132, 0.1);
+}
+
+.theme-toggle .icon {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+.theme-toggle .theme-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.dark-mode .main-header {
+    background-color: var(--color-header-bg);
+}
+
+.dark-mode .logo h1 {
+    color: var(--color-primary);
+}
+
+.dark-mode .stat-card,
+.dark-mode .story-card {
+    background-color: var(--color-card-bg);
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.dark-mode footer {
+    background-color: var(--color-footer-bg);
+}
+
+.stat-card,
+.story-card,
+footer {
+    transition: background-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .main-header .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .main-nav {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .main-nav ul {
+        flex-wrap: wrap;
+    }
+    
+    .theme-toggle {
+        margin-top: 1rem;
+        margin-left: 0;
+    }
+    
+    .theme-label {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .theme-label {
+        display: none;
+    }
 }

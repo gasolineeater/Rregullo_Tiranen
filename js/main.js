@@ -14,4 +14,33 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Forma e raportimit do të implementohet në përditësimet e ardhshme!');
         });
     }
+    
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('.icon');
+    const themeLabel = themeToggle.querySelector('.theme-label');
+    
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        updateThemeToggle(true);
+    }
+    
+    themeToggle.addEventListener('click', function() {
+        const isDarkMode = document.body.classList.toggle('dark-mode');
+        
+        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        
+        updateThemeToggle(isDarkMode);
+    });
+    
+    function updateThemeToggle(isDarkMode) {
+        if (isDarkMode) {
+            themeIcon.textContent = '☀️';
+            themeLabel.textContent = 'Tema e Ndritshme';
+        } else {
+            themeIcon.textContent = '🌓';
+            themeLabel.textContent = 'Tema e Errët';
+        }
+    }
 });
