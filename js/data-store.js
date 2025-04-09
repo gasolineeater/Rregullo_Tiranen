@@ -6,20 +6,20 @@
 const DataStore = (function() {
     // Storage keys
     const REPORTS_KEY = 'rregullo_tiranen_reports';
-    
+
     // Get all reports from localStorage
     function getAllReports() {
         const reportsJson = localStorage.getItem(REPORTS_KEY);
         return reportsJson ? JSON.parse(reportsJson) : [];
     }
-    
+
     // Save a new report
     function saveReport(reportData) {
         const reports = getAllReports();
-        
+
         // Generate a unique ID for the report
         const reportId = Date.now().toString();
-        
+
         // Add metadata to the report
         const newReport = {
             id: reportId,
@@ -27,67 +27,83 @@ const DataStore = (function() {
             status: 'pending',
             ...reportData
         };
-        
+
         // Add to reports array and save back to localStorage
         reports.push(newReport);
         localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
-        
+
         return newReport;
     }
-    
+
     // Get a report by ID
     function getReportById(reportId) {
         const reports = getAllReports();
         return reports.find(report => report.id === reportId);
     }
-    
+
     // Update a report's status
-    function updateReportStatus(reportId, newStatus) {
+    function updateReportStatus(reportId, newStatus, comment = '') {
         const reports = getAllReports();
         const reportIndex = reports.findIndex(report => report.id === reportId);
-        
+
         if (reportIndex !== -1) {
-            reports[reportIndex].status = newStatus;
-            reports[reportIndex].lastUpdated = new Date().toISOString();
+            const report = reports[reportIndex];
+            const currentDate = new Date().toISOString();
+
+            // Update status
+            report.status = newStatus;
+            report.lastUpdated = currentDate;
+
+            // Initialize statusUpdates if it doesn't exist
+            if (!report.statusUpdates) {
+                report.statusUpdates = {};
+            }
+
+            // Add status update entry
+            report.statusUpdates[newStatus] = {
+                date: currentDate,
+                comment: comment || ''
+            };
+
             localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
             return true;
         }
-        
+
         return false;
     }
-    
+
     // Get reports filtered by category, status, or both
     function getFilteredReports(filters = {}) {
         const reports = getAllReports();
-        
+
         return reports.filter(report => {
             let matches = true;
-            
+
             if (filters.category && report.category !== filters.category) {
                 matches = false;
             }
-            
+
             if (filters.subcategory && report.subcategory !== filters.subcategory) {
                 matches = false;
             }
-            
+
             if (filters.status && report.status !== filters.status) {
                 matches = false;
             }
-            
+
             return matches;
         });
     }
-    
+
     // Clear all reports (for testing)
     function clearAllReports() {
         localStorage.removeItem(REPORTS_KEY);
     }
-    
+
     // Add some sample reports if none exist
     function initializeSampleData() {
         const reports = getAllReports();
-        
+
         if (reports.length === 0) {
             const sampleReports = [
                 {
@@ -161,20 +177,20 @@ const DataStore = (function() {
                     timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() // 5 days ago
                 }
             ];
-            
+
             // Add IDs to sample reports
             sampleReports.forEach((report, index) => {
                 report.id = (Date.now() - index * 1000000).toString();
             });
-            
+
             localStorage.setItem(REPORTS_KEY, JSON.stringify(sampleReports));
             console.log('Sample reports initialized');
             return sampleReports;
         }
-        
+
         return reports;
     }
-    
+
     // Public API
     return {
         getAllReports,

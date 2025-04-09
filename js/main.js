@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span>Nënkategoria: ${getSubcategoryName(report.subcategory)}</span>
                     <span>Statusi: ${getStatusName(report.status)}</span>
                     <span>Data: ${formatDate(report.timestamp)}</span>
+                    <div class="popup-actions">
+                        <a href="html/report-detail.html?id=${report.id}" class="popup-link">Shiko detajet</a>
+                    </div>
                 </div>
             `);
         });

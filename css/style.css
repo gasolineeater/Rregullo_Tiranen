@@ -321,6 +321,51 @@ footer {
     box-sizing: border-box;
 }
 
+/* Map Popup Styles */
+.map-marker-popup {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.map-marker-popup strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-primary);
+}
+
+.map-marker-popup span {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.map-marker-popup p {
+    margin: 5px 0;
+    font-style: italic;
+}
+
+.popup-actions {
+    margin-top: 8px;
+    text-align: right;
+}
+
+.popup-link {
+    display: inline-block;
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 3px 8px;
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.popup-link:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
+
 /* Footer Styles */
 footer {
     background-color: var(--color-footer-bg);
