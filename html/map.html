@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harta e Problemeve - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/map.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">Ballina</a></li>
+                    <li><a href="../report.html">Raporto</a></li>
+                    <li><a href="map.html" class="active">Shiko Hartën</a></li>
+                    <li><a href="#">Rreth Nesh</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="map-hero">
+        <div class="container">
+            <h2>Harta e Problemeve të Raportuara</h2>
+            <p>Shiko të gjitha problemet e raportuara në Tiranë dhe statusin e tyre</p>
+        </div>
+    </section>
+
+    <section class="map-filters">
+        <div class="container">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="category-filter">Kategoria</label>
+                    <select id="category-filter">
+                        <option value="all" selected>Të gjitha kategoritë</option>
+                        <option value="infrastructure">Probleme me Infrastrukturën</option>
+                        <option value="environment">Probleme Mjedisore</option>
+                        <option value="public-services">Shërbime Publike</option>
+                        <option value="community">Përmirësime Komunitare</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="status-filter">Statusi</label>
+                    <select id="status-filter">
+                        <option value="all" selected>Të gjitha statuset</option>
+                        <option value="pending">Në pritje</option>
+                        <option value="in-progress">Në proces</option>
+                        <option value="resolved">Të zgjidhura</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="date-filter">Periudha</label>
+                    <select id="date-filter">
+                        <option value="all" selected>Të gjitha kohët</option>
+                        <option value="today">Sot</option>
+                        <option value="week">Javën e fundit</option>
+                        <option value="month">Muajin e fundit</option>
+                    </select>
+                </div>
+                
+                <button id="apply-filters" class="btn btn-primary">Apliko Filtrat</button>
+                <button id="reset-filters" class="btn btn-secondary">Rivendos</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="full-map-section">
+        <div class="container">
+            <div class="map-legend">
+                <div class="legend-item">
+                    <div class="legend-color infrastructure"></div>
+                    <span>Infrastrukturë</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color environment"></div>
+                    <span>Mjedis</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color public-services"></div>
+                    <span>Shërbime Publike</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color community"></div>
+                    <span>Komunitet</span>
+                </div>
+                <div class="legend-divider"></div>
+                <div class="legend-item">
+                    <div class="status-indicator pending"></div>
+                    <span>Në pritje</span>
+                </div>
+                <div class="legend-item">
+                    <div class="status-indicator in-progress"></div>
+                    <span>Në proces</span>
+                </div>
+                <div class="legend-item">
+                    <div class="status-indicator resolved"></div>
+                    <span>Të zgjidhura</span>
+                </div>
+            </div>
+            
+            <div id="full-map" class="full-map-container"></div>
+            
+            <div class="map-stats">
+                <div class="stat-item">
+                    <strong>Probleme të shfaqura:</strong>
+                    <span id="visible-issues">0</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Totali i problemeve:</strong>
+                    <span id="total-issues">0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="../report.html">Raporto Problem</a></li>
+                        <li><a href="map.html">Shiko Hartën</a></li>
+                        <li><a href="#">Si Funksionon</a></li>
+                        <li><a href="#">Kontakto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data-store.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/map.js"></script>
+</body>
+</html>
