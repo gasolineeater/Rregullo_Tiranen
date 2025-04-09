@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Rregullo Tiranen application initialized');
 
+    // Update navigation based on authentication status
+    updateNavigation();
+
     // Update statistics on the homepage
     updateStatistics();
 
@@ -207,6 +210,177 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             themeIcon.textContent = '🌓';
             themeLabel.textContent = 'Tema e Errët';
+        }
+    }
+
+    // Function to update navigation based on authentication status
+    function updateNavigation() {
+        // Check if AuthStore is available and user is logged in
+        if (typeof AuthStore !== 'undefined' && AuthStore.isLoggedIn && AuthStore.isLoggedIn()) {
+            const currentUser = AuthStore.getCurrentUser();
+
+            // Get navigation elements
+            const mainNav = document.querySelector('.main-nav');
+            const navList = document.querySelector('.main-nav ul');
+
+            if (mainNav && navList) {
+                // Check if user menu already exists
+                if (!document.querySelector('.user-menu')) {
+                    // Create user menu
+                    const userMenu = document.createElement('div');
+                    userMenu.className = 'user-menu';
+
+                    // Create user menu toggle button
+                    const userMenuToggle = document.createElement('button');
+                    userMenuToggle.className = 'user-menu-toggle';
+                    userMenuToggle.id = 'user-menu-toggle';
+
+                    // Create user avatar
+                    const userAvatar = document.createElement('div');
+                    userAvatar.className = 'user-avatar';
+
+                    const userInitial = document.createElement('span');
+                    userInitial.className = 'user-initial';
+                    userInitial.id = 'user-initial';
+                    userInitial.textContent = currentUser.fullname.charAt(0).toUpperCase();
+
+                    userAvatar.appendChild(userInitial);
+
+                    // Create user name
+                    const userName = document.createElement('span');
+                    userName.className = 'user-name';
+                    userName.id = 'user-name';
+                    userName.textContent = currentUser.fullname;
+
+                    // Create dropdown icon
+                    const dropdownIcon = document.createElement('span');
+                    dropdownIcon.className = 'dropdown-icon';
+                    dropdownIcon.textContent = '▼';
+
+                    // Assemble user menu toggle
+                    userMenuToggle.appendChild(userAvatar);
+                    userMenuToggle.appendChild(userName);
+                    userMenuToggle.appendChild(dropdownIcon);
+
+                    // Create user dropdown
+                    const userDropdown = document.createElement('div');
+                    userDropdown.className = 'user-dropdown';
+                    userDropdown.id = 'user-dropdown';
+
+                    // Create dropdown list
+                    const dropdownList = document.createElement('ul');
+
+                    // Create dropdown items
+                    const profileItem = document.createElement('li');
+                    const profileLink = document.createElement('a');
+                    profileLink.href = 'html/profile.html';
+                    profileLink.textContent = 'Profili Im';
+                    profileItem.appendChild(profileLink);
+
+                    const notificationsItem = document.createElement('li');
+                    const notificationsLink = document.createElement('a');
+                    notificationsLink.href = 'html/profile.html#notifications';
+                    notificationsLink.textContent = 'Njoftimet';
+                    notificationsItem.appendChild(notificationsLink);
+
+                    const logoutItem = document.createElement('li');
+                    const logoutLink = document.createElement('a');
+                    logoutLink.href = '#';
+                    logoutLink.id = 'logout-btn';
+                    logoutLink.textContent = 'Dilni';
+                    logoutItem.appendChild(logoutLink);
+
+                    // Assemble dropdown list
+                    dropdownList.appendChild(profileItem);
+                    dropdownList.appendChild(notificationsItem);
+                    dropdownList.appendChild(logoutItem);
+
+                    userDropdown.appendChild(dropdownList);
+
+                    // Assemble user menu
+                    userMenu.appendChild(userMenuToggle);
+                    userMenu.appendChild(userDropdown);
+
+                    // Add user menu to navigation
+                    mainNav.insertBefore(userMenu, document.querySelector('.theme-toggle'));
+
+                    // Add event listeners
+                    userMenuToggle.addEventListener('click', function() {
+                        userDropdown.classList.toggle('active');
+                    });
+
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!userMenuToggle.contains(e.target) && !userDropdown.contains(e.target)) {
+                            userDropdown.classList.remove('active');
+                        }
+                    });
+
+                    // Handle logout
+                    logoutLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        if (typeof AuthStore !== 'undefined' && AuthStore.logoutUser) {
+                            const result = AuthStore.logoutUser();
+                            if (result.success) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+
+                    // Update login/register links
+                    const loginLink = navList.querySelector('a[href="html/login.html"]');
+                    if (loginLink) {
+                        const loginItem = loginLink.parentElement;
+                        navList.removeChild(loginItem);
+                    }
+
+                    const registerLink = navList.querySelector('a[href="html/register.html"]');
+                    if (registerLink) {
+                        const registerItem = registerLink.parentElement;
+                        navList.removeChild(registerItem);
+                    }
+                }
+            }
+        } else {
+            // User is not logged in, make sure login/register links are present
+            const navList = document.querySelector('.main-nav ul');
+
+            if (navList) {
+                // Check if login link already exists
+                const loginLink = navList.querySelector('a[href="html/login.html"]');
+                if (!loginLink) {
+                    // Create login link
+                    const loginItem = document.createElement('li');
+                    const loginLink = document.createElement('a');
+                    loginLink.href = 'html/login.html';
+                    loginLink.textContent = 'Hyrje';
+                    loginItem.appendChild(loginLink);
+
+                    // Add login link to navigation
+                    navList.appendChild(loginItem);
+                }
+
+                // Check if register link already exists
+                const registerLink = navList.querySelector('a[href="html/register.html"]');
+                if (!registerLink) {
+                    // Create register link
+                    const registerItem = document.createElement('li');
+                    const registerLink = document.createElement('a');
+                    registerLink.href = 'html/register.html';
+                    registerLink.textContent = 'Regjistrim';
+                    registerItem.appendChild(registerLink);
+
+                    // Add register link to navigation
+                    navList.appendChild(registerItem);
+                }
+
+                // Remove user menu if it exists
+                const userMenu = document.querySelector('.user-menu');
+                if (userMenu) {
+                    userMenu.parentElement.removeChild(userMenu);
+                }
+            }
         }
     }
 });
