@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <meta name="description" content="Regjistrohuni për të raportuar dhe ndjekur problemet urbane në Tiranë">
+    <title>Regjistrim - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/mobile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../images/icons/icon-192x192.png">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">Ballina</a></li>
+                    <li><a href="../report.html">Raporto</a></li>
+                    <li><a href="map.html">Shiko Hartën</a></li>
+                    <li><a href="#">Rreth Nesh</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="auth-container">
+        <div class="container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2>Krijoni një Llogari të Re</h2>
+                    <p>Regjistrohuni për të raportuar dhe ndjekur problemet urbane</p>
+                </div>
+                
+                <form id="register-form" class="auth-form">
+                    <div class="form-field">
+                        <label for="fullname">Emri i Plotë</label>
+                        <input type="text" id="fullname" name="fullname" required placeholder="Shkruani emrin tuaj të plotë">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="Shkruani emailin tuaj">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="phone">Numri i Telefonit (opsional)</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Shkruani numrin tuaj të telefonit">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="password">Fjalëkalimi</label>
+                        <div class="password-field">
+                            <input type="password" id="password" name="password" required placeholder="Krijoni një fjalëkalim">
+                            <button type="button" class="toggle-password" aria-label="Shfaq/fshih fjalëkalimin">
+                                <span class="eye-icon">👁️</span>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-meter">
+                                <div class="strength-bar" id="strength-bar"></div>
+                            </div>
+                            <span class="strength-text" id="strength-text">Fjalëkalimi duhet të ketë të paktën 8 karaktere</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="confirm-password">Konfirmoni Fjalëkalimin</label>
+                        <div class="password-field">
+                            <input type="password" id="confirm-password" name="confirm-password" required placeholder="Konfirmoni fjalëkalimin tuaj">
+                            <button type="button" class="toggle-password" aria-label="Shfaq/fshih fjalëkalimin">
+                                <span class="eye-icon">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-field checkbox-field">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">Unë pranoj <a href="#">Kushtet e Përdorimit</a> dhe <a href="#">Politikën e Privatësisë</a></label>
+                    </div>
+                    
+                    <div class="auth-message" id="register-message"></div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-block">Regjistrohu</button>
+                    </div>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>OSE</span>
+                </div>
+                
+                <div class="social-login">
+                    <button class="btn btn-social btn-google">
+                        <span class="social-icon">G</span>
+                        <span>Regjistrohu me Google</span>
+                    </button>
+                    <button class="btn btn-social btn-facebook">
+                        <span class="social-icon">f</span>
+                        <span>Regjistrohu me Facebook</span>
+                    </button>
+                </div>
+                
+                <div class="auth-footer">
+                    <p>Keni tashmë një llogari? <a href="login.html">Hyni</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="../report.html">Raporto Problem</a></li>
+                        <li><a href="map.html">Shiko Hartën</a></li>
+                        <li><a href="#">Si Funksionon</a></li>
+                        <li><a href="#">Kontakto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/pwa.js"></script>
+</body>
+</html>

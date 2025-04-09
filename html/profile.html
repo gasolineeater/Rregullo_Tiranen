@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <meta name="description" content="Menaxhoni profilin tuaj dhe shikoni raportimet tuaja në Rregullo Tiranen">
+    <title>Profili Im - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/mobile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../images/icons/icon-192x192.png">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">Ballina</a></li>
+                    <li><a href="../report.html">Raporto</a></li>
+                    <li><a href="map.html">Shiko Hartën</a></li>
+                    <li><a href="#">Rreth Nesh</a></li>
+                </ul>
+                <div class="user-menu">
+                    <button class="user-menu-toggle" id="user-menu-toggle">
+                        <div class="user-avatar">
+                            <span class="user-initial" id="user-initial">U</span>
+                        </div>
+                        <span class="user-name" id="user-name">Përdorues</span>
+                        <span class="dropdown-icon">▼</span>
+                    </button>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <ul>
+                            <li><a href="profile.html" class="active">Profili Im</a></li>
+                            <li><a href="notifications.html">Njoftimet</a></li>
+                            <li><a href="#" id="logout-btn">Dilni</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="profile-header">
+        <div class="container">
+            <div class="profile-header-content">
+                <div class="profile-avatar">
+                    <span id="profile-initial">U</span>
+                    <button class="change-avatar-btn" title="Ndrysho foton e profilit">
+                        <span>📷</span>
+                    </button>
+                </div>
+                <div class="profile-info">
+                    <h2 id="profile-name">Emri i Përdoruesit</h2>
+                    <p id="profile-email">email@example.com</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="reports-count">0</span>
+                            <span class="stat-label">Raporte</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="resolved-count">0</span>
+                            <span class="stat-label">Të Zgjidhura</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="pending-count">0</span>
+                            <span class="stat-label">Në Pritje</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="profile-content">
+        <div class="container">
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="my-reports">Raportimet e Mia</button>
+                <button class="tab-btn" data-tab="account-settings">Cilësimet e Llogarisë</button>
+                <button class="tab-btn" data-tab="notifications">Njoftimet</button>
+            </div>
+            
+            <div class="tab-content active" id="my-reports">
+                <div class="reports-filter">
+                    <div class="filter-group">
+                        <label for="status-filter">Statusi</label>
+                        <select id="status-filter">
+                            <option value="all" selected>Të gjitha</option>
+                            <option value="pending">Në pritje</option>
+                            <option value="in-progress">Në proces</option>
+                            <option value="resolved">Të zgjidhura</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="category-filter">Kategoria</label>
+                        <select id="category-filter">
+                            <option value="all" selected>Të gjitha</option>
+                            <option value="infrastructure">Infrastrukturë</option>
+                            <option value="environment">Mjedis</option>
+                            <option value="public-services">Shërbime Publike</option>
+                            <option value="community">Komunitet</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="date-filter">Periudha</label>
+                        <select id="date-filter">
+                            <option value="all" selected>Të gjitha</option>
+                            <option value="week">Javën e fundit</option>
+                            <option value="month">Muajin e fundit</option>
+                            <option value="year">Vitin e fundit</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" id="apply-filters">Apliko</button>
+                </div>
+                
+                <div class="reports-list" id="reports-list">
+                    <!-- Reports will be loaded here dynamically -->
+                    <div class="no-reports-message" id="no-reports-message">
+                        <p>Nuk keni bërë ende asnjë raportim. <a href="../report.html">Raportoni një problem</a> për të filluar.</p>
+                    </div>
+                </div>
+                
+                <div class="reports-map-container">
+                    <h3>Raportimet e Mia në Hartë</h3>
+                    <div id="user-reports-map" class="user-reports-map"></div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="account-settings">
+                <div class="settings-card">
+                    <h3>Informacioni i Profilit</h3>
+                    <form id="profile-form" class="settings-form">
+                        <div class="form-field">
+                            <label for="settings-fullname">Emri i Plotë</label>
+                            <input type="text" id="settings-fullname" name="fullname" placeholder="Emri juaj i plotë">
+                        </div>
+                        
+                        <div class="form-field">
+                            <label for="settings-email">Email</label>
+                            <input type="email" id="settings-email" name="email" placeholder="Email-i juaj" readonly>
+                            <small>Email-i nuk mund të ndryshohet</small>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label for="settings-phone">Numri i Telefonit</label>
+                            <input type="tel" id="settings-phone" name="phone" placeholder="Numri juaj i telefonit">
+                        </div>
+                        
+                        <div class="form-field">
+                            <label for="settings-neighborhood">Lagjja/Zona</label>
+                            <select id="settings-neighborhood" name="neighborhood">
+                                <option value="">Zgjidhni lagjjen tuaj</option>
+                                <option value="njesia1">Njësia Administrative 1</option>
+                                <option value="njesia2">Njësia Administrative 2</option>
+                                <option value="njesia3">Njësia Administrative 3</option>
+                                <option value="njesia4">Njësia Administrative 4</option>
+                                <option value="njesia5">Njësia Administrative 5</option>
+                                <option value="njesia6">Njësia Administrative 6</option>
+                                <option value="njesia7">Njësia Administrative 7</option>
+                                <option value="njesia8">Njësia Administrative 8</option>
+                                <option value="njesia9">Njësia Administrative 9</option>
+                                <option value="njesia10">Njësia Administrative 10</option>
+                                <option value="njesia11">Njësia Administrative 11</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Ruaj Ndryshimet</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>Ndrysho Fjalëkalimin</h3>
+                    <form id="password-form" class="settings-form">
+                        <div class="form-field">
+                            <label for="current-password">Fjalëkalimi Aktual</label>
+                            <div class="password-field">
+                                <input type="password" id="current-password" name="current-password" placeholder="Shkruani fjalëkalimin aktual">
+                                <button type="button" class="toggle-password" aria-label="Shfaq/fshih fjalëkalimin">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label for="new-password">Fjalëkalimi i Ri</label>
+                            <div class="password-field">
+                                <input type="password" id="new-password" name="new-password" placeholder="Shkruani fjalëkalimin e ri">
+                                <button type="button" class="toggle-password" aria-label="Shfaq/fshih fjalëkalimin">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                            <div class="password-strength">
+                                <div class="strength-meter">
+                                    <div class="strength-bar" id="new-strength-bar"></div>
+                                </div>
+                                <span class="strength-text" id="new-strength-text">Fjalëkalimi duhet të ketë të paktën 8 karaktere</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label for="confirm-new-password">Konfirmoni Fjalëkalimin e Ri</label>
+                            <div class="password-field">
+                                <input type="password" id="confirm-new-password" name="confirm-new-password" placeholder="Konfirmoni fjalëkalimin e ri">
+                                <button type="button" class="toggle-password" aria-label="Shfaq/fshih fjalëkalimin">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Ndrysho Fjalëkalimin</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="settings-card danger-zone">
+                    <h3>Zona e Rrezikut</h3>
+                    <p>Kujdes: Veprimet e mëposhtme nuk mund të zhbëhen!</p>
+                    
+                    <div class="danger-actions">
+                        <button class="btn btn-danger" id="delete-account-btn">Fshij Llogarinë Time</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="notifications">
+                <div class="settings-card">
+                    <h3>Cilësimet e Njoftimeve</h3>
+                    <form id="notifications-form" class="settings-form">
+                        <div class="form-field checkbox-field">
+                            <input type="checkbox" id="notify-status" name="notify-status" checked>
+                            <label for="notify-status">Njoftimet për ndryshimet e statusit të raportimeve</label>
+                        </div>
+                        
+                        <div class="form-field checkbox-field">
+                            <input type="checkbox" id="notify-comments" name="notify-comments" checked>
+                            <label for="notify-comments">Njoftimet për komente të reja në raportimet tuaja</label>
+                        </div>
+                        
+                        <div class="form-field checkbox-field">
+                            <input type="checkbox" id="notify-nearby" name="notify-nearby" checked>
+                            <label for="notify-nearby">Njoftimet për probleme të reja në zonën tuaj</label>
+                        </div>
+                        
+                        <div class="form-field checkbox-field">
+                            <input type="checkbox" id="notify-email" name="notify-email" checked>
+                            <label for="notify-email">Merrni njoftimet edhe me email</label>
+                        </div>
+                        
+                        <div class="form-field checkbox-field">
+                            <input type="checkbox" id="notify-push" name="notify-push" checked>
+                            <label for="notify-push">Merrni njoftime push në pajisjen tuaj</label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Ruaj Cilësimet</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="notifications-list">
+                    <h3>Njoftimet e Fundit</h3>
+                    <div id="notifications-container">
+                        <!-- Notifications will be loaded here dynamically -->
+                        <div class="no-notifications-message" id="no-notifications-message">
+                            <p>Nuk keni asnjë njoftim të ri.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div id="delete-account-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Konfirmoni Fshirjen e Llogarisë</h3>
+            <p>Jeni i sigurt që dëshironi të fshini llogarinë tuaj? Ky veprim nuk mund të zhbëhet dhe të gjitha të dhënat tuaja do të fshihen përgjithmonë.</p>
+            <form id="delete-account-form">
+                <div class="form-field">
+                    <label for="delete-password">Shkruani fjalëkalimin tuaj për të konfirmuar</label>
+                    <input type="password" id="delete-password" name="delete-password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary cancel-modal">Anulo</button>
+                    <button type="submit" class="btn btn-danger">Fshij Llogarinë Time</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="../report.html">Raporto Problem</a></li>
+                        <li><a href="map.html">Shiko Hartën</a></li>
+                        <li><a href="#">Si Funksionon</a></li>
+                        <li><a href="#">Kontakto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data-store.js"></script>
+    <script src="../js/auth-store.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/profile.js"></script>
+    <script src="../js/pwa.js"></script>
+</body>
+</html>
