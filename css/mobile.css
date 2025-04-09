@@ -1,0 +1,235 @@
+/* Mobile-specific styles for Rregullo Tiranen */
+
+/* Base mobile adjustments */
+@media (max-width: 768px) {
+    :root {
+        --spacing-small: 0.75rem;
+        --spacing-medium: 1.5rem;
+        --spacing-large: 3rem;
+    }
+    
+    body {
+        font-size: 15px;
+    }
+    
+    .container {
+        width: 95%;
+        padding: 0 var(--spacing-small);
+    }
+    
+    /* Header adjustments */
+    .main-header {
+        padding: 0.75rem 0;
+    }
+    
+    .main-header .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .logo h1 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .main-nav {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .main-nav ul {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 0.5rem;
+    }
+    
+    .main-nav li {
+        margin: 0.25rem 0.5rem;
+    }
+    
+    .theme-toggle {
+        margin-left: 0;
+    }
+    
+    /* Hero section adjustments */
+    .hero {
+        padding: var(--spacing-medium) 0;
+    }
+    
+    .hero h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hero p {
+        font-size: 0.9rem;
+    }
+    
+    /* Stats adjustments */
+    .quick-stats .container {
+        flex-direction: column;
+    }
+    
+    .stat-card {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    /* Map adjustments */
+    .home-map-container {
+        height: 300px;
+    }
+    
+    .map-legend {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .legend-item {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Success stories adjustments */
+    .story-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Footer adjustments */
+    .footer-content {
+        flex-direction: column;
+    }
+    
+    .footer-logo, .footer-links {
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Report form adjustments */
+    .report-form {
+        padding: 1rem;
+    }
+    
+    .form-group {
+        padding: 1rem;
+    }
+    
+    .category-group {
+        flex-direction: column;
+    }
+    
+    .category-group .form-field {
+        flex: none;
+        width: 100%;
+    }
+    
+    .report-map-container {
+        height: 250px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+        margin-bottom: 0.75rem;
+    }
+    
+    /* Map page adjustments */
+    .filter-controls {
+        flex-direction: column;
+    }
+    
+    .filter-group {
+        width: 100%;
+        margin-bottom: 0.75rem;
+    }
+    
+    .full-map-container {
+        height: 400px;
+    }
+    
+    /* Report detail adjustments */
+    .report-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-card {
+        padding: 1rem;
+    }
+    
+    .report-actions {
+        flex-direction: column;
+    }
+    
+    .report-actions a, 
+    .report-actions button {
+        width: 100%;
+        margin-bottom: 0.75rem;
+        text-align: center;
+    }
+    
+    /* Modal adjustments */
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+        padding: 1.5rem;
+    }
+}
+
+/* Small mobile adjustments */
+@media (max-width: 480px) {
+    .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .main-nav li {
+        margin: 0.25rem 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .main-nav a {
+        display: block;
+        padding: 0.5rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .dark-mode .main-nav a {
+        border-bottom-color: rgba(255,255,255,0.1);
+    }
+    
+    .hero h2 {
+        font-size: 1.3rem;
+    }
+    
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .home-map-container {
+        height: 250px;
+    }
+    
+    .report-detail-hero h2 {
+        font-size: 1.3rem;
+    }
+    
+    .report-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .timeline-item {
+        padding-left: 1.5rem;
+    }
+    
+    .timeline-icon {
+        left: -1.5rem;
+        width: 20px;
+        height: 20px;
+    }
+}

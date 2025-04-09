@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <title>Offline - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        .offline-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .offline-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .offline-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+        
+        .offline-message {
+            margin-bottom: 2rem;
+        }
+        
+        .offline-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+            </div>
+        </div>
+    </header>
+
+    <section class="offline-container">
+        <div class="offline-icon">📶</div>
+        <h2 class="offline-title">Ju jeni offline</h2>
+        <p class="offline-message">
+            Duket se nuk keni lidhje me internetin. Disa funksione të aplikacionit mund të mos jenë të disponueshme.
+            Ju mund të shikoni përmbajtjen e ruajtur më parë, por nuk mund të raportoni probleme të reja ose të shikoni
+            përditësimet e fundit.
+        </p>
+        <div class="offline-actions">
+            <button class="btn btn-primary" id="retry-connection">Provo përsëri</button>
+            <a href="index.html" class="btn btn-secondary">Kthehu në faqen kryesore</a>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('retry-connection').addEventListener('click', function() {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>
