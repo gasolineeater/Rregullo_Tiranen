@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <meta name="description" content="Raportoni probleme urbane në Tiranë dhe ndihmoni në përmirësimin e qytetit">
     <title>Rregullo Tiranen - Përmirëso qytetin tonë</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -118,5 +123,11 @@
 
     <script src="js/data-store.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/pwa.js"></script>
+
+    <!-- Add to Home Screen button -->
+    <div id="add-to-home" class="pwa-install-prompt">
+        <button class="btn btn-primary">Shto në Ekranin Kryesor</button>
+    </div>
 </body>
 </html>

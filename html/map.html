@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <meta name="description" content="Shiko hartën e problemeve urbane të raportuara në Tiranë">
     <title>Harta e Problemeve - Rregullo Tiranen</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/map.css">
+    <link rel="stylesheet" href="../css/mobile.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../images/icons/icon-192x192.png">
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -58,7 +63,7 @@
                         <option value="community">Përmirësime Komunitare</option>
                     </select>
                 </div>
-                
+
                 <div class="filter-group">
                     <label for="status-filter">Statusi</label>
                     <select id="status-filter">
@@ -68,7 +73,7 @@
                         <option value="resolved">Të zgjidhura</option>
                     </select>
                 </div>
-                
+
                 <div class="filter-group">
                     <label for="date-filter">Periudha</label>
                     <select id="date-filter">
@@ -78,7 +83,7 @@
                         <option value="month">Muajin e fundit</option>
                     </select>
                 </div>
-                
+
                 <button id="apply-filters" class="btn btn-primary">Apliko Filtrat</button>
                 <button id="reset-filters" class="btn btn-secondary">Rivendos</button>
             </div>
@@ -118,9 +123,9 @@
                     <span>Të zgjidhura</span>
                 </div>
             </div>
-            
+
             <div id="full-map" class="full-map-container"></div>
-            
+
             <div class="map-stats">
                 <div class="stat-item">
                     <strong>Probleme të shfaqura:</strong>
@@ -160,5 +165,6 @@
     <script src="../js/data-store.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/map.js"></script>
+    <script src="../js/pwa.js"></script>
 </body>
 </html>

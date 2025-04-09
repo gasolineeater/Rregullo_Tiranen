@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <meta name="description" content="Shiko detajet e plota të një problemi të raportuar në Tiranë">
     <title>Detaje të Raportit - Rregullo Tiranen</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/report-detail.css">
+    <link rel="stylesheet" href="../css/mobile.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../images/icons/icon-192x192.png">
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -71,7 +76,7 @@
                             <span id="report-severity" class="info-value"></span>
                         </div>
                     </div>
-                    
+
                     <div class="info-card">
                         <h3>Vendndodhja</h3>
                         <div class="info-row">
@@ -89,13 +94,13 @@
                         <div id="report-location-map" class="location-map"></div>
                     </div>
                 </div>
-                
+
                 <div class="report-description">
                     <div class="info-card">
                         <h3>Përshkrimi i Problemit</h3>
                         <p id="report-description-text"></p>
                     </div>
-                    
+
                     <div class="info-card">
                         <h3>Statusi i Raportit</h3>
                         <div class="status-timeline">
@@ -130,7 +135,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="report-actions">
                 <a href="map.html" class="btn btn-secondary">Kthehu te Harta</a>
                 <button id="update-status-btn" class="btn btn-primary">Përditëso Statusin</button>
@@ -190,5 +195,6 @@
     <script src="../js/data-store.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/report-detail.js"></script>
+    <script src="../js/pwa.js"></script>
 </body>
 </html>
