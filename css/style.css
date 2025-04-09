@@ -205,21 +205,21 @@ footer {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .main-nav {
         width: 100%;
         margin-top: 1rem;
     }
-    
+
     .main-nav ul {
         flex-wrap: wrap;
     }
-    
+
     .theme-toggle {
         margin-top: 1rem;
         margin-left: 0;
     }
-    
+
     .theme-label {
         font-size: 0.9rem;
     }
@@ -244,4 +244,85 @@ footer {
 .dark-mode .disabled-field select {
     background-color: var(--color-disabled, #333) !important;
     color: var(--color-disabled-text, #777) !important;
+}
+
+/* Map Styles */
+.map-preview {
+    padding: var(--spacing-medium) 0;
+    background-color: var(--color-background);
+}
+
+.home-map-container {
+    height: 500px;
+    margin: var(--spacing-medium) 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.map-legend {
+    background-color: var(--color-card-bg);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: var(--spacing-medium);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.legend-color.infrastructure {
+    background-color: #e74c3c;
+}
+
+.legend-color.environment {
+    background-color: #2ecc71;
+}
+
+.legend-color.public-services {
+    background-color: #3498db;
+}
+
+.legend-color.community {
+    background-color: #f39c12;
+}
+
+/* Custom map markers */
+.custom-marker {
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+}
+
+.custom-marker div {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.custom-marker.resolved div {
+    opacity: 0.6;
+}
+
+.custom-marker.in-progress div {
+    border: 2px dashed white;
+    box-sizing: border-box;
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--color-footer-bg);
+    padding: var(--spacing-medium) 0;
 }

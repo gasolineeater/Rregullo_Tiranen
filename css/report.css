@@ -48,6 +48,21 @@
     margin-bottom: 1.25rem;
 }
 
+#subcategory-container.disabled {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.category-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.category-group .form-field {
+    flex: 1 1 300px;
+}
+
 .form-field label {
     display: block;
     margin-bottom: 0.5rem;
@@ -85,19 +100,28 @@
 }
 
 .report-map-container {
-    height: 300px;
+    height: 400px;
     margin: 1rem 0;
     background-color: #eee;
     border-radius: 4px;
     border: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    z-index: 1; /* Ensure proper stacking context for Leaflet */
 }
 
 .dark-mode .report-map-container {
     background-color: #333;
     border-color: #444;
+}
+
+.map-marker-popup {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.map-marker-popup strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-primary);
 }
 
 .map-coordinates {
@@ -148,7 +172,7 @@
     .form-actions {
         flex-direction: column;
     }
-    
+
     .form-actions .btn {
         width: 100%;
         margin-bottom: 1rem;
