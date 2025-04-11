@@ -22,6 +22,54 @@ document.addEventListener('DOMContentLoaded', function() {
         maxZoom: 19
     }).addTo(fullMap);
 
+    // Initialize marker cluster group
+    const markers = L.markerClusterGroup({
+        maxClusterRadius: 50,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: true,
+        zoomToBoundsOnClick: true,
+        iconCreateFunction: function(cluster) {
+            const count = cluster.getChildCount();
+            let size = 'small';
+
+            if (count > 50) {
+                size = 'large';
+            } else if (count > 20) {
+                size = 'medium';
+            }
+
+            return L.divIcon({
+                html: `<div><span>${count}</span></div>`,
+                className: `marker-cluster marker-cluster-${size}`,
+                iconSize: L.point(40, 40)
+            });
+        }
+    });
+
+    // Initialize heat map layer
+    let heatLayer = null;
+    let heatData = [];
+
+    // Initialize search control
+    const searchControl = L.control.search({
+        position: 'topleft',
+        initial: false,
+        zoom: 16,
+        marker: false
+    });
+
+    // Initialize locate control
+    const locateControl = L.control.locate({
+        position: 'topleft',
+        strings: {
+            title: 'Trego vendndodhjen time'
+        },
+        locateOptions: {
+            enableHighAccuracy: true,
+            maxZoom: 16
+        }
+    }).addTo(fullMap);
+
     // Get filter elements
     const categoryFilter = document.getElementById('category-filter');
     const statusFilter = document.getElementById('status-filter');
@@ -29,18 +77,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const applyFiltersBtn = document.getElementById('apply-filters');
     const resetFiltersBtn = document.getElementById('reset-filters');
 
+    // Get view toggle buttons
+    const markerViewBtn = document.getElementById('marker-view');
+    const clusterViewBtn = document.getElementById('cluster-view');
+    const heatViewBtn = document.getElementById('heat-view');
+
+    // Get address search elements
+    const addressSearchInput = document.getElementById('address-search');
+    const addressSearchResults = document.getElementById('address-search-results');
+
     // Stats elements
     const visibleIssuesElement = document.getElementById('visible-issues');
     const totalIssuesElement = document.getElementById('total-issues');
 
     // Store all markers for filtering
     let allMarkers = [];
+    let currentView = 'marker'; // 'marker', 'cluster', or 'heat'
 
     // Load and display all reports
     async function loadReports() {
         // Clear existing markers
         allMarkers.forEach(marker => marker.remove());
         allMarkers = [];
+        markers.clearLayers();
+
+        if (heatLayer) {
+            fullMap.removeLayer(heatLayer);
+            heatLayer = null;
+        }
+
+        heatData = [];
 
         // Show loading indicator
         const mapContainer = document.getElementById('full-map');
@@ -81,11 +147,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     iconAnchor: [12, 12]
                 });
 
-                // Create marker and add to map
+                // Create marker
                 const marker = L.marker([report.lat, report.lng], {
                     icon: markerIcon,
                     reportData: report // Store report data with the marker for filtering
-                }).addTo(fullMap);
+                });
 
                 // Add popup with report details
                 marker.bindPopup(`
@@ -105,10 +171,62 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Store marker for filtering
                 allMarkers.push(marker);
+
+                // Add to marker cluster group
+                markers.addLayer(marker);
+
+                // Add to heat data
+                // Adjust intensity based on status and severity
+                let intensity = 0.5; // Default intensity
+
+                // Adjust based on status
+                if (report.status === 'pending') {
+                    intensity = 0.8;
+                } else if (report.status === 'in-progress') {
+                    intensity = 0.6;
+                } else if (report.status === 'resolved') {
+                    intensity = 0.3;
+                }
+
+                // Adjust based on severity if available
+                if (report.severity) {
+                    if (report.severity === 'high') {
+                        intensity *= 1.5;
+                    } else if (report.severity === 'low') {
+                        intensity *= 0.7;
+                    }
+                }
+
+                heatData.push([report.lat, report.lng, intensity]);
+
+                // Add to search control
+                searchControl.options.layer = L.layerGroup(allMarkers);
+                searchControl.options.propertyName = 'reportData.title';
             });
+
+            // Initialize heat layer
+            heatLayer = L.heatLayer(heatData, {
+                radius: 25,
+                blur: 15,
+                maxZoom: 17,
+                gradient: {
+                    0.4: '#2ecc71',
+                    0.6: '#f39c12',
+                    0.8: '#e74c3c'
+                }
+            });
+
+            // Set initial view
+            setMapView(currentView);
 
             // Update visible count
             updateVisibleCount();
+
+            // Add search control after data is loaded
+            fullMap.addControl(searchControl);
+
+            // Initialize address search
+            initAddressSearch();
         } catch (error) {
             console.error('Error loading reports:', error);
 
@@ -135,6 +253,140 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Set map view (marker, cluster, or heat)
+    function setMapView(view) {
+        // Update current view
+        currentView = view;
+
+        // Remove all layers
+        fullMap.removeLayer(markers);
+        if (heatLayer) {
+            fullMap.removeLayer(heatLayer);
+        }
+        allMarkers.forEach(marker => fullMap.removeLayer(marker));
+
+        // Add appropriate layer based on view
+        if (view === 'marker') {
+            // Add individual markers
+            allMarkers.forEach(marker => {
+                const report = marker.options.reportData;
+                if (matchesFilters(report)) {
+                    marker.addTo(fullMap);
+                }
+            });
+
+            // Update button states
+            markerViewBtn.classList.add('active');
+            clusterViewBtn.classList.remove('active');
+            heatViewBtn.classList.remove('active');
+        } else if (view === 'cluster') {
+            // Add marker cluster group
+            fullMap.addLayer(markers);
+
+            // Update button states
+            markerViewBtn.classList.remove('active');
+            clusterViewBtn.classList.add('active');
+            heatViewBtn.classList.remove('active');
+        } else if (view === 'heat') {
+            // Add heat layer
+            if (heatLayer) {
+                fullMap.addLayer(heatLayer);
+            }
+
+            // Update button states
+            markerViewBtn.classList.remove('active');
+            clusterViewBtn.classList.remove('active');
+            heatViewBtn.classList.add('active');
+        }
+
+        // Update visible count
+        updateVisibleCount();
+    }
+
+    // Initialize address search
+    function initAddressSearch() {
+        if (!addressSearchInput || !addressSearchResults) return;
+
+        // Add event listener for input
+        addressSearchInput.addEventListener('input', debounce(async function() {
+            const query = addressSearchInput.value.trim();
+
+            // Clear results if query is empty
+            if (!query) {
+                addressSearchResults.innerHTML = '';
+                addressSearchResults.classList.remove('active');
+                return;
+            }
+
+            try {
+                // Show loading state
+                addressSearchResults.innerHTML = '<div class="address-search-result">Duke kërkuar...</div>';
+                addressSearchResults.classList.add('active');
+
+                // Use Nominatim API to search for addresses
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=al&limit=5`);
+                const data = await response.json();
+
+                // Clear results
+                addressSearchResults.innerHTML = '';
+
+                // Add results
+                if (data.length === 0) {
+                    addressSearchResults.innerHTML = '<div class="address-search-result">Nuk u gjet asnjë rezultat</div>';
+                } else {
+                    data.forEach(result => {
+                        const resultElement = document.createElement('div');
+                        resultElement.className = 'address-search-result';
+                        resultElement.textContent = result.display_name;
+
+                        // Add click event
+                        resultElement.addEventListener('click', function() {
+                            // Set map view to result location
+                            fullMap.setView([result.lat, result.lon], 16);
+
+                            // Clear search input and results
+                            addressSearchInput.value = result.display_name;
+                            addressSearchResults.innerHTML = '';
+                            addressSearchResults.classList.remove('active');
+                        });
+
+                        addressSearchResults.appendChild(resultElement);
+                    });
+                }
+            } catch (error) {
+                console.error('Error searching for address:', error);
+                addressSearchResults.innerHTML = '<div class="address-search-result">Ndodhi një gabim gjatë kërkimit</div>';
+            }
+        }, 500));
+
+        // Close results when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!addressSearchInput.contains(event.target) && !addressSearchResults.contains(event.target)) {
+                addressSearchResults.classList.remove('active');
+            }
+        });
+
+        // Show results when focusing on input
+        addressSearchInput.addEventListener('focus', function() {
+            if (addressSearchResults.children.length > 0) {
+                addressSearchResults.classList.add('active');
+            }
+        });
+    }
+
+    // Debounce function to limit API calls
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
+
     // Apply filters to markers
     function applyFilters() {
         const categoryValue = categoryFilter.value;
@@ -149,54 +401,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Clear all markers from map
         allMarkers.forEach(marker => marker.remove());
-
-        // Helper function to check if a report matches the filters
-        function matchesFilters(report) {
-            // Category filter
-            if (categoryValue !== 'all' && report.category !== categoryValue) {
-                return false;
-            }
-
-            // Status filter
-            if (statusValue !== 'all' && report.status !== statusValue) {
-                return false;
-            }
-
-            // Date filter
-            if (dateValue !== 'all') {
-                const reportDate = new Date(report.timestamp);
-                const now = new Date();
-
-                if (dateValue === 'today') {
-                    // Check if report is from today
-                    if (reportDate.toDateString() !== now.toDateString()) {
-                        return false;
-                    }
-                } else if (dateValue === 'week') {
-                    // Check if report is from the last 7 days
-                    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    if (reportDate < weekAgo) {
-                        return false;
-                    }
-                } else if (dateValue === 'month') {
-                    // Check if report is from the last 30 days
-                    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-                    if (reportDate < monthAgo) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
+        markers.clearLayers();
 
         // Add back markers that match criteria
         allMarkers.forEach(marker => {
             const report = marker.options.reportData;
             if (matchesFilters(report)) {
-                marker.addTo(fullMap);
+                if (currentView === 'marker') {
+                    marker.addTo(fullMap);
+                } else if (currentView === 'cluster') {
+                    markers.addLayer(marker);
+                }
             }
         });
+
+        // Update heat map if in heat view
+        if (currentView === 'heat' && heatLayer) {
+            // Filter heat data
+            const filteredHeatData = [];
+            allMarkers.forEach((marker, index) => {
+                const report = marker.options.reportData;
+                if (matchesFilters(report) && heatData[index]) {
+                    filteredHeatData.push(heatData[index]);
+                }
+            });
+
+            // Remove old heat layer
+            fullMap.removeLayer(heatLayer);
+
+            // Create new heat layer with filtered data
+            heatLayer = L.heatLayer(filteredHeatData, {
+                radius: 25,
+                blur: 15,
+                maxZoom: 17,
+                gradient: {
+                    0.4: '#2ecc71',
+                    0.6: '#f39c12',
+                    0.8: '#e74c3c'
+                }
+            });
+
+            // Add new heat layer if in heat view
+            if (currentView === 'heat') {
+                fullMap.addLayer(heatLayer);
+            }
+        }
 
         // Remove filtering indicator
         if (mapContainer) {
@@ -207,10 +456,60 @@ document.addEventListener('DOMContentLoaded', function() {
         updateVisibleCount();
     }
 
+    // Helper function to check if a report matches the filters
+    function matchesFilters(report) {
+        // Category filter
+        if (categoryFilter.value !== 'all' && report.category !== categoryFilter.value) {
+            return false;
+        }
+
+        // Status filter
+        if (statusFilter.value !== 'all' && report.status !== statusFilter.value) {
+            return false;
+        }
+
+        // Date filter
+        if (dateFilter.value !== 'all') {
+            const reportDate = new Date(report.timestamp);
+            const now = new Date();
+
+            if (dateFilter.value === 'today') {
+                // Check if report is from today
+                if (reportDate.toDateString() !== now.toDateString()) {
+                    return false;
+                }
+            } else if (dateFilter.value === 'week') {
+                // Check if report is from the last 7 days
+                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                if (reportDate < weekAgo) {
+                    return false;
+                }
+            } else if (dateFilter.value === 'month') {
+                // Check if report is from the last 30 days
+                const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                if (reportDate < monthAgo) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     // Update the visible issues count
     function updateVisibleCount() {
         if (visibleIssuesElement) {
-            const visibleCount = allMarkers.filter(marker => fullMap.hasLayer(marker)).length;
+            let visibleCount = 0;
+
+            if (currentView === 'marker') {
+                visibleCount = allMarkers.filter(marker => fullMap.hasLayer(marker)).length;
+            } else if (currentView === 'cluster') {
+                visibleCount = markers.getLayers().length;
+            } else if (currentView === 'heat') {
+                // For heat map, count all markers that match filters
+                visibleCount = allMarkers.filter(marker => matchesFilters(marker.options.reportData)).length;
+            }
+
             visibleIssuesElement.textContent = visibleCount;
         }
     }
@@ -221,11 +520,8 @@ document.addEventListener('DOMContentLoaded', function() {
         statusFilter.value = 'all';
         dateFilter.value = 'all';
 
-        // Add all markers back to the map
-        allMarkers.forEach(marker => marker.addTo(fullMap));
-
-        // Update visible count
-        updateVisibleCount();
+        // Apply filters (which will now show all markers)
+        applyFilters();
     }
 
     // Event listeners for filter controls
@@ -235,6 +531,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (resetFiltersBtn) {
         resetFiltersBtn.addEventListener('click', resetFilters);
+    }
+
+    // Event listeners for view toggle buttons
+    if (markerViewBtn) {
+        markerViewBtn.addEventListener('click', function() {
+            setMapView('marker');
+        });
+    }
+
+    if (clusterViewBtn) {
+        clusterViewBtn.addEventListener('click', function() {
+            setMapView('cluster');
+        });
+    }
+
+    if (heatViewBtn) {
+        heatViewBtn.addEventListener('click', function() {
+            setMapView('heat');
+        });
     }
 
     // Helper functions for marker display

@@ -17,10 +17,28 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
+    <!-- Leaflet MarkerCluster CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <!-- Leaflet Locate Control CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
+    <!-- Leaflet Search CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@3.0.2/dist/leaflet-search.min.css" />
+    <!-- Leaflet Heat CSS -->
+    <link rel="stylesheet" href="../css/leaflet-heat.css" />
+
     <!-- Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
+    <!-- Leaflet MarkerCluster JavaScript -->
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <!-- Leaflet Locate Control JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js"></script>
+    <!-- Leaflet Search JavaScript -->
+    <script src="https://unpkg.com/leaflet-search@3.0.2/dist/leaflet-search.min.js"></script>
+    <!-- Leaflet Heat JavaScript -->
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 </head>
 <body>
     <header class="main-header">
@@ -126,7 +144,20 @@
                 </div>
             </div>
 
-            <div id="full-map" class="full-map-container"></div>
+            <div id="full-map" class="full-map-container">
+                <!-- Map view toggle buttons -->
+                <div class="map-view-buttons">
+                    <button id="marker-view" class="map-view-button active">Shenja</button>
+                    <button id="cluster-view" class="map-view-button">Grupime</button>
+                    <button id="heat-view" class="map-view-button">Heatmap</button>
+                </div>
+
+                <!-- Address search bar -->
+                <div class="address-search-container">
+                    <input type="text" id="address-search" class="address-search-input" placeholder="Kërko adresë..." />
+                    <div id="address-search-results" class="address-search-results"></div>
+                </div>
+            </div>
 
             <div class="map-stats">
                 <div class="stat-item">

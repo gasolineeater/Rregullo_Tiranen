@@ -1,0 +1,296 @@
+/* Leaflet Heat Map Styles */
+
+.map-view-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    padding: 5px;
+}
+
+.dark-mode .map-view-toggle {
+    background-color: #333;
+}
+
+.map-view-toggle button {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.map-view-toggle button.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 3px;
+}
+
+.map-view-toggle button:hover:not(.active) {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.dark-mode .map-view-toggle button:hover:not(.active) {
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* Custom cluster styles */
+.marker-cluster {
+    background-color: rgba(var(--color-primary-rgb), 0.6);
+    border: 3px solid rgba(var(--color-primary-rgb), 0.2);
+    color: white;
+}
+
+.marker-cluster div {
+    background-color: rgba(var(--color-primary-rgb), 0.8);
+    color: white;
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-top: 5px;
+    text-align: center;
+    border-radius: 15px;
+    font-size: 12px;
+    line-height: 30px;
+    font-weight: bold;
+}
+
+.marker-cluster-small {
+    background-color: rgba(var(--color-info-rgb), 0.6);
+    border: 3px solid rgba(var(--color-info-rgb), 0.2);
+}
+
+.marker-cluster-small div {
+    background-color: rgba(var(--color-info-rgb), 0.8);
+}
+
+.marker-cluster-medium {
+    background-color: rgba(var(--color-warning-rgb), 0.6);
+    border: 3px solid rgba(var(--color-warning-rgb), 0.2);
+}
+
+.marker-cluster-medium div {
+    background-color: rgba(var(--color-warning-rgb), 0.8);
+}
+
+.marker-cluster-large {
+    background-color: rgba(var(--color-danger-rgb), 0.6);
+    border: 3px solid rgba(var(--color-danger-rgb), 0.2);
+}
+
+.marker-cluster-large div {
+    background-color: rgba(var(--color-danger-rgb), 0.8);
+}
+
+/* Search control styles */
+.leaflet-control-search .search-button {
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.dark-mode .leaflet-control-search .search-button {
+    background-color: #333;
+    color: white;
+}
+
+.leaflet-control-search .search-input {
+    height: 30px;
+    padding: 0 8px;
+    border: none;
+    background-color: white;
+    color: var(--color-text);
+}
+
+.dark-mode .leaflet-control-search .search-input {
+    background-color: #333;
+    color: white;
+}
+
+.leaflet-control-search .search-tooltip {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+}
+
+.dark-mode .leaflet-control-search .search-tooltip {
+    background-color: #333;
+}
+
+.leaflet-control-search .search-tip {
+    color: var(--color-text);
+    padding: 5px 8px;
+}
+
+.dark-mode .leaflet-control-search .search-tip {
+    color: white;
+}
+
+.leaflet-control-search .search-tip:hover,
+.leaflet-control-search .search-tip.search-tip-select {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* Locate control styles */
+.leaflet-control-locate a {
+    color: var(--color-text);
+}
+
+.dark-mode .leaflet-control-locate a {
+    color: white;
+    background-color: #333;
+}
+
+.leaflet-control-locate.active a {
+    color: white;
+    background-color: var(--color-primary);
+}
+
+/* Loading indicator for map */
+.map-loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.map-loading-indicator .spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Address search bar */
+.address-search-container {
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    z-index: 1000;
+    width: 300px;
+    max-width: calc(100% - 100px);
+}
+
+.address-search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    font-size: 14px;
+}
+
+.dark-mode .address-search-input {
+    background-color: #333;
+    color: white;
+}
+
+.address-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+}
+
+.dark-mode .address-search-results {
+    background-color: #333;
+}
+
+.address-search-results.active {
+    display: block;
+}
+
+.address-search-result {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.dark-mode .address-search-result {
+    border-bottom-color: #444;
+}
+
+.address-search-result:hover {
+    background-color: #f5f5f5;
+}
+
+.dark-mode .address-search-result:hover {
+    background-color: #444;
+}
+
+/* Map view toggle buttons */
+.map-view-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    overflow: hidden;
+}
+
+.dark-mode .map-view-buttons {
+    background-color: #333;
+}
+
+.map-view-button {
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--color-text);
+    border-right: 1px solid #eee;
+}
+
+.dark-mode .map-view-button {
+    color: white;
+    border-right-color: #444;
+}
+
+.map-view-button:last-child {
+    border-right: none;
+}
+
+.map-view-button.active {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.map-view-button:hover:not(.active) {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.dark-mode .map-view-button:hover:not(.active) {
+    background-color: rgba(255,255,255,0.1);
+}
