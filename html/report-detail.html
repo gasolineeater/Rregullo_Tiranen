@@ -138,6 +138,36 @@
                 </div>
             </div>
 
+            <!-- Photos Section -->
+            <div class="report-photos" id="report-photos-container">
+                <div class="info-card">
+                    <h3>Fotot</h3>
+                    <div class="photos-grid" id="photos-grid">
+                        <p id="no-photos-message">Nuk ka foto të disponueshme për këtë raport.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="report-comments">
+                <div class="info-card">
+                    <h3>Komente</h3>
+                    <div class="comments-list" id="comments-list">
+                        <p id="no-comments-message">Nuk ka komente për këtë raport.</p>
+                    </div>
+
+                    <div class="add-comment-form">
+                        <h4>Shto një koment</h4>
+                        <form id="comment-form">
+                            <div class="form-field">
+                                <textarea id="comment-text" name="comment-text" rows="3" placeholder="Shkruani komentin tuaj këtu..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Posto Komentin</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div class="report-actions">
                 <a href="map.html" class="btn btn-secondary">Kthehu te Harta</a>
                 <button id="update-status-btn" class="btn btn-primary">Përditëso Statusin</button>
@@ -194,6 +224,7 @@
         </div>
     </div>
 
+    <script src="../js/api-service.js"></script>
     <script src="../js/data-store.js"></script>
     <script src="../js/auth-store.js"></script>
     <script src="../js/main.js"></script>
