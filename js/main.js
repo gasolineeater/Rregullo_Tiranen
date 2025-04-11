@@ -6,6 +6,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         PerformanceUtils.initialize();
     }
 
+    // Initialize accessibility module if available
+    if (typeof AccessibilityModule !== 'undefined') {
+        AccessibilityModule.initialize();
+    }
+
+    // Initialize localization module if available
+    if (typeof LocalizationModule !== 'undefined') {
+        await LocalizationModule.initialize();
+    }
+
     // Check if notifications module is available and initialize it
     if (typeof NotificationsModule !== 'undefined') {
         try {

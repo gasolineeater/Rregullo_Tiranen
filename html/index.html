@@ -3,116 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rregullo Tiranen - Një platformë për raportimin e problemeve urbane në Tiranë">
     <title>Rregullo Tiranen - Përmirëso qytetin tonë</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="css/accessibility.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content" data-i18n="accessibility.skipToContent">Kalo te përmbajtja</a>
+
     <header class="main-header">
         <div class="container">
             <div class="logo">
-                <h1>Rregullo Tiranen</h1>
+                <h1 data-i18n="app.name">Rregullo Tiranen</h1>
             </div>
-            <nav class="main-nav">
+            <nav class="main-nav" role="navigation" aria-label="Main Navigation">
                 <ul>
-                    <li><a href="index.html" class="active">Ballina</a></li>
-                    <li><a href="#">Raporto</a></li>
-                    <li><a href="#">Shiko Hartën</a></li>
-                    <li><a href="#">Rreth Nesh</a></li>
+                    <li><a href="index.html" class="active" data-i18n="nav.home">Ballina</a></li>
+                    <li><a href="#" data-i18n="nav.newReport">Raporto</a></li>
+                    <li><a href="#" data-i18n="nav.map">Shiko Hartën</a></li>
+                    <li><a href="#" data-i18n="nav.about">Rreth Nesh</a></li>
                 </ul>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
                     <span class="icon">🌓</span>
-                    <span class="theme-label">Ndryshoni Temen</span>
+                    <span class="theme-label" data-i18n="common.theme">Ndryshoni Temen</span>
                 </button>
             </nav>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h2>Ndihmo në përmirësimin e Tiranës</h2>
-                <p>Raporto probleme infrastrukturore, mbeturina, dhe çështje të tjera urbane për një Tiranë më të mirë.</p>
-                <a href="#" class="btn btn-primary">Raporto një Problem</a>
-            </div>
-        </div>
-    </section>
-
-    <section class="quick-stats">
-        <div class="container">
-            <div class="stat-card">
-                <h3>237</h3>
-                <p>Probleme të raportuara</p>
-            </div>
-            <div class="stat-card">
-                <h3>142</h3>
-                <p>Probleme të zgjidhura</p>
-            </div>
-            <div class="stat-card">
-                <h3>48</h3>
-                <p>Në proces</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="map-preview">
-        <div class="container">
-            <h2>Problemet e raportuara në Tiranë</h2>
-            <div id="map-container">
-                <!-- Map will be loaded here with JavaScript -->
-                <div class="map-placeholder">Harta do të ngarkohet këtu</div>
-            </div>
-            <a href="#" class="btn btn-secondary">Shiko hartën e plotë</a>
-        </div>
-    </section>
-
-    <section class="success-stories">
-        <div class="container">
-            <h2>Probleme të zgjidhura kohët e fundit</h2>
-            <div class="story-grid">
-                <!-- Success stories will go here -->
-                <div class="story-card">
-                    <div class="story-image placeholder"></div>
-                    <h3>Ndriçim i riparuar në Bulevardin Zhan D'Ark</h3>
-                    <p>Pas raportimit nga qytetarët, ndriçimi u riparua brenda 48 orëve.</p>
-                </div>
-                <div class="story-card">
-                    <div class="story-image placeholder"></div>
-                    <h3>Pastrimi i mbeturinave në Parkun e Liqenit</h3>
-                    <p>Një zonë e parkut u pastrua pas raportimeve të shumta nga vizitorët.</p>
+    <main id="main-content">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 data-i18n="home.subtitle">Ndihmo në përmirësimin e Tiranës</h2>
+                    <p data-i18n="home.subtitle">Raporto probleme infrastrukturore, mbeturina, dhe çështje të tjera urbane për një Tiranë më të mirë.</p>
+                    <a href="#" class="btn btn-primary" data-i18n="home.reportButton">Raporto një Problem</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h3>Rregullo Tiranen</h3>
-                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+        <section class="quick-stats" aria-labelledby="stats-heading">
+            <div class="container">
+                <h2 id="stats-heading" class="sr-only" data-i18n="home.statistics.title">Statistika</h2>
+                <div class="stat-card">
+                    <h3>237</h3>
+                    <p data-i18n="home.statistics.totalReports">Probleme të raportuara</p>
                 </div>
-                <div class="footer-links">
-                    <h4>Lidhje të Shpejta</h4>
-                    <ul>
-                        <li><a href="#">Raporto Problem</a></li>
-                        <li><a href="#">Shiko Hartën</a></li>
-                        <li><a href="#">Si Funksionon</a></li>
-                        <li><a href="#">Kontakto</a></li>
-                    </ul>
+                <div class="stat-card">
+                    <h3>142</h3>
+                    <p data-i18n="home.statistics.resolvedReports">Probleme të zgjidhura</p>
+                </div>
+                <div class="stat-card">
+                    <h3>48</h3>
+                    <p data-i18n="home.statistics.inProgress">Në proces</p>
                 </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+        </section>
+
+        <section class="map-preview" aria-labelledby="map-heading">
+            <div class="container">
+                <h2 id="map-heading" data-i18n="map.title">Problemet e raportuara në Tiranë</h2>
+                <div id="map-container">
+                    <!-- Map will be loaded here with JavaScript -->
+                    <div class="map-placeholder" aria-label="Harta e problemeve të raportuara">Harta do të ngarkohet këtu</div>
+                </div>
+                <a href="html/map.html" class="btn btn-secondary" data-i18n="home.viewMapButton">Shiko hartën e plotë</a>
             </div>
-        </div>
-    </footer>
+        </section>
+
+        <section class="success-stories" aria-labelledby="success-heading">
+            <div class="container">
+                <h2 id="success-heading" data-i18n="home.recentReports">Probleme të zgjidhura kohët e fundit</h2>
+                <div class="story-grid">
+                    <!-- Success stories will go here -->
+                    <div class="story-card">
+                        <div class="story-image placeholder" aria-label="Foto e ndriçimit të riparuar"></div>
+                        <h3>Ndriçim i riparuar në Bulevardin Zhan D'Ark</h3>
+                        <p>Pas raportimit nga qytetarët, ndriçimi u riparua brenda 48 orëve.</p>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-image placeholder" aria-label="Foto e pastrimit të mbeturinave"></div>
+                        <h3>Pastrimi i mbeturinave në Parkun e Liqenit</h3>
+                        <p>Një zonë e parkut u pastrua pas raportimeve të shumta nga vizitorët.</p>
+                    </div>
+                </div>
+                <div class="view-all-link">
+                    <a href="html/reports.html" class="btn btn-secondary" data-i18n="home.viewAllReports">Shiko të gjitha raportet</a>
+                </div>
+            </div>
+        </section>
+
+        <footer role="contentinfo">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <h3 data-i18n="app.name">Rregullo Tiranen</h3>
+                        <p data-i18n="app.tagline">Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4 data-i18n="footer.quickLinks">Lidhje të Shpejta</h4>
+                        <ul>
+                            <li><a href="html/new-report.html" data-i18n="nav.newReport">Raporto Problem</a></li>
+                            <li><a href="html/map.html" data-i18n="nav.map">Shiko Hartën</a></li>
+                            <li><a href="html/about.html" data-i18n="nav.about">Si Funksionon</a></li>
+                            <li><a href="html/contact.html" data-i18n="nav.contact">Kontakto</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p data-i18n="footer.copyright">&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+                </div>
+            </div>
+        </footer>
+    </main>
 
     <script src="js/api-service.js"></script>
     <script src="js/auth-store.js"></script>
     <script src="js/data-store.js"></script>
     <script src="js/performance.js"></script>
+    <script src="js/localization.js"></script>
+    <script src="js/accessibility.js"></script>
     <script src="js/notifications.js"></script>
     <script src="js/main.js"></script>
     <script src="js/pwa.js"></script>

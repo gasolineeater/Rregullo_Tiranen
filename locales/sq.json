@@ -1,0 +1,399 @@
+{
+  "app": {
+    "name": "Rregullo Tiranen",
+    "tagline": "Një iniciativë qytetare për përmirësimin e Tiranës"
+  },
+  "nav": {
+    "home": "Kryefaqja",
+    "map": "Harta",
+    "reports": "Raportet",
+    "newReport": "Raport i Ri",
+    "about": "Rreth Nesh",
+    "contact": "Kontakt",
+    "login": "Hyr",
+    "register": "Regjistrohu",
+    "profile": "Profili",
+    "admin": "Admin",
+    "logout": "Dil"
+  },
+  "home": {
+    "title": "Mirë se vini në Rregullo Tiranen",
+    "subtitle": "Raportoni probleme urbane dhe ndihmoni në përmirësimin e qytetit tonë",
+    "reportButton": "Raporto një Problem",
+    "viewMapButton": "Shiko Hartën",
+    "recentReports": "Raportet e Fundit",
+    "viewAllReports": "Shiko të Gjitha Raportet",
+    "statistics": {
+      "title": "Statistika",
+      "totalReports": "Raporte Totale",
+      "resolvedReports": "Raporte të Zgjidhura",
+      "pendingReports": "Raporte në Pritje",
+      "activeUsers": "Përdorues Aktivë"
+    },
+    "categories": {
+      "title": "Kategoritë",
+      "infrastructure": "Infrastrukturë",
+      "environment": "Mjedis",
+      "publicServices": "Shërbime Publike",
+      "community": "Komunitet"
+    },
+    "howItWorks": {
+      "title": "Si Funksionon",
+      "step1": "Regjistrohuni ose Hyni",
+      "step2": "Raportoni një Problem",
+      "step3": "Ndiqni Progresin",
+      "step4": "Problemi Zgjidhet"
+    }
+  },
+  "map": {
+    "title": "Harta e Raporteve",
+    "filters": {
+      "title": "Filtro",
+      "category": "Kategoria",
+      "status": "Statusi",
+      "date": "Data",
+      "apply": "Apliko",
+      "reset": "Rivendos"
+    },
+    "search": "Kërko adresë...",
+    "stats": {
+      "visible": "Raporte të Dukshme",
+      "total": "Raporte Totale"
+    },
+    "views": {
+      "markers": "Shenja",
+      "clusters": "Grupime",
+      "heatmap": "Heatmap"
+    }
+  },
+  "reports": {
+    "title": "Raportet",
+    "newReport": "Raport i Ri",
+    "filters": {
+      "title": "Filtro",
+      "category": "Kategoria",
+      "status": "Statusi",
+      "date": "Data",
+      "apply": "Apliko",
+      "reset": "Rivendos"
+    },
+    "search": "Kërko raporte...",
+    "sort": {
+      "title": "Rendit sipas",
+      "newest": "Më të Rejat",
+      "oldest": "Më të Vjetrat",
+      "mostVoted": "Më të Votuarat",
+      "mostCommented": "Më të Komentuarat"
+    },
+    "noReports": "Nuk u gjetën raporte"
+  },
+  "reportDetail": {
+    "status": {
+      "pending": "Në Pritje",
+      "inProgress": "Në Proces",
+      "resolved": "I Zgjidhur"
+    },
+    "category": {
+      "infrastructure": "Infrastrukturë",
+      "environment": "Mjedis",
+      "publicServices": "Shërbime Publike",
+      "community": "Komunitet"
+    },
+    "subcategory": {
+      "roadDamage": "Dëmtime të rrugëve",
+      "sidewalkDamage": "Dëmtime të trotuareve",
+      "streetLighting": "Ndriçimi rrugor",
+      "publicFacilities": "Objekte publike",
+      "trafficSignals": "Sinjalistika",
+      "littering": "Mbeturina",
+      "greenSpace": "Hapësira të gjelbërta",
+      "pollution": "Ndotje",
+      "treePlanting": "Mbjellje pemësh",
+      "wasteCollection": "Grumbullimi i mbeturinave",
+      "publicTransport": "Transporti publik",
+      "waterUtilities": "Ujë dhe shërbime",
+      "publicBuilding": "Ndërtesa publike",
+      "beautification": "Zbukurim i lagjes",
+      "publicSafety": "Siguria publike",
+      "accessibility": "Aksesueshmëria",
+      "culturalPreservation": "Trashëgimia kulturore"
+    },
+    "reportedBy": "Raportuar nga",
+    "reportedOn": "Raportuar më",
+    "lastUpdated": "Përditësuar së fundmi",
+    "location": "Vendndodhja",
+    "description": "Përshkrimi",
+    "photos": "Fotot",
+    "noPhotos": "Nuk ka foto të disponueshme",
+    "comments": "Komentet",
+    "noComments": "Nuk ka komente për këtë raport",
+    "addComment": "Shto një koment",
+    "commentPlaceholder": "Shkruani komentin tuaj këtu...",
+    "submit": "Dërgo",
+    "upvote": "Voto",
+    "upvotes": "Vota",
+    "share": "Ndaj",
+    "report": "Raporto",
+    "edit": "Ndrysho",
+    "delete": "Fshi",
+    "confirmDelete": "A jeni të sigurt që dëshironi të fshini këtë raport?",
+    "yes": "Po",
+    "no": "Jo",
+    "updateStatus": "Përditëso Statusin",
+    "statusUpdateSuccess": "Statusi u përditësua me sukses",
+    "commentSuccess": "Komenti u shtua me sukses",
+    "deleteSuccess": "Raporti u fshi me sukses",
+    "viewOnMap": "Shiko në hartë"
+  },
+  "newReport": {
+    "title": "Raporto një Problem",
+    "step1": "Detajet e Problemit",
+    "step2": "Vendndodhja",
+    "step3": "Fotot",
+    "step4": "Rishikim",
+    "category": "Kategoria",
+    "selectCategory": "Zgjidhni një kategori",
+    "subcategory": "Nënkategoria",
+    "selectSubcategory": "Zgjidhni një nënkategori",
+    "title": "Titulli",
+    "titlePlaceholder": "Jepni një titull të shkurtër për problemin",
+    "description": "Përshkrimi",
+    "descriptionPlaceholder": "Përshkruani problemin në detaje",
+    "severity": "Serioziteti",
+    "low": "I Ulët",
+    "medium": "Mesatar",
+    "high": "I Lartë",
+    "location": "Vendndodhja",
+    "address": "Adresa",
+    "addressPlaceholder": "Shkruani adresën ose zgjidhni në hartë",
+    "neighborhood": "Lagjja",
+    "selectNeighborhood": "Zgjidhni një lagje",
+    "dragMarker": "Tërhiqni shenjuesin për të zgjedhur vendndodhjen e saktë",
+    "photos": "Fotot",
+    "addPhotos": "Shtoni Foto",
+    "dragPhotos": "Tërhiqni fotot këtu ose klikoni për të zgjedhur",
+    "maxPhotos": "Maksimumi 5 foto",
+    "review": "Rishikoni Raportin",
+    "submit": "Dërgo Raportin",
+    "next": "Tjetër",
+    "back": "Mbrapa",
+    "requiredField": "Kjo fushë është e detyrueshme",
+    "invalidTitle": "Titulli duhet të jetë midis 5 dhe 100 karaktere",
+    "invalidDescription": "Përshkrimi duhet të jetë midis 20 dhe 1000 karaktere",
+    "invalidLocation": "Ju lutemi zgjidhni një vendndodhje",
+    "submitSuccess": "Raporti u dërgua me sukses",
+    "submitError": "Ndodhi një gabim gjatë dërgimit të raportit"
+  },
+  "auth": {
+    "login": {
+      "title": "Hyrje",
+      "email": "Email",
+      "password": "Fjalëkalimi",
+      "rememberMe": "Më mbaj mend",
+      "forgotPassword": "Keni harruar fjalëkalimin?",
+      "loginButton": "Hyr",
+      "noAccount": "Nuk keni një llogari?",
+      "register": "Regjistrohuni",
+      "loginSuccess": "Hyrja u krye me sukses",
+      "loginError": "Email ose fjalëkalim i pasaktë"
+    },
+    "register": {
+      "title": "Regjistrim",
+      "fullName": "Emri i plotë",
+      "email": "Email",
+      "password": "Fjalëkalimi",
+      "confirmPassword": "Konfirmo fjalëkalimin",
+      "phone": "Numri i telefonit (opsional)",
+      "neighborhood": "Lagjja (opsional)",
+      "terms": "Pranoj kushtet e përdorimit",
+      "registerButton": "Regjistrohu",
+      "haveAccount": "Keni tashmë një llogari?",
+      "login": "Hyni",
+      "registerSuccess": "Regjistrimi u krye me sukses",
+      "registerError": "Ndodhi një gabim gjatë regjistrimit"
+    },
+    "forgotPassword": {
+      "title": "Rivendosje e Fjalëkalimit",
+      "email": "Email",
+      "resetButton": "Dërgo lidhjen e rivendosjes",
+      "backToLogin": "Kthehu te hyrja",
+      "resetSuccess": "Lidhja e rivendosjes u dërgua në email-in tuaj",
+      "resetError": "Ndodhi një gabim gjatë dërgimit të lidhjes së rivendosjes"
+    },
+    "resetPassword": {
+      "title": "Rivendos Fjalëkalimin",
+      "newPassword": "Fjalëkalimi i ri",
+      "confirmPassword": "Konfirmo fjalëkalimin",
+      "resetButton": "Rivendos fjalëkalimin",
+      "resetSuccess": "Fjalëkalimi u rivendos me sukses",
+      "resetError": "Ndodhi një gabim gjatë rivendosjes së fjalëkalimit"
+    },
+    "logout": {
+      "logoutSuccess": "Dalja u krye me sukses"
+    }
+  },
+  "profile": {
+    "title": "Profili Im",
+    "personalInfo": "Informacioni Personal",
+    "fullName": "Emri i plotë",
+    "email": "Email",
+    "phone": "Numri i telefonit",
+    "neighborhood": "Lagjja",
+    "memberSince": "Anëtar që nga",
+    "updateProfile": "Përditëso Profilin",
+    "changePassword": "Ndrysho Fjalëkalimin",
+    "currentPassword": "Fjalëkalimi aktual",
+    "newPassword": "Fjalëkalimi i ri",
+    "confirmPassword": "Konfirmo fjalëkalimin",
+    "updateButton": "Përditëso",
+    "myReports": "Raportet e Mia",
+    "myComments": "Komentet e Mia",
+    "noReports": "Nuk keni raporte",
+    "noComments": "Nuk keni komente",
+    "updateSuccess": "Profili u përditësua me sukses",
+    "updateError": "Ndodhi një gabim gjatë përditësimit të profilit",
+    "passwordSuccess": "Fjalëkalimi u ndryshua me sukses",
+    "passwordError": "Ndodhi një gabim gjatë ndryshimit të fjalëkalimit"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Dashboard Administratori",
+      "welcome": "Mirë se vini në panelin e administratorit të Rregullo Tiranen. Këtu mund të menaxhoni raportet, përdoruesit dhe të shikoni statistikat e platformës.",
+      "stats": {
+        "users": "Përdorues",
+        "reports": "Raporte Totale",
+        "pending": "Në Pritje",
+        "inProgress": "Në Proces",
+        "resolved": "Të Zgjidhura",
+        "recentReports": "Raportet e Javës"
+      },
+      "charts": {
+        "reportsByCategory": "Raportet sipas Kategorisë",
+        "reportsByStatus": "Raportet sipas Statusit"
+      },
+      "recentReports": "Raportet e Fundit",
+      "recentUsers": "Përdoruesit e Fundit",
+      "viewAll": "Shiko të Gjitha"
+    },
+    "reports": {
+      "title": "Menaxhimi i Raporteve",
+      "description": "Këtu mund të shikoni, filtroni dhe menaxhoni të gjitha raportet e dërguara nga përdoruesit.",
+      "filters": {
+        "status": "Filtro sipas Statusit",
+        "category": "Filtro sipas Kategorisë",
+        "neighborhood": "Filtro sipas Lagjes",
+        "search": "Kërko"
+      },
+      "actions": {
+        "view": "Shiko Detajet",
+        "edit": "Ndrysho",
+        "delete": "Fshi"
+      },
+      "reportDetails": "Detajet e Raportit",
+      "updateStatus": "Përditëso Statusin",
+      "newStatus": "Statusi i Ri",
+      "statusComment": "Komenti",
+      "update": "Përditëso"
+    },
+    "users": {
+      "title": "Menaxhimi i Përdoruesve",
+      "description": "Këtu mund të shikoni, filtroni dhe menaxhoni të gjithë përdoruesit e regjistruar në platformë.",
+      "filters": {
+        "role": "Filtro sipas Rolit",
+        "search": "Kërko"
+      },
+      "actions": {
+        "view": "Shiko Detajet",
+        "edit": "Ndrysho",
+        "delete": "Fshi"
+      },
+      "userDetails": "Detajet e Përdoruesit",
+      "role": "Roli",
+      "save": "Ruaj Ndryshimet"
+    },
+    "notifications": {
+      "title": "Menaxhimi i Njoftimeve",
+      "description": "Këtu mund të dërgoni njoftime të reja për të gjithë përdoruesit e platformës.",
+      "newNotification": "Dërgo Njoftim të Ri",
+      "notificationTitle": "Titulli i Njoftimit",
+      "notificationMessage": "Mesazhi i Njoftimit",
+      "notificationType": "Lloji i Njoftimit",
+      "send": "Dërgo Njoftimin",
+      "recentNotifications": "Njoftimet e Dërguara së Fundmi"
+    }
+  },
+  "notifications": {
+    "title": "Njoftimet",
+    "markAllRead": "Shëno të gjitha si të lexuara",
+    "noNotifications": "Nuk keni njoftime të reja",
+    "loading": "Duke ngarkuar njoftimet...",
+    "markRead": "Shëno si të lexuar",
+    "delete": "Fshi",
+    "now": "Tani",
+    "minutesAgo": "{{count}} min më parë",
+    "hoursAgo": "{{count}} orë më parë",
+    "daysAgo": "{{count}} ditë më parë"
+  },
+  "common": {
+    "loading": "Duke ngarkuar...",
+    "error": "Ndodhi një gabim",
+    "success": "Veprimi u krye me sukses",
+    "confirm": "Konfirmo",
+    "cancel": "Anulo",
+    "save": "Ruaj",
+    "edit": "Ndrysho",
+    "delete": "Fshi",
+    "view": "Shiko",
+    "search": "Kërko",
+    "filter": "Filtro",
+    "reset": "Rivendos",
+    "apply": "Apliko",
+    "all": "Të Gjitha",
+    "noResults": "Nuk u gjetën rezultate",
+    "required": "E detyrueshme",
+    "optional": "Opsionale",
+    "more": "Më shumë",
+    "less": "Më pak",
+    "next": "Tjetër",
+    "previous": "E mëparshme",
+    "page": "Faqja {{current}} nga {{total}}",
+    "perPage": "{{count}} për faqe",
+    "exportCSV": "Eksporto CSV",
+    "confirmDelete": "A jeni të sigurt që dëshironi të fshini këtë?",
+    "yes": "Po",
+    "no": "Jo",
+    "close": "Mbyll",
+    "today": "Sot",
+    "yesterday": "Dje",
+    "thisWeek": "Këtë javë",
+    "lastWeek": "Javën e kaluar",
+    "thisMonth": "Këtë muaj",
+    "lastMonth": "Muajin e kaluar",
+    "dateRange": "Interval date",
+    "from": "Nga",
+    "to": "Deri",
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Joaktiv",
+      "pending": "Në pritje",
+      "approved": "Aprovuar",
+      "rejected": "Refuzuar"
+    }
+  },
+  "accessibility": {
+    "skipToContent": "Kalo te përmbajtja",
+    "highContrast": "Kontrast i Lartë",
+    "reducedMotion": "Lëvizje e Reduktuar",
+    "fontSize": "Madhësia e Shkronjave",
+    "increaseFontSize": "Rrit madhësinë e shkronjave",
+    "decreaseFontSize": "Zvogëlo madhësinë e shkronjave",
+    "accessibilityOptions": "Opsionet e Aksesueshmërisë"
+  },
+  "footer": {
+    "about": "Rreth Nesh",
+    "contact": "Kontakt",
+    "terms": "Kushtet e Përdorimit",
+    "privacy": "Politika e Privatësisë",
+    "copyright": "© 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara."
+  }
+}
