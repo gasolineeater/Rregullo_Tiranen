@@ -246,14 +246,29 @@ const ApiService = (function() {
 
             const url = `${API_BASE_URL}/reports${queryString ? `?${queryString}` : ''}`;
 
+            // Check if we have a cached response
+            if (typeof PerformanceUtils !== 'undefined') {
+                const cachedResponse = PerformanceUtils.getCachedApiResponse(url);
+                if (cachedResponse) {
+                    console.log('Using cached reports data');
+                    return cachedResponse;
+                }
+            }
+
             const response = await fetch(url, {
                 method: 'GET',
                 headers: getHeaders()
             });
 
             const data = await handleResponse(response);
+            const reports = data.data;
 
-            return data.data;
+            // Cache the response
+            if (typeof PerformanceUtils !== 'undefined') {
+                PerformanceUtils.cacheApiResponse(url, reports);
+            }
+
+            return reports;
         } catch (error) {
             console.error('Error fetching reports:', error);
             return [];
@@ -263,14 +278,31 @@ const ApiService = (function() {
     // Get a report by ID
     async function getReportById(reportId) {
         try {
-            const response = await fetch(`${API_BASE_URL}/reports/${reportId}`, {
+            const url = `${API_BASE_URL}/reports/${reportId}`;
+
+            // Check if we have a cached response
+            if (typeof PerformanceUtils !== 'undefined') {
+                const cachedResponse = PerformanceUtils.getCachedApiResponse(url);
+                if (cachedResponse) {
+                    console.log(`Using cached data for report ${reportId}`);
+                    return cachedResponse;
+                }
+            }
+
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: getHeaders()
             });
 
             const data = await handleResponse(response);
+            const report = data.data;
 
-            return data.data;
+            // Cache the response
+            if (typeof PerformanceUtils !== 'undefined') {
+                PerformanceUtils.cacheApiResponse(url, report);
+            }
+
+            return report;
         } catch (error) {
             console.error(`Error fetching report ${reportId}:`, error);
             return null;

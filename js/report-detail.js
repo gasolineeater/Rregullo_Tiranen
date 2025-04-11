@@ -271,29 +271,44 @@ async function displayPhotos(report) {
                 photoItem.className = 'photo-item';
                 photoItem.dataset.index = index;
 
-                // Create image element
+                // Create image element with lazy loading
                 const img = document.createElement('img');
 
                 // Determine the correct URL for the photo
+                let photoUrl;
                 if (photo.startsWith('http')) {
-                    img.src = photo;
+                    photoUrl = photo;
                 } else if (photo.startsWith('/')) {
-                    img.src = `http://localhost:5000${photo}`;
+                    photoUrl = `http://localhost:5000${photo}`;
                 } else {
-                    img.src = `http://localhost:5000/uploads/${photo}`;
+                    photoUrl = `http://localhost:5000/uploads/${photo}`;
                 }
 
+                // Use data-src for lazy loading
+                img.dataset.src = photoUrl;
                 img.alt = `Foto ${index + 1} e raportit`;
-                img.loading = 'lazy';
+
+                // Add a low-quality placeholder or loading indicator
+                img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect width="300" height="200" fill="%23cccccc"%3E%3C/rect%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="%23555555"%3EDuke ngarkuar...%3C/text%3E%3C/svg%3E';
+                img.className = 'lazy-image';
 
                 // Add click event to open modal
                 photoItem.addEventListener('click', function() {
+                    // Ensure the image is loaded before opening modal
+                    if (typeof PerformanceUtils !== 'undefined' && img.dataset.src) {
+                        PerformanceUtils.loadImage(img, img.dataset.src);
+                    }
                     openPhotoModal(index, photos);
                 });
 
                 photoItem.appendChild(img);
                 photosGrid.appendChild(photoItem);
             });
+
+            // Initialize lazy loading if PerformanceUtils is available
+            if (typeof PerformanceUtils !== 'undefined') {
+                PerformanceUtils.lazyLoadImages('.lazy-image');
+            }
 
             // Show photos container
             if (photosContainer) {
@@ -341,12 +356,24 @@ function openPhotoModal(index, photos) {
 
     // Set image source
     const photo = photos[index];
+    let photoUrl;
+
     if (photo.startsWith('http')) {
-        modalImg.src = photo;
+        photoUrl = photo;
     } else if (photo.startsWith('/')) {
-        modalImg.src = `http://localhost:5000${photo}`;
+        photoUrl = `http://localhost:5000${photo}`;
     } else {
-        modalImg.src = `http://localhost:5000/uploads/${photo}`;
+        photoUrl = `http://localhost:5000/uploads/${photo}`;
+    }
+
+    // Show loading indicator in modal
+    modalImg.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect width="300" height="200" fill="%23333333"%3E%3C/rect%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="%23ffffff"%3EDuke ngarkuar...%3C/text%3E%3C/svg%3E';
+
+    // Use PerformanceUtils if available
+    if (typeof PerformanceUtils !== 'undefined') {
+        PerformanceUtils.loadImage(modalImg, photoUrl);
+    } else {
+        modalImg.src = photoUrl;
     }
 
     // Show modal
@@ -375,7 +402,8 @@ function navigatePhoto(direction) {
     // Get photos array
     const photos = Array.from(photoItems).map(item => {
         const img = item.querySelector('img');
-        return img.src;
+        // Use data-src if available (for lazy loaded images)
+        return img.dataset.src || img.src;
     });
 
     // Open modal with new index

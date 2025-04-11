@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('Rregullo Tiranen application initialized');
 
+    // Initialize performance utilities if available
+    if (typeof PerformanceUtils !== 'undefined') {
+        PerformanceUtils.initialize();
+    }
+
     // Check if notifications module is available and initialize it
     if (typeof NotificationsModule !== 'undefined') {
         try {
