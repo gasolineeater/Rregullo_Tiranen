@@ -37,58 +37,102 @@ document.addEventListener('DOMContentLoaded', function() {
     let allMarkers = [];
 
     // Load and display all reports
-    function loadReports() {
+    async function loadReports() {
         // Clear existing markers
         allMarkers.forEach(marker => marker.remove());
         allMarkers = [];
 
-        // Get all reports
-        const reports = DataStore.getAllReports();
-
-        // Update total count
-        if (totalIssuesElement) {
-            totalIssuesElement.textContent = reports.length;
+        // Show loading indicator
+        const mapContainer = document.getElementById('full-map');
+        if (mapContainer) {
+            mapContainer.classList.add('loading');
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.className = 'map-loading-indicator';
+            loadingIndicator.innerHTML = '<div class="spinner"></div><p>Duke ngarkuar të dhënat...</p>';
+            mapContainer.appendChild(loadingIndicator);
         }
 
-        // Add markers for each report
-        reports.forEach(report => {
-            // Create custom icon based on category
-            const markerColor = getMarkerColor(report.category);
-            const markerIcon = L.divIcon({
-                className: `custom-marker ${report.category} ${report.status}`,
-                html: `<div style="background-color: ${markerColor};"></div>`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
+        try {
+            // Get all reports
+            const reports = await DataStore.getAllReports();
+
+            // Update total count
+            if (totalIssuesElement) {
+                totalIssuesElement.textContent = reports.length;
+            }
+
+            // Remove loading indicator
+            if (mapContainer) {
+                mapContainer.classList.remove('loading');
+                const loadingIndicator = mapContainer.querySelector('.map-loading-indicator');
+                if (loadingIndicator) {
+                    mapContainer.removeChild(loadingIndicator);
+                }
+            }
+
+            // Add markers for each report
+            reports.forEach(report => {
+                // Create custom icon based on category
+                const markerColor = getMarkerColor(report.category);
+                const markerIcon = L.divIcon({
+                    className: `custom-marker ${report.category} ${report.status}`,
+                    html: `<div style="background-color: ${markerColor};"></div>`,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
+                });
+
+                // Create marker and add to map
+                const marker = L.marker([report.lat, report.lng], {
+                    icon: markerIcon,
+                    reportData: report // Store report data with the marker for filtering
+                }).addTo(fullMap);
+
+                // Add popup with report details
+                marker.bindPopup(`
+                    <div class="map-marker-popup">
+                        <strong>${report.title}</strong>
+                        <span>Kategoria: ${getCategoryName(report.category)}</span>
+                        <span>Nënkategoria: ${getSubcategoryName(report.subcategory)}</span>
+                        <span>Statusi: ${getStatusName(report.status)}</span>
+                        <span>Data: ${formatDate(report.timestamp)}</span>
+                        <p>${report.description.substring(0, 100)}${report.description.length > 100 ? '...' : ''}</p>
+                        <span>Adresa: ${report.address}</span>
+                        <div class="popup-actions">
+                            <a href="report-detail.html?id=${report.id}" class="popup-link">Shiko detajet e plota</a>
+                        </div>
+                    </div>
+                `);
+
+                // Store marker for filtering
+                allMarkers.push(marker);
             });
 
-            // Create marker and add to map
-            const marker = L.marker([report.lat, report.lng], {
-                icon: markerIcon,
-                reportData: report // Store report data with the marker for filtering
-            }).addTo(fullMap);
+            // Update visible count
+            updateVisibleCount();
+        } catch (error) {
+            console.error('Error loading reports:', error);
 
-            // Add popup with report details
-            marker.bindPopup(`
-                <div class="map-marker-popup">
-                    <strong>${report.title}</strong>
-                    <span>Kategoria: ${getCategoryName(report.category)}</span>
-                    <span>Nënkategoria: ${getSubcategoryName(report.subcategory)}</span>
-                    <span>Statusi: ${getStatusName(report.status)}</span>
-                    <span>Data: ${formatDate(report.timestamp)}</span>
-                    <p>${report.description.substring(0, 100)}${report.description.length > 100 ? '...' : ''}</p>
-                    <span>Adresa: ${report.address}</span>
-                    <div class="popup-actions">
-                        <a href="report-detail.html?id=${report.id}" class="popup-link">Shiko detajet e plota</a>
-                    </div>
-                </div>
-            `);
+            // Remove loading indicator and show error message
+            if (mapContainer) {
+                mapContainer.classList.remove('loading');
+                const loadingIndicator = mapContainer.querySelector('.map-loading-indicator');
+                if (loadingIndicator) {
+                    mapContainer.removeChild(loadingIndicator);
+                }
 
-            // Store marker for filtering
-            allMarkers.push(marker);
-        });
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'map-error-message';
+                errorMessage.innerHTML = '<p>Ndodhi një gabim gjatë ngarkimit të të dhënave. Ju lutemi provoni përsëri.</p>';
+                mapContainer.appendChild(errorMessage);
 
-        // Update visible count
-        updateVisibleCount();
+                // Remove error message after 5 seconds
+                setTimeout(() => {
+                    if (errorMessage.parentNode === mapContainer) {
+                        mapContainer.removeChild(errorMessage);
+                    }
+                }, 5000);
+            }
+        }
     }
 
     // Apply filters to markers
@@ -97,22 +141,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const statusValue = statusFilter.value;
         const dateValue = dateFilter.value;
 
+        // Show loading indicator
+        const mapContainer = document.getElementById('full-map');
+        if (mapContainer) {
+            mapContainer.classList.add('filtering');
+        }
+
         // Clear all markers from map
         allMarkers.forEach(marker => marker.remove());
 
-        // Filter and add back markers that match criteria
-        let visibleMarkers = allMarkers.filter(marker => {
-            const report = marker.options.reportData;
-            let matches = true;
-
+        // Helper function to check if a report matches the filters
+        function matchesFilters(report) {
             // Category filter
             if (categoryValue !== 'all' && report.category !== categoryValue) {
-                matches = false;
+                return false;
             }
 
             // Status filter
             if (statusValue !== 'all' && report.status !== statusValue) {
-                matches = false;
+                return false;
             }
 
             // Date filter
@@ -123,30 +170,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (dateValue === 'today') {
                     // Check if report is from today
                     if (reportDate.toDateString() !== now.toDateString()) {
-                        matches = false;
+                        return false;
                     }
                 } else if (dateValue === 'week') {
                     // Check if report is from the last 7 days
                     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
                     if (reportDate < weekAgo) {
-                        matches = false;
+                        return false;
                     }
                 } else if (dateValue === 'month') {
                     // Check if report is from the last 30 days
                     const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
                     if (reportDate < monthAgo) {
-                        matches = false;
+                        return false;
                     }
                 }
             }
 
-            // If marker matches all criteria, add it back to the map
-            if (matches) {
+            return true;
+        }
+
+        // Add back markers that match criteria
+        allMarkers.forEach(marker => {
+            const report = marker.options.reportData;
+            if (matchesFilters(report)) {
                 marker.addTo(fullMap);
             }
-
-            return matches;
         });
+
+        // Remove filtering indicator
+        if (mapContainer) {
+            mapContainer.classList.remove('filtering');
+        }
 
         // Update visible count
         updateVisibleCount();

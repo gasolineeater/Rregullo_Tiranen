@@ -1,11 +1,35 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     console.log('Rregullo Tiranen application initialized');
 
-    // Update navigation based on authentication status
-    updateNavigation();
+    // Show loading indicator
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = '<div class="loading-spinner"></div><p>Duke ngarkuar aplikacionin...</p>';
+    document.body.appendChild(loadingOverlay);
 
-    // Update statistics on the homepage
-    updateStatistics();
+    try {
+        // Initialize backend connection
+        console.log('Initializing backend connection...');
+
+        // Wait for both auth and data stores to initialize
+        await Promise.all([
+            AuthStore.initialize(),
+            DataStore.initialize()
+        ]);
+
+        console.log('Backend connection initialized');
+
+        // Update navigation based on authentication status
+        updateNavigation();
+
+        // Update statistics on the homepage
+        updateStatistics();
+    } catch (error) {
+        console.error('Error initializing application:', error);
+    } finally {
+        // Remove loading overlay
+        document.body.removeChild(loadingOverlay);
+    }
 
     // Initialize the map on the homepage
     const mapContainer = document.getElementById('map-container');
@@ -214,171 +238,186 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to update navigation based on authentication status
-    function updateNavigation() {
-        // Check if AuthStore is available and user is logged in
-        if (typeof AuthStore !== 'undefined' && AuthStore.isLoggedIn && AuthStore.isLoggedIn()) {
-            const currentUser = AuthStore.getCurrentUser();
+    async function updateNavigation() {
+        // Check if AuthStore is available
+        if (typeof AuthStore !== 'undefined') {
+            try {
+                // Check if user is logged in
+                const isLoggedIn = await AuthStore.isLoggedIn();
+                if (isLoggedIn) {
+                    const currentUser = AuthStore.getCurrentUser();
 
-            // Get navigation elements
-            const mainNav = document.querySelector('.main-nav');
-            const navList = document.querySelector('.main-nav ul');
+                    // Get navigation elements
+                    const mainNav = document.querySelector('.main-nav');
+                    const navList = document.querySelector('.main-nav ul');
 
-            if (mainNav && navList) {
-                // Check if user menu already exists
-                if (!document.querySelector('.user-menu')) {
-                    // Create user menu
-                    const userMenu = document.createElement('div');
-                    userMenu.className = 'user-menu';
+                    if (mainNav && navList) {
+                        // Check if user menu already exists
+                        if (!document.querySelector('.user-menu')) {
+                        // Create user menu
+                        const userMenu = document.createElement('div');
+                        userMenu.className = 'user-menu';
 
-                    // Create user menu toggle button
-                    const userMenuToggle = document.createElement('button');
-                    userMenuToggle.className = 'user-menu-toggle';
-                    userMenuToggle.id = 'user-menu-toggle';
+                        // Create user menu toggle button
+                        const userMenuToggle = document.createElement('button');
+                        userMenuToggle.className = 'user-menu-toggle';
+                        userMenuToggle.id = 'user-menu-toggle';
 
-                    // Create user avatar
-                    const userAvatar = document.createElement('div');
-                    userAvatar.className = 'user-avatar';
+                        // Create user avatar
+                        const userAvatar = document.createElement('div');
+                        userAvatar.className = 'user-avatar';
 
-                    const userInitial = document.createElement('span');
-                    userInitial.className = 'user-initial';
-                    userInitial.id = 'user-initial';
-                    userInitial.textContent = currentUser.fullname.charAt(0).toUpperCase();
+                        const userInitial = document.createElement('span');
+                        userInitial.className = 'user-initial';
+                        userInitial.id = 'user-initial';
+                        userInitial.textContent = currentUser.fullname.charAt(0).toUpperCase();
 
-                    userAvatar.appendChild(userInitial);
+                        userAvatar.appendChild(userInitial);
 
-                    // Create user name
-                    const userName = document.createElement('span');
-                    userName.className = 'user-name';
-                    userName.id = 'user-name';
-                    userName.textContent = currentUser.fullname;
+                        // Create user name
+                        const userName = document.createElement('span');
+                        userName.className = 'user-name';
+                        userName.id = 'user-name';
+                        userName.textContent = currentUser.fullname;
 
-                    // Create dropdown icon
-                    const dropdownIcon = document.createElement('span');
-                    dropdownIcon.className = 'dropdown-icon';
-                    dropdownIcon.textContent = '▼';
+                        // Create dropdown icon
+                        const dropdownIcon = document.createElement('span');
+                        dropdownIcon.className = 'dropdown-icon';
+                        dropdownIcon.textContent = '▼';
 
-                    // Assemble user menu toggle
-                    userMenuToggle.appendChild(userAvatar);
-                    userMenuToggle.appendChild(userName);
-                    userMenuToggle.appendChild(dropdownIcon);
+                        // Assemble user menu toggle
+                        userMenuToggle.appendChild(userAvatar);
+                        userMenuToggle.appendChild(userName);
+                        userMenuToggle.appendChild(dropdownIcon);
 
-                    // Create user dropdown
-                    const userDropdown = document.createElement('div');
-                    userDropdown.className = 'user-dropdown';
-                    userDropdown.id = 'user-dropdown';
+                        // Create user dropdown
+                        const userDropdown = document.createElement('div');
+                        userDropdown.className = 'user-dropdown';
+                        userDropdown.id = 'user-dropdown';
 
-                    // Create dropdown list
-                    const dropdownList = document.createElement('ul');
+                        // Create dropdown list
+                        const dropdownList = document.createElement('ul');
 
-                    // Create dropdown items
-                    const profileItem = document.createElement('li');
-                    const profileLink = document.createElement('a');
-                    profileLink.href = 'html/profile.html';
-                    profileLink.textContent = 'Profili Im';
-                    profileItem.appendChild(profileLink);
+                        // Create dropdown items
+                        const profileItem = document.createElement('li');
+                        const profileLink = document.createElement('a');
+                        profileLink.href = 'html/profile.html';
+                        profileLink.textContent = 'Profili Im';
+                        profileItem.appendChild(profileLink);
 
-                    const notificationsItem = document.createElement('li');
-                    const notificationsLink = document.createElement('a');
-                    notificationsLink.href = 'html/profile.html#notifications';
-                    notificationsLink.textContent = 'Njoftimet';
-                    notificationsItem.appendChild(notificationsLink);
+                        const notificationsItem = document.createElement('li');
+                        const notificationsLink = document.createElement('a');
+                        notificationsLink.href = 'html/profile.html#notifications';
+                        notificationsLink.textContent = 'Njoftimet';
+                        notificationsItem.appendChild(notificationsLink);
 
-                    const logoutItem = document.createElement('li');
-                    const logoutLink = document.createElement('a');
-                    logoutLink.href = '#';
-                    logoutLink.id = 'logout-btn';
-                    logoutLink.textContent = 'Dilni';
-                    logoutItem.appendChild(logoutLink);
+                        const logoutItem = document.createElement('li');
+                        const logoutLink = document.createElement('a');
+                        logoutLink.href = '#';
+                        logoutLink.id = 'logout-btn';
+                        logoutLink.textContent = 'Dilni';
+                        logoutItem.appendChild(logoutLink);
 
-                    // Assemble dropdown list
-                    dropdownList.appendChild(profileItem);
-                    dropdownList.appendChild(notificationsItem);
-                    dropdownList.appendChild(logoutItem);
+                        // Assemble dropdown list
+                        dropdownList.appendChild(profileItem);
+                        dropdownList.appendChild(notificationsItem);
+                        dropdownList.appendChild(logoutItem);
 
-                    userDropdown.appendChild(dropdownList);
+                        userDropdown.appendChild(dropdownList);
 
-                    // Assemble user menu
-                    userMenu.appendChild(userMenuToggle);
-                    userMenu.appendChild(userDropdown);
+                        // Assemble user menu
+                        userMenu.appendChild(userMenuToggle);
+                        userMenu.appendChild(userDropdown);
 
-                    // Add user menu to navigation
-                    mainNav.insertBefore(userMenu, document.querySelector('.theme-toggle'));
+                        // Add user menu to navigation
+                        mainNav.insertBefore(userMenu, document.querySelector('.theme-toggle'));
 
-                    // Add event listeners
-                    userMenuToggle.addEventListener('click', function() {
-                        userDropdown.classList.toggle('active');
-                    });
+                        // Add event listeners
+                        userMenuToggle.addEventListener('click', function() {
+                            userDropdown.classList.toggle('active');
+                        });
 
-                    // Close dropdown when clicking outside
-                    document.addEventListener('click', function(e) {
-                        if (!userMenuToggle.contains(e.target) && !userDropdown.contains(e.target)) {
-                            userDropdown.classList.remove('active');
-                        }
-                    });
-
-                    // Handle logout
-                    logoutLink.addEventListener('click', function(e) {
-                        e.preventDefault();
-
-                        if (typeof AuthStore !== 'undefined' && AuthStore.logoutUser) {
-                            const result = AuthStore.logoutUser();
-                            if (result.success) {
-                                window.location.reload();
+                        // Close dropdown when clicking outside
+                        document.addEventListener('click', function(e) {
+                            if (!userMenuToggle.contains(e.target) && !userDropdown.contains(e.target)) {
+                                userDropdown.classList.remove('active');
                             }
+                        });
+
+                        // Handle logout
+                        logoutLink.addEventListener('click', async function(e) {
+                            e.preventDefault();
+
+                            if (typeof AuthStore !== 'undefined' && AuthStore.logoutUser) {
+                                try {
+                                    const result = await AuthStore.logoutUser();
+                                    if (result.success) {
+                                        window.location.reload();
+                                    }
+                                } catch (error) {
+                                    console.error('Error logging out:', error);
+                                    window.location.reload();
+                                }
+                            }
+                        });
+
+                        // Update login/register links
+                        const loginLink = navList.querySelector('a[href="html/login.html"]');
+                        if (loginLink) {
+                            const loginItem = loginLink.parentElement;
+                            navList.removeChild(loginItem);
                         }
-                    });
 
-                    // Update login/register links
-                    const loginLink = navList.querySelector('a[href="html/login.html"]');
-                    if (loginLink) {
-                        const loginItem = loginLink.parentElement;
-                        navList.removeChild(loginItem);
-                    }
-
-                    const registerLink = navList.querySelector('a[href="html/register.html"]');
-                    if (registerLink) {
-                        const registerItem = registerLink.parentElement;
-                        navList.removeChild(registerItem);
+                        const registerLink = navList.querySelector('a[href="html/register.html"]');
+                        if (registerLink) {
+                            const registerItem = registerLink.parentElement;
+                            navList.removeChild(registerItem);
+                        }
                     }
                 }
+            } catch (error) {
+                console.error('Error checking authentication status:', error);
             }
-        } else {
-            // User is not logged in, make sure login/register links are present
-            const navList = document.querySelector('.main-nav ul');
 
-            if (navList) {
-                // Check if login link already exists
-                const loginLink = navList.querySelector('a[href="html/login.html"]');
-                if (!loginLink) {
-                    // Create login link
-                    const loginItem = document.createElement('li');
-                    const loginLink = document.createElement('a');
-                    loginLink.href = 'html/login.html';
-                    loginLink.textContent = 'Hyrje';
-                    loginItem.appendChild(loginLink);
+            // If we get here and the user is not logged in, make sure login/register links are present
+            const isLoggedIn = await AuthStore.isLoggedIn();
+            if (!isLoggedIn) {
+                const navList = document.querySelector('.main-nav ul');
 
-                    // Add login link to navigation
-                    navList.appendChild(loginItem);
-                }
+                if (navList) {
+                    // Check if login link already exists
+                    const loginLink = navList.querySelector('a[href="html/login.html"]');
+                    if (!loginLink) {
+                        // Create login link
+                        const loginItem = document.createElement('li');
+                        const loginLink = document.createElement('a');
+                        loginLink.href = 'html/login.html';
+                        loginLink.textContent = 'Hyrje';
+                        loginItem.appendChild(loginLink);
 
-                // Check if register link already exists
-                const registerLink = navList.querySelector('a[href="html/register.html"]');
-                if (!registerLink) {
-                    // Create register link
-                    const registerItem = document.createElement('li');
-                    const registerLink = document.createElement('a');
-                    registerLink.href = 'html/register.html';
-                    registerLink.textContent = 'Regjistrim';
-                    registerItem.appendChild(registerLink);
+                        // Add login link to navigation
+                        navList.appendChild(loginItem);
+                    }
 
-                    // Add register link to navigation
-                    navList.appendChild(registerItem);
-                }
+                    // Check if register link already exists
+                    const registerLink = navList.querySelector('a[href="html/register.html"]');
+                    if (!registerLink) {
+                        // Create register link
+                        const registerItem = document.createElement('li');
+                        const registerLink = document.createElement('a');
+                        registerLink.href = 'html/register.html';
+                        registerLink.textContent = 'Regjistrim';
+                        registerItem.appendChild(registerLink);
 
-                // Remove user menu if it exists
-                const userMenu = document.querySelector('.user-menu');
-                if (userMenu) {
-                    userMenu.parentElement.removeChild(userMenu);
+                        // Add register link to navigation
+                        navList.appendChild(registerItem);
+                    }
+
+                    // Remove user menu if it exists
+                    const userMenu = document.querySelector('.user-menu');
+                    if (userMenu) {
+                        userMenu.parentElement.removeChild(userMenu);
+                    }
                 }
             }
         }

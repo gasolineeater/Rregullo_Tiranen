@@ -100,30 +100,68 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Validate required fields
             if (!reportData['issue-category'] || !reportData['issue-subcategory'] ||
-                !reportData['issue-title'] || !reportData.lat === 0 || reportData.lng === 0) {
+                !reportData['issue-title'] || reportData.lat === 0 || reportData.lng === 0) {
 
                 alert('Ju lutemi plotësoni të gjitha fushat e detyrueshme dhe zgjidhni një vendndodhje në hartë.');
                 return;
             }
 
-            // Save report to localStorage
-            try {
-                const savedReport = DataStore.saveReport({
-                    category: reportData['issue-category'],
-                    subcategory: reportData['issue-subcategory'],
-                    type: reportData['issue-type'],
-                    title: reportData['issue-title'],
-                    description: reportData['issue-description'],
-                    address: reportData['location-address'],
-                    neighborhood: reportData['location-neighborhood'],
-                    lat: reportData.lat,
-                    lng: reportData.lng,
-                    severity: reportData['issue-severity'],
-                    reporter: reportData['reporter-anonymous'] === 'on' ? 'anonymous' : {
-                        name: reportData['reporter-name'],
-                        email: reportData['reporter-email']
-                    }
+            // Prepare report data
+            const reportToSave = {
+                category: reportData['issue-category'],
+                subcategory: reportData['issue-subcategory'],
+                type: reportData['issue-type'],
+                title: reportData['issue-title'],
+                description: reportData['issue-description'],
+                address: reportData['location-address'],
+                neighborhood: reportData['location-neighborhood'],
+                lat: reportData.lat,
+                lng: reportData.lng,
+                severity: reportData['issue-severity'],
+                reporter: reportData['reporter-anonymous'] === 'on' ? 'anonymous' : {
+                    name: reportData['reporter-name'],
+                    email: reportData['reporter-email']
+                }
+            };
+
+            // Handle photo uploads
+            const photoFiles = photoInput.files;
+            let photos = [];
+
+            if (photoFiles && photoFiles.length > 0) {
+                // In a real implementation with backend, we would use FormData
+                // For now, we'll convert images to base64 for localStorage
+                const photoPromises = Array.from(photoFiles).map(file => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = e => resolve({
+                            name: file.name,
+                            type: file.type,
+                            size: file.size,
+                            data: e.target.result
+                        });
+                        reader.onerror = e => reject(e);
+                        reader.readAsDataURL(file);
+                    });
                 });
+
+                try {
+                    photos = await Promise.all(photoPromises);
+                    reportToSave.photos = photos;
+                } catch (error) {
+                    console.error('Error processing photos:', error);
+                }
+            }
+
+            // Show loading indicator
+            const submitBtn = reportForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Duke dërguar...';
+
+            try {
+                // Save report using DataStore (which will try API first, then fallback to localStorage)
+                const savedReport = await DataStore.saveReport(reportToSave);
 
                 console.log('Report saved:', savedReport);
 
@@ -149,6 +187,10 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch (error) {
                 console.error('Error saving report:', error);
                 alert('Ndodhi një gabim gjatë ruajtjes së raportit. Ju lutemi provoni përsëri.');
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
             }
         });
     }

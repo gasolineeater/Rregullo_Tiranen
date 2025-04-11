@@ -3,46 +3,81 @@
  * Handles login, registration, and password management
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     console.log('Auth page initialized');
-    
-    // Check if user is already logged in
-    if (AuthStore.isLoggedIn()) {
-        // Redirect to profile page if on login or register page
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('login.html') || currentPath.includes('register.html')) {
-            window.location.href = 'profile.html';
+
+    // Show loading indicator
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = '<div class="loading-spinner"></div><p>Duke ngarkuar...</p>';
+    document.body.appendChild(loadingOverlay);
+
+    try {
+        // Initialize auth store
+        await AuthStore.initialize();
+
+        // Check if user is already logged in
+        const isLoggedIn = await AuthStore.isLoggedIn();
+        if (isLoggedIn) {
+            // Redirect to profile page if on login or register page
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('login.html') || currentPath.includes('register.html')) {
+                window.location.href = 'profile.html';
+                return;
+            }
         }
+    } catch (error) {
+        console.error('Error initializing auth:', error);
+    } finally {
+        // Remove loading overlay
+        document.body.removeChild(loadingOverlay);
     }
-    
+
     // Login form handling
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const remember = document.getElementById('remember').checked;
-            
-            const result = AuthStore.loginUser(email, password, remember);
-            
+
+            // Show loading indicator
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Duke u identifikuar...';
+
             const messageElement = document.getElementById('login-message');
-            if (result.success) {
-                messageElement.textContent = result.message;
-                messageElement.className = 'auth-message success';
-                
-                // Redirect to homepage after successful login
-                setTimeout(() => {
-                    window.location.href = '../index.html';
-                }, 1500);
-            } else {
-                messageElement.textContent = result.message;
+
+            try {
+                const result = await AuthStore.loginUser(email, password, remember);
+
+                if (result.success) {
+                    messageElement.textContent = result.message;
+                    messageElement.className = 'auth-message success';
+
+                    // Redirect to homepage after successful login
+                    setTimeout(() => {
+                        window.location.href = '../index.html';
+                    }, 1500);
+                } else {
+                    messageElement.textContent = result.message;
+                    messageElement.className = 'auth-message error';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                messageElement.textContent = 'Ndodhi një gabim gjatë hyrjes. Ju lutemi provoni përsëri.';
                 messageElement.className = 'auth-message error';
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
             }
         });
     }
-    
+
     // Registration form handling
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
@@ -50,82 +85,102 @@ document.addEventListener('DOMContentLoaded', function() {
         const confirmPasswordInput = document.getElementById('confirm-password');
         const strengthBar = document.getElementById('strength-bar');
         const strengthText = document.getElementById('strength-text');
-        
+
         // Password strength meter
         if (passwordInput) {
             passwordInput.addEventListener('input', function() {
                 const password = this.value;
                 const strength = checkPasswordStrength(password);
-                
+
                 // Update strength bar
                 strengthBar.className = 'strength-bar';
                 if (password.length > 0) {
                     strengthBar.classList.add(strength.className);
                 }
-                
+
                 // Update strength text
                 strengthText.textContent = strength.message;
             });
         }
-        
-        registerForm.addEventListener('submit', function(e) {
+
+        registerForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const fullname = document.getElementById('fullname').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
             const password = passwordInput.value;
             const confirmPassword = confirmPasswordInput.value;
             const termsAccepted = document.getElementById('terms').checked;
-            
+
             const messageElement = document.getElementById('register-message');
-            
+
             // Validate form
             if (password !== confirmPassword) {
                 messageElement.textContent = 'Fjalëkalimet nuk përputhen.';
                 messageElement.className = 'auth-message error';
                 return;
             }
-            
+
             if (!termsAccepted) {
                 messageElement.textContent = 'Ju duhet të pranoni kushtet e përdorimit.';
                 messageElement.className = 'auth-message error';
                 return;
             }
-            
+
             const strength = checkPasswordStrength(password);
             if (strength.score < 2) {
                 messageElement.textContent = 'Fjalëkalimi është shumë i dobët. ' + strength.message;
                 messageElement.className = 'auth-message error';
                 return;
             }
-            
-            // Register user
-            const result = AuthStore.registerUser({
-                fullname,
-                email,
-                phone,
-                password
-            });
-            
-            if (result.success) {
-                messageElement.textContent = result.message;
-                messageElement.className = 'auth-message success';
-                
-                // Automatically log in the user
-                AuthStore.loginUser(email, password);
-                
-                // Redirect to homepage after successful registration
-                setTimeout(() => {
-                    window.location.href = '../index.html';
-                }, 1500);
-            } else {
-                messageElement.textContent = result.message;
+
+            // Show loading indicator
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Duke regjistruar...';
+
+            try {
+                // Register user
+                const result = await AuthStore.registerUser({
+                    fullname,
+                    email,
+                    phone,
+                    password
+                });
+
+                if (result.success) {
+                    messageElement.textContent = result.message;
+                    messageElement.className = 'auth-message success';
+
+                    // Automatically log in the user
+                    try {
+                        await AuthStore.loginUser(email, password);
+                    } catch (loginError) {
+                        console.error('Error logging in after registration:', loginError);
+                    }
+
+                    // Redirect to homepage after successful registration
+                    setTimeout(() => {
+                        window.location.href = '../index.html';
+                    }, 1500);
+                } else {
+                    messageElement.textContent = result.message;
+                    messageElement.className = 'auth-message error';
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                messageElement.textContent = 'Ndodhi një gabim gjatë regjistrimit. Ju lutemi provoni përsëri.';
                 messageElement.className = 'auth-message error';
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
             }
         });
     }
-    
+
     // Toggle password visibility
     const togglePasswordButtons = document.querySelectorAll('.toggle-password');
     togglePasswordButtons.forEach(button => {
@@ -133,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const passwordField = this.parentElement.querySelector('input');
             const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordField.setAttribute('type', type);
-            
+
             // Change the eye icon (optional)
             const eyeIcon = this.querySelector('.eye-icon');
             eyeIcon.style.opacity = type === 'password' ? '0.7' : '1';
@@ -149,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function checkPasswordStrength(password) {
     // Initialize score
     let score = 0;
-    
+
     // Check length
     if (password.length < 8) {
         return {
@@ -160,27 +215,27 @@ function checkPasswordStrength(password) {
     } else {
         score += 1;
     }
-    
+
     // Check for lowercase letters
     if (/[a-z]/.test(password)) {
         score += 1;
     }
-    
+
     // Check for uppercase letters
     if (/[A-Z]/.test(password)) {
         score += 1;
     }
-    
+
     // Check for numbers
     if (/\d/.test(password)) {
         score += 1;
     }
-    
+
     // Check for special characters
     if (/[^a-zA-Z0-9]/.test(password)) {
         score += 1;
     }
-    
+
     // Return result based on score
     if (score < 2) {
         return {

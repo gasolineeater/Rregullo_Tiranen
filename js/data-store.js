@@ -1,21 +1,144 @@
 /**
  * Data storage module for Rregullo Tiranen
- * Handles storing and retrieving reports using localStorage
+ * Handles storing and retrieving reports using the API service
+ * Falls back to localStorage when API is not available
  */
 
 const DataStore = (function() {
-    // Storage keys
+    // Storage key for local reports cache
     const REPORTS_KEY = 'rregullo_tiranen_reports';
 
-    // Get all reports from localStorage
-    function getAllReports() {
-        const reportsJson = localStorage.getItem(REPORTS_KEY);
-        return reportsJson ? JSON.parse(reportsJson) : [];
+    // Flag to track if backend is available
+    let backendAvailable = false;
+
+    // Local cache of reports
+    let reportsCache = null;
+
+    // Initialize reports from localStorage
+    function initReportsCache() {
+        if (!reportsCache) {
+            const reportsJson = localStorage.getItem(REPORTS_KEY);
+            if (reportsJson) {
+                try {
+                    reportsCache = JSON.parse(reportsJson);
+                } catch (e) {
+                    console.error('Error parsing reports data:', e);
+                    reportsCache = [];
+                }
+            } else {
+                reportsCache = [];
+            }
+        }
+        return reportsCache;
+    }
+
+    // Save reports to localStorage
+    function saveReportsToCache(reports) {
+        reportsCache = reports;
+        localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
+    }
+
+    // Get all reports
+    async function getAllReports() {
+        try {
+            if (backendAvailable) {
+                // Try to get reports from API
+                const reports = await ApiService.getAllReports();
+                if (reports) {
+                    // Update local cache
+                    saveReportsToCache(reports);
+                    return reports;
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching reports from API:', error);
+        }
+
+        // Fallback to local cache
+        return initReportsCache();
+    }
+
+    // Get reports with filters
+    async function getFilteredReports(filters = {}) {
+        try {
+            if (backendAvailable) {
+                // Try to get filtered reports from API
+                const reports = await ApiService.getFilteredReports(filters);
+                if (reports) {
+                    return reports;
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching filtered reports from API:', error);
+        }
+
+        // Fallback to filtering local cache
+        const reports = initReportsCache();
+
+        return reports.filter(report => {
+            let matches = true;
+
+            if (filters.category && report.category !== filters.category) {
+                matches = false;
+            }
+
+            if (filters.subcategory && report.subcategory !== filters.subcategory) {
+                matches = false;
+            }
+
+            if (filters.status && report.status !== filters.status) {
+                matches = false;
+            }
+
+            if (filters.neighborhood && report.neighborhood !== filters.neighborhood) {
+                matches = false;
+            }
+
+            if (filters.severity && report.severity !== filters.severity) {
+                matches = false;
+            }
+
+            // Date range filtering
+            if (filters.startDate) {
+                const startDate = new Date(filters.startDate);
+                const reportDate = new Date(report.timestamp);
+                if (reportDate < startDate) {
+                    matches = false;
+                }
+            }
+
+            if (filters.endDate) {
+                const endDate = new Date(filters.endDate);
+                const reportDate = new Date(report.timestamp);
+                if (reportDate > endDate) {
+                    matches = false;
+                }
+            }
+
+            return matches;
+        });
     }
 
     // Save a new report
-    function saveReport(reportData) {
-        const reports = getAllReports();
+    async function saveReport(reportData) {
+        try {
+            if (backendAvailable) {
+                // Try to save report to API
+                const result = await ApiService.createReport(reportData);
+                if (result.success && result.report) {
+                    // Update local cache
+                    const reports = initReportsCache();
+                    reports.push(result.report);
+                    saveReportsToCache(reports);
+                    return result.report;
+                }
+            }
+        } catch (error) {
+            console.error('Error saving report to API:', error);
+        }
+
+        // Fallback to local storage
+        const reports = initReportsCache();
 
         // Generate a unique ID for the report
         const reportId = Date.now().toString();
@@ -30,20 +153,53 @@ const DataStore = (function() {
 
         // Add to reports array and save back to localStorage
         reports.push(newReport);
-        localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
+        saveReportsToCache(reports);
 
         return newReport;
     }
 
     // Get a report by ID
-    function getReportById(reportId) {
-        const reports = getAllReports();
+    async function getReportById(reportId) {
+        try {
+            if (backendAvailable) {
+                // Try to get report from API
+                const report = await ApiService.getReportById(reportId);
+                if (report) {
+                    return report;
+                }
+            }
+        } catch (error) {
+            console.error(`Error fetching report ${reportId} from API:`, error);
+        }
+
+        // Fallback to local cache
+        const reports = initReportsCache();
         return reports.find(report => report.id === reportId);
     }
 
     // Update a report's status
-    function updateReportStatus(reportId, newStatus, comment = '') {
-        const reports = getAllReports();
+    async function updateReportStatus(reportId, newStatus, comment = '') {
+        try {
+            if (backendAvailable) {
+                // Try to update report status in API
+                const result = await ApiService.updateReportStatus(reportId, newStatus, comment);
+                if (result.success && result.report) {
+                    // Update local cache
+                    const reports = initReportsCache();
+                    const reportIndex = reports.findIndex(report => report.id === reportId);
+                    if (reportIndex !== -1) {
+                        reports[reportIndex] = result.report;
+                        saveReportsToCache(reports);
+                    }
+                    return true;
+                }
+            }
+        } catch (error) {
+            console.error(`Error updating report ${reportId} status in API:`, error);
+        }
+
+        // Fallback to local storage
+        const reports = initReportsCache();
         const reportIndex = reports.findIndex(report => report.id === reportId);
 
         if (reportIndex !== -1) {
@@ -65,44 +221,100 @@ const DataStore = (function() {
                 comment: comment || ''
             };
 
-            localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
+            saveReportsToCache(reports);
             return true;
         }
 
         return false;
     }
 
-    // Get reports filtered by category, status, or both
-    function getFilteredReports(filters = {}) {
-        const reports = getAllReports();
+    // Add a comment to a report
+    async function addComment(reportId, text) {
+        try {
+            if (backendAvailable) {
+                // Try to add comment in API
+                const result = await ApiService.addComment(reportId, text);
+                if (result.success) {
+                    return result.comments;
+                }
+            }
+        } catch (error) {
+            console.error(`Error adding comment to report ${reportId} in API:`, error);
+        }
+
+        // Fallback to local storage
+        const reports = initReportsCache();
+        const reportIndex = reports.findIndex(report => report.id === reportId);
+
+        if (reportIndex !== -1) {
+            const report = reports[reportIndex];
+
+            // Initialize comments array if it doesn't exist
+            if (!report.comments) {
+                report.comments = [];
+            }
+
+            // Create new comment
+            const newComment = {
+                id: Date.now().toString(),
+                text,
+                timestamp: new Date().toISOString(),
+                user: AuthStore.getCurrentUser() ? {
+                    id: AuthStore.getCurrentUser().id,
+                    name: AuthStore.getCurrentUser().fullname
+                } : {
+                    id: 'anonymous',
+                    name: 'Anonim'
+                }
+            };
+
+            // Add comment to report
+            report.comments.push(newComment);
+            saveReportsToCache(reports);
+
+            return report.comments;
+        }
+
+        return [];
+    }
+
+    // Get reports within a radius
+    async function getReportsInRadius(lat, lng, radius) {
+        try {
+            if (backendAvailable) {
+                // Try to get reports in radius from API
+                const reports = await ApiService.getReportsInRadius(lat, lng, radius);
+                if (reports) {
+                    return reports;
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching reports in radius from API:', error);
+        }
+
+        // Fallback to filtering local cache
+        // This is a simplified version that doesn't actually calculate distance properly
+        const reports = initReportsCache();
+
+        // Convert radius from km to degrees (very rough approximation)
+        const radiusDegrees = radius / 111;
 
         return reports.filter(report => {
-            let matches = true;
-
-            if (filters.category && report.category !== filters.category) {
-                matches = false;
-            }
-
-            if (filters.subcategory && report.subcategory !== filters.subcategory) {
-                matches = false;
-            }
-
-            if (filters.status && report.status !== filters.status) {
-                matches = false;
-            }
-
-            return matches;
+            const latDiff = Math.abs(report.lat - lat);
+            const lngDiff = Math.abs(report.lng - lng);
+            return latDiff < radiusDegrees && lngDiff < radiusDegrees;
         });
     }
 
     // Clear all reports (for testing)
     function clearAllReports() {
+        reportsCache = [];
         localStorage.removeItem(REPORTS_KEY);
     }
 
     // Add some sample reports if none exist
     function initializeSampleData() {
-        const reports = getAllReports();
+        const reports = initReportsCache();
 
         if (reports.length === 0) {
             const sampleReports = [
@@ -183,7 +395,7 @@ const DataStore = (function() {
                 report.id = (Date.now() - index * 1000000).toString();
             });
 
-            localStorage.setItem(REPORTS_KEY, JSON.stringify(sampleReports));
+            saveReportsToCache(sampleReports);
             console.log('Sample reports initialized');
             return sampleReports;
         }
@@ -191,19 +403,55 @@ const DataStore = (function() {
         return reports;
     }
 
+    // Check if backend is available
+    async function checkBackendAvailability() {
+        try {
+            // Try to get reports from API
+            const reports = await ApiService.getAllReports();
+            if (reports) {
+                backendAvailable = true;
+                console.log('Backend is available, using API for data storage');
+                // Update local cache with reports from API
+                saveReportsToCache(reports);
+                return true;
+            }
+        } catch (error) {
+            console.error('Backend availability check failed:', error);
+            backendAvailable = false;
+        }
+
+        console.warn('Backend is not available, using localStorage fallback');
+        return false;
+    }
+
+    // Initialize - check if backend is available and sync data
+    async function initialize() {
+        await checkBackendAvailability();
+
+        if (!backendAvailable) {
+            // If backend is not available, initialize sample data
+            initializeSampleData();
+        }
+    }
+
     // Public API
     return {
         getAllReports,
+        getFilteredReports,
         saveReport,
         getReportById,
         updateReportStatus,
-        getFilteredReports,
+        addComment,
+        getReportsInRadius,
         clearAllReports,
-        initializeSampleData
+        initializeSampleData,
+        initialize
     };
 })();
 
-// Initialize sample data when the script loads
+// Initialize data store when the script loads
 document.addEventListener('DOMContentLoaded', function() {
-    DataStore.initializeSampleData();
+    DataStore.initialize().then(() => {
+        console.log('DataStore initialized');
+    });
 });
