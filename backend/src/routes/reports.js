@@ -11,6 +11,14 @@ const {
   getUserReports
 } = require('../controllers/reports');
 
+const {
+  uploadReportPhoto,
+  deleteReportPhoto,
+  getReportPhotos
+} = require('../controllers/photos');
+
+const upload = require('../middleware/upload');
+
 const router = express.Router();
 
 const { protect, authorize } = require('../middleware/auth');
@@ -31,5 +39,9 @@ router
 
 router.route('/:id/status').put(protect, authorize('admin'), updateReportStatus);
 router.route('/:id/comments').post(protect, addComment);
+
+// Photo routes
+router.route('/:id/photos').get(getReportPhotos).post(protect, upload.single('photo'), uploadReportPhoto);
+router.route('/:id/photos/:photo').delete(protect, deleteReportPhoto);
 
 module.exports = router;

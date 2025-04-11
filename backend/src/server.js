@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const connectDB = require('./config/db');
 const config = require('./config/config');
 const errorHandler = require('./middleware/error');
@@ -19,6 +20,9 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors());
+
+// Set static folder for uploads
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Mount routers
 app.use('/api/auth', auth);

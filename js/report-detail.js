@@ -156,69 +156,230 @@ function updateTimeline(report) {
 /**
  * Display photos if available
  */
-function displayPhotos(report) {
+async function displayPhotos(report) {
     const photosGrid = document.getElementById('photos-grid');
     const noPhotosMessage = document.getElementById('no-photos-message');
+    const photosContainer = document.getElementById('report-photos-container');
 
     if (!photosGrid) return;
 
-    // Check if report has photos
-    if (report.photos && report.photos.length > 0) {
-        // Hide no photos message
-        if (noPhotosMessage) {
-            noPhotosMessage.style.display = 'none';
+    // Show loading indicator
+    const loadingIndicator = document.createElement('div');
+    loadingIndicator.className = 'loading-indicator';
+    loadingIndicator.innerHTML = '<div class="spinner"></div><p>Duke ngarkuar fotot...</p>';
+    photosGrid.appendChild(loadingIndicator);
+
+    try {
+        // Get photos from API if available
+        let photos = [];
+        if (report.photos && report.photos.length > 0) {
+            photos = report.photos;
+        } else {
+            // Try to fetch photos from API
+            try {
+                const result = await ApiService.getReportPhotos(report._id || report.id);
+                if (result.success && result.photos && result.photos.length > 0) {
+                    photos = result.photos;
+                }
+            } catch (error) {
+                console.error('Error fetching photos from API:', error);
+            }
         }
 
-        // Create photo modal container if it doesn't exist
-        let photoModal = document.getElementById('photo-modal');
-        if (!photoModal) {
-            photoModal = document.createElement('div');
-            photoModal.id = 'photo-modal';
-            photoModal.className = 'photo-modal';
-            photoModal.innerHTML = `
-                <span class="photo-modal-close">&times;</span>
-                <img class="photo-modal-content" id="photo-modal-img">
-            `;
-            document.body.appendChild(photoModal);
+        // Remove loading indicator
+        if (loadingIndicator.parentNode === photosGrid) {
+            photosGrid.removeChild(loadingIndicator);
+        }
 
-            // Add event listener to close modal
-            const closeBtn = photoModal.querySelector('.photo-modal-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function() {
-                    photoModal.style.display = 'none';
-                });
+        // Check if we have photos to display
+        if (photos && photos.length > 0) {
+            // Hide no photos message
+            if (noPhotosMessage) {
+                noPhotosMessage.style.display = 'none';
             }
 
-            // Close modal when clicking outside the image
-            photoModal.addEventListener('click', function(event) {
-                if (event.target === photoModal) {
-                    photoModal.style.display = 'none';
+            // Create photo modal container if it doesn't exist
+            let photoModal = document.getElementById('photo-modal');
+            if (!photoModal) {
+                photoModal = document.createElement('div');
+                photoModal.id = 'photo-modal';
+                photoModal.className = 'photo-modal';
+                photoModal.innerHTML = `
+                    <span class="photo-modal-close">&times;</span>
+                    <img class="photo-modal-content" id="photo-modal-img">
+                    <div class="photo-modal-controls">
+                        <button class="photo-nav prev">&lsaquo;</button>
+                        <button class="photo-nav next">&rsaquo;</button>
+                    </div>
+                    <div class="photo-modal-counter">1 / ${photos.length}</div>
+                `;
+                document.body.appendChild(photoModal);
+
+                // Add event listener to close modal
+                const closeBtn = photoModal.querySelector('.photo-modal-close');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function() {
+                        photoModal.style.display = 'none';
+                    });
                 }
+
+                // Close modal when clicking outside the image
+                photoModal.addEventListener('click', function(event) {
+                    if (event.target === photoModal) {
+                        photoModal.style.display = 'none';
+                    }
+                });
+
+                // Add keyboard navigation
+                document.addEventListener('keydown', function(e) {
+                    if (photoModal.style.display === 'flex') {
+                        if (e.key === 'Escape') {
+                            photoModal.style.display = 'none';
+                        } else if (e.key === 'ArrowLeft') {
+                            navigatePhoto(-1);
+                        } else if (e.key === 'ArrowRight') {
+                            navigatePhoto(1);
+                        }
+                    }
+                });
+
+                // Add navigation buttons
+                const prevBtn = photoModal.querySelector('.photo-nav.prev');
+                const nextBtn = photoModal.querySelector('.photo-nav.next');
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        navigatePhoto(-1);
+                    });
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        navigatePhoto(1);
+                    });
+                }
+            }
+
+            // Clear existing photos
+            photosGrid.innerHTML = '';
+
+            // Add photos to grid
+            photos.forEach((photo, index) => {
+                const photoItem = document.createElement('div');
+                photoItem.className = 'photo-item';
+                photoItem.dataset.index = index;
+
+                // Create image element
+                const img = document.createElement('img');
+
+                // Determine the correct URL for the photo
+                if (photo.startsWith('http')) {
+                    img.src = photo;
+                } else if (photo.startsWith('/')) {
+                    img.src = `http://localhost:5000${photo}`;
+                } else {
+                    img.src = `http://localhost:5000/uploads/${photo}`;
+                }
+
+                img.alt = `Foto ${index + 1} e raportit`;
+                img.loading = 'lazy';
+
+                // Add click event to open modal
+                photoItem.addEventListener('click', function() {
+                    openPhotoModal(index, photos);
+                });
+
+                photoItem.appendChild(img);
+                photosGrid.appendChild(photoItem);
             });
+
+            // Show photos container
+            if (photosContainer) {
+                photosContainer.style.display = 'block';
+            }
+        } else {
+            // No photos to display
+            if (noPhotosMessage) {
+                noPhotosMessage.style.display = 'block';
+            }
+        }
+    } catch (error) {
+        console.error('Error displaying photos:', error);
+
+        // Remove loading indicator
+        if (loadingIndicator.parentNode === photosGrid) {
+            photosGrid.removeChild(loadingIndicator);
         }
 
-        // Add photos to grid
-        report.photos.forEach((photo, index) => {
-            const photoItem = document.createElement('div');
-            photoItem.className = 'photo-item';
-
-            // Create image element
-            const img = document.createElement('img');
-            img.src = photo.startsWith('http') ? photo : `../uploads/${photo}`;
-            img.alt = `Foto ${index + 1} e raportit`;
-            img.loading = 'lazy';
-
-            // Add click event to open modal
-            photoItem.addEventListener('click', function() {
-                const modalImg = document.getElementById('photo-modal-img');
-                modalImg.src = img.src;
-                photoModal.style.display = 'flex';
-            });
-
-            photoItem.appendChild(img);
-            photosGrid.appendChild(photoItem);
-        });
+        // Show error message
+        if (noPhotosMessage) {
+            noPhotosMessage.style.display = 'block';
+            noPhotosMessage.textContent = 'Ndodhi një gabim gjatë ngarkimit të fotove. Ju lutemi provoni përsëri.';
+        }
     }
+}
+
+/**
+ * Open photo modal with the selected photo
+ */
+function openPhotoModal(index, photos) {
+    const photoModal = document.getElementById('photo-modal');
+    const modalImg = document.getElementById('photo-modal-img');
+    const counter = photoModal.querySelector('.photo-modal-counter');
+
+    if (!photoModal || !modalImg) return;
+
+    // Set current photo index
+    photoModal.dataset.currentIndex = index;
+
+    // Update counter
+    if (counter) {
+        counter.textContent = `${index + 1} / ${photos.length}`;
+    }
+
+    // Set image source
+    const photo = photos[index];
+    if (photo.startsWith('http')) {
+        modalImg.src = photo;
+    } else if (photo.startsWith('/')) {
+        modalImg.src = `http://localhost:5000${photo}`;
+    } else {
+        modalImg.src = `http://localhost:5000/uploads/${photo}`;
+    }
+
+    // Show modal
+    photoModal.style.display = 'flex';
+}
+
+/**
+ * Navigate to previous or next photo
+ */
+function navigatePhoto(direction) {
+    const photoModal = document.getElementById('photo-modal');
+    if (!photoModal) return;
+
+    const currentIndex = parseInt(photoModal.dataset.currentIndex || 0);
+    const photosGrid = document.getElementById('photos-grid');
+    if (!photosGrid) return;
+
+    const photoItems = photosGrid.querySelectorAll('.photo-item');
+    if (!photoItems.length) return;
+
+    // Calculate new index
+    let newIndex = currentIndex + direction;
+    if (newIndex < 0) newIndex = photoItems.length - 1;
+    if (newIndex >= photoItems.length) newIndex = 0;
+
+    // Get photos array
+    const photos = Array.from(photoItems).map(item => {
+        const img = item.querySelector('img');
+        return img.src;
+    });
+
+    // Open modal with new index
+    openPhotoModal(newIndex, photos);
 }
 
 /**

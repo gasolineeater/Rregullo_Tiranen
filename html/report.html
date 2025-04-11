@@ -32,7 +32,7 @@
     <section class="report-hero">
         <div class="container">
             <h2>Raporto një Problem</h2>
-            <p>Ndihmo në përmirësimin e Tiranës duke raportuar problemet e infrastrukturës, 
+            <p>Ndihmo në përmirësimin e Tiranës duke raportuar problemet e infrastrukturës,
                mbeturinave, apo çështje të tjera urbane që kërkojnë vëmendje.</p>
         </div>
     </section>
@@ -42,7 +42,7 @@
             <form id="issue-report-form" class="report-form">
                 <div class="form-group">
                     <h3>Informacion mbi Problemin</h3>
-                    
+
                     <div class="form-field">
                         <label for="issue-type">Lloji i Problemit</label>
                         <select id="issue-type" name="issue-type" required>
@@ -57,29 +57,29 @@
                             <option value="other">Tjetër</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="issue-title">Titulli i Problemit</label>
-                        <input type="text" id="issue-title" name="issue-title" 
+                        <input type="text" id="issue-title" name="issue-title"
                                placeholder="p.sh. Gropë e madhe në rrugën 'Myslym Shyri'" required>
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="issue-description">Përshkrimi i Problemit</label>
-                        <textarea id="issue-description" name="issue-description" rows="4" 
+                        <textarea id="issue-description" name="issue-description" rows="4"
                                  placeholder="Jepni detaje të problemit dhe si ndikon në zonë" required></textarea>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <h3>Vendndodhja</h3>
-                    
+
                     <div class="form-field">
                         <label for="location-address">Adresa</label>
-                        <input type="text" id="location-address" name="location-address" 
+                        <input type="text" id="location-address" name="location-address"
                                placeholder="p.sh. Rruga 'Myslym Shyri', nr. 43" required>
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="location-neighborhood">Lagjja/Zona</label>
                         <select id="location-neighborhood" name="location-neighborhood" required>
@@ -97,7 +97,7 @@
                             <option value="njesia11">Njësia Administrative 11</option>
                         </select>
                     </div>
-                    
+
                     <div class="map-picker">
                         <label>Zgjidhni vendndodhjen në hartë</label>
                         <div id="report-map" class="report-map-container">
@@ -111,16 +111,16 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <h3>Foto dhe Detaje Shtesë</h3>
-                    
+
                     <div class="form-field">
                         <label for="issue-photos">Ngarko Foto (opsionale)</label>
                         <input type="file" id="issue-photos" name="issue-photos" accept="image/*" multiple>
                         <div id="photo-preview" class="photo-preview"></div>
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="issue-severity">Serioziteti i Problemit</label>
                         <select id="issue-severity" name="issue-severity">
@@ -131,27 +131,27 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <h3>Informacioni Juaj (opsional)</h3>
-                    
+
                     <div class="form-field">
                         <label for="reporter-name">Emri</label>
                         <input type="text" id="reporter-name" name="reporter-name" placeholder="Emri juaj (opsional)">
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="reporter-email">Email</label>
-                        <input type="email" id="reporter-email" name="reporter-email" 
+                        <input type="email" id="reporter-email" name="reporter-email"
                                placeholder="adresa@email.com (për t'ju njoftuar kur problemi zgjidhet)">
                     </div>
-                    
+
                     <div class="form-field checkbox-field">
                         <input type="checkbox" id="reporter-anonymous" name="reporter-anonymous" checked>
                         <label for="reporter-anonymous">Dëshiroj të raportoj në mënyrë anonime</label>
                     </div>
                 </div>
-                
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Dërgo Raportin</button>
                     <button type="reset" class="btn btn-secondary">Pastro Formën</button>
@@ -183,7 +183,11 @@
         </div>
     </footer>
 
+    <script src="js/api-service.js"></script>
+    <script src="js/data-store.js"></script>
+    <script src="js/auth-store.js"></script>
     <script src="js/main.js"></script>
     <script src="js/report.js"></script>
+    <script src="js/pwa.js"></script>
 </body>
 </html>

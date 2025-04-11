@@ -1,4 +1,7 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Initialize data stores
+    await DataStore.initialize();
+    await AuthStore.initialize();
     console.log('Report form initialized');
 
     const reportForm = document.getElementById('issue-report-form');
@@ -124,34 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             };
 
-            // Handle photo uploads
-            const photoFiles = photoInput.files;
-            let photos = [];
-
-            if (photoFiles && photoFiles.length > 0) {
-                // In a real implementation with backend, we would use FormData
-                // For now, we'll convert images to base64 for localStorage
-                const photoPromises = Array.from(photoFiles).map(file => {
-                    return new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onload = e => resolve({
-                            name: file.name,
-                            type: file.type,
-                            size: file.size,
-                            data: e.target.result
-                        });
-                        reader.onerror = e => reject(e);
-                        reader.readAsDataURL(file);
-                    });
-                });
-
-                try {
-                    photos = await Promise.all(photoPromises);
-                    reportToSave.photos = photos;
-                } catch (error) {
-                    console.error('Error processing photos:', error);
-                }
-            }
+            // We'll handle photo uploads separately after saving the report
 
             // Show loading indicator
             const submitBtn = reportForm.querySelector('button[type="submit"]');
@@ -164,6 +140,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 const savedReport = await DataStore.saveReport(reportToSave);
 
                 console.log('Report saved:', savedReport);
+
+                // Handle photo uploads if there are any
+                const photoFiles = photoInput.files;
+                if (photoFiles && photoFiles.length > 0 && savedReport._id) {
+                    submitBtn.textContent = 'Duke ngarkuar fotot...';
+
+                    // Upload each photo
+                    for (let i = 0; i < photoFiles.length; i++) {
+                        try {
+                            submitBtn.textContent = `Duke ngarkuar foton ${i+1}/${photoFiles.length}...`;
+                            await ApiService.uploadReportPhoto(savedReport._id, photoFiles[i]);
+                        } catch (photoError) {
+                            console.error('Error uploading photo:', photoError);
+                            // Continue with other photos even if one fails
+                        }
+                    }
+                }
 
                 alert('Faleminderit për raportimin! Problemi juaj është regjistruar dhe do të shqyrtohet së shpejti.');
 
@@ -200,22 +193,112 @@ document.addEventListener('DOMContentLoaded', function() {
             photoPreview.innerHTML = '';
 
             if (this.files) {
+                // Add progress bar
+                const progressContainer = document.createElement('div');
+                progressContainer.className = 'photo-upload-progress';
+                const progressBar = document.createElement('div');
+                progressBar.className = 'photo-upload-progress-bar';
+                progressContainer.appendChild(progressBar);
+                photoPreview.parentElement.appendChild(progressContainer);
+
+                // Update progress bar
+                let filesProcessed = 0;
+                const totalFiles = this.files.length;
+
                 Array.from(this.files).forEach(file => {
                     if (!file.type.match('image.*')) {
+                        filesProcessed++;
+                        updateProgress();
                         return;
                     }
 
                     const reader = new FileReader();
+                    const previewContainer = document.createElement('div');
+                    previewContainer.className = 'photo-preview-container';
+                    photoPreview.appendChild(previewContainer);
 
                     reader.onload = function(e) {
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.alt = 'Photo preview';
-                        photoPreview.appendChild(img);
+                        img.title = file.name;
+
+                        // Add click event to show larger preview
+                        img.addEventListener('click', function() {
+                            const modal = document.createElement('div');
+                            modal.className = 'photo-modal';
+                            modal.innerHTML = `
+                                <span class="photo-modal-close">&times;</span>
+                                <img class="photo-modal-content" src="${e.target.result}">
+                            `;
+                            document.body.appendChild(modal);
+
+                            // Show modal
+                            modal.style.display = 'flex';
+
+                            // Add close button event
+                            const closeBtn = modal.querySelector('.photo-modal-close');
+                            closeBtn.addEventListener('click', function() {
+                                modal.style.display = 'none';
+                                setTimeout(() => {
+                                    document.body.removeChild(modal);
+                                }, 300);
+                            });
+
+                            // Close when clicking outside
+                            modal.addEventListener('click', function(event) {
+                                if (event.target === modal) {
+                                    modal.style.display = 'none';
+                                    setTimeout(() => {
+                                        document.body.removeChild(modal);
+                                    }, 300);
+                                }
+                            });
+                        });
+
+                        previewContainer.appendChild(img);
+
+                        // Add remove button
+                        const removeBtn = document.createElement('span');
+                        removeBtn.className = 'remove-photo';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.title = 'Remove photo';
+                        removeBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            previewContainer.remove();
+
+                            // Create a new FileList without this file
+                            // This is tricky because FileList is read-only
+                            // We'll need to update the input in a different way
+                            // For now, we'll just show a message
+                            alert('Foto u hoq nga paraparamja. Kur të dërgoni raportin, mos harroni të zgjidhni përsëri fotot e dëshiruara.');
+                        });
+                        previewContainer.appendChild(removeBtn);
+
+                        filesProcessed++;
+                        updateProgress();
+                    };
+
+                    reader.onerror = function() {
+                        filesProcessed++;
+                        updateProgress();
+                        console.error('Error reading file:', file.name);
                     };
 
                     reader.readAsDataURL(file);
                 });
+
+                function updateProgress() {
+                    const progress = (filesProcessed / totalFiles) * 100;
+                    progressBar.style.width = `${progress}%`;
+
+                    if (filesProcessed === totalFiles) {
+                        // Remove progress bar after a delay
+                        setTimeout(() => {
+                            progressContainer.remove();
+                        }, 1000);
+                    }
+                }
             }
         });
     }
