@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menaxhimi i Raporteve - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/notifications.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+                <span class="admin-badge">Admin</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="reports.html" class="active">Raportet</a></li>
+                    <li><a href="users.html">Përdoruesit</a></li>
+                    <li><a href="notifications.html">Njoftimet</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="admin-header">
+        <div class="container">
+            <h2>Menaxhimi i Raporteve</h2>
+            <p>Këtu mund të shikoni, filtroni dhe menaxhoni të gjitha raportet e dërguara nga përdoruesit.</p>
+        </div>
+    </section>
+
+    <section class="admin-content">
+        <div class="container">
+            <div class="admin-filters">
+                <div class="filter-group">
+                    <label for="status-filter">Filtro sipas Statusit:</label>
+                    <select id="status-filter">
+                        <option value="">Të Gjitha</option>
+                        <option value="pending">Në Pritje</option>
+                        <option value="in-progress">Në Proces</option>
+                        <option value="resolved">Të Zgjidhura</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="category-filter">Filtro sipas Kategorisë:</label>
+                    <select id="category-filter">
+                        <option value="">Të Gjitha</option>
+                        <option value="infrastructure">Infrastrukturë</option>
+                        <option value="environment">Mjedis</option>
+                        <option value="public-services">Shërbime Publike</option>
+                        <option value="community">Komunitet</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="neighborhood-filter">Filtro sipas Lagjes:</label>
+                    <select id="neighborhood-filter">
+                        <option value="">Të Gjitha</option>
+                        <option value="njesia1">Njësia Administrative 1</option>
+                        <option value="njesia2">Njësia Administrative 2</option>
+                        <option value="njesia3">Njësia Administrative 3</option>
+                        <option value="njesia4">Njësia Administrative 4</option>
+                        <option value="njesia5">Njësia Administrative 5</option>
+                        <option value="njesia6">Njësia Administrative 6</option>
+                        <option value="njesia7">Njësia Administrative 7</option>
+                        <option value="njesia8">Njësia Administrative 8</option>
+                        <option value="njesia9">Njësia Administrative 9</option>
+                        <option value="njesia10">Njësia Administrative 10</option>
+                        <option value="njesia11">Njësia Administrative 11</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search-reports">Kërko:</label>
+                    <input type="text" id="search-reports" placeholder="Kërko sipas titullit ose përshkrimit...">
+                </div>
+                <button id="apply-filters" class="btn btn-primary">Apliko Filtrat</button>
+            </div>
+
+            <div class="admin-tables">
+                <div class="table-container full-width">
+                    <div class="table-header">
+                        <h3>Lista e Raporteve</h3>
+                        <div class="table-actions">
+                            <button id="export-reports" class="btn btn-sm">Eksporto CSV</button>
+                            <select id="reports-per-page">
+                                <option value="10">10 për faqe</option>
+                                <option value="25">25 për faqe</option>
+                                <option value="50">50 për faqe</option>
+                                <option value="100">100 për faqe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="admin-table" id="reports-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Titulli</th>
+                                    <th>Kategoria</th>
+                                    <th>Lagjja</th>
+                                    <th>Statusi</th>
+                                    <th>Përdoruesi</th>
+                                    <th>Data</th>
+                                    <th>Veprime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="loading-row">
+                                    <td colspan="8">
+                                        <div class="loading-spinner"></div>
+                                        <p>Duke ngarkuar të dhënat...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="reports-pagination">
+                        <button class="pagination-prev" disabled>« E mëparshme</button>
+                        <div class="pagination-info">Faqja <span id="current-page">1</span> nga <span id="total-pages">1</span></div>
+                        <button class="pagination-next" disabled>E ardhshme »</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="../../index.html">Kthehu te Faqja Kryesore</a></li>
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li><a href="users.html">Menaxho Përdoruesit</a></li>
+                        <li><a href="notifications.html">Dërgo Njoftime</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for report details -->
+    <div id="report-modal" class="modal">
+        <div class="modal-content modal-lg">
+            <span class="close-modal">&times;</span>
+            <h3 id="report-modal-title">Detajet e Raportit</h3>
+            <div class="report-details">
+                <div class="report-info">
+                    <div class="info-group">
+                        <label>ID:</label>
+                        <span id="report-id"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Titulli:</label>
+                        <span id="report-title"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Përshkrimi:</label>
+                        <p id="report-description"></p>
+                    </div>
+                    <div class="info-group">
+                        <label>Kategoria:</label>
+                        <span id="report-category"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Nënkategoria:</label>
+                        <span id="report-subcategory"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Adresa:</label>
+                        <span id="report-address"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Lagjja:</label>
+                        <span id="report-neighborhood"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Koordinatat:</label>
+                        <span id="report-coordinates"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Statusi:</label>
+                        <span id="report-status"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Serioziteti:</label>
+                        <span id="report-severity"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Përdoruesi:</label>
+                        <span id="report-user"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Data e Krijimit:</label>
+                        <span id="report-created"></span>
+                    </div>
+                </div>
+                <div class="report-photos">
+                    <h4>Fotot</h4>
+                    <div id="report-photos-container">
+                        <p id="no-photos-message">Nuk ka foto të disponueshme për këtë raport.</p>
+                    </div>
+                </div>
+                <div class="report-comments">
+                    <h4>Komentet</h4>
+                    <div id="report-comments-container">
+                        <p id="no-comments-message">Nuk ka komente për këtë raport.</p>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <h4>Përditëso Statusin</h4>
+                    <form id="update-status-form">
+                        <div class="form-group">
+                            <label for="new-status">Statusi i Ri:</label>
+                            <select id="new-status" required>
+                                <option value="pending">Në Pritje</option>
+                                <option value="in-progress">Në Proces</option>
+                                <option value="resolved">I Zgjidhur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="status-comment">Komenti:</label>
+                            <textarea id="status-comment" rows="3" placeholder="Shtoni një koment për ndryshimin e statusit..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Përditëso Statusin</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for confirmation -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">Konfirmim</h3>
+            <p id="modal-message">A jeni të sigurt që dëshironi të kryeni këtë veprim?</p>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn btn-secondary">Anulo</button>
+                <button id="modal-confirm" class="btn btn-primary">Konfirmo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/api-service.js"></script>
+    <script src="../../js/auth-store.js"></script>
+    <script src="../../js/data-store.js"></script>
+    <script src="../../js/notifications.js"></script>
+    <script src="../../js/admin/admin-api.js"></script>
+    <script src="../../js/admin/admin-utils.js"></script>
+    <script src="../../js/admin/admin-reports.js"></script>
+    <script src="../../js/pwa.js"></script>
+</body>
+</html>

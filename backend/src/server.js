@@ -12,6 +12,7 @@ connectDB();
 const auth = require('./routes/auth');
 const reports = require('./routes/reports');
 const notifications = require('./routes/notifications');
+const admin = require('./routes/admin');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api/auth', auth);
 app.use('/api/reports', reports);
 app.use('/api/notifications', notifications);
+app.use('/api/admin', admin);
 
 // Basic route for testing
 app.get('/', (req, res) => {

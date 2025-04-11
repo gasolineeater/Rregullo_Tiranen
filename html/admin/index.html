@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/notifications.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+                <span class="admin-badge">Admin</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Dashboard</a></li>
+                    <li><a href="reports.html">Raportet</a></li>
+                    <li><a href="users.html">Përdoruesit</a></li>
+                    <li><a href="notifications.html">Njoftimet</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="admin-header">
+        <div class="container">
+            <h2>Dashboard Administratori</h2>
+            <p>Mirë se vini në panelin e administratorit të Rregullo Tiranen. Këtu mund të menaxhoni raportet, përdoruesit dhe të shikoni statistikat e platformës.</p>
+        </div>
+    </section>
+
+    <section class="admin-content">
+        <div class="container">
+            <div class="admin-stats">
+                <div class="stats-card total-users">
+                    <div class="stats-icon">👥</div>
+                    <div class="stats-info">
+                        <h3>Përdorues</h3>
+                        <div class="stats-value" id="total-users">0</div>
+                    </div>
+                </div>
+                <div class="stats-card total-reports">
+                    <div class="stats-icon">📊</div>
+                    <div class="stats-info">
+                        <h3>Raporte Totale</h3>
+                        <div class="stats-value" id="total-reports">0</div>
+                    </div>
+                </div>
+                <div class="stats-card pending-reports">
+                    <div class="stats-icon">⏳</div>
+                    <div class="stats-info">
+                        <h3>Në Pritje</h3>
+                        <div class="stats-value" id="pending-reports">0</div>
+                    </div>
+                </div>
+                <div class="stats-card in-progress-reports">
+                    <div class="stats-icon">🔄</div>
+                    <div class="stats-info">
+                        <h3>Në Proces</h3>
+                        <div class="stats-value" id="in-progress-reports">0</div>
+                    </div>
+                </div>
+                <div class="stats-card resolved-reports">
+                    <div class="stats-icon">✅</div>
+                    <div class="stats-info">
+                        <h3>Të Zgjidhura</h3>
+                        <div class="stats-value" id="resolved-reports">0</div>
+                    </div>
+                </div>
+                <div class="stats-card recent-reports">
+                    <div class="stats-icon">📅</div>
+                    <div class="stats-info">
+                        <h3>Raportet e Javës</h3>
+                        <div class="stats-value" id="recent-reports">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-charts">
+                <div class="chart-container">
+                    <h3>Raportet sipas Kategorisë</h3>
+                    <div class="chart" id="category-chart">
+                        <canvas id="category-chart-canvas"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3>Raportet sipas Statusit</h3>
+                    <div class="chart" id="status-chart">
+                        <canvas id="status-chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-tables">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Raportet e Fundit</h3>
+                        <a href="reports.html" class="btn btn-sm">Shiko të Gjitha</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="admin-table" id="recent-reports-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Titulli</th>
+                                    <th>Kategoria</th>
+                                    <th>Statusi</th>
+                                    <th>Data</th>
+                                    <th>Veprime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="loading-row">
+                                    <td colspan="6">
+                                        <div class="loading-spinner"></div>
+                                        <p>Duke ngarkuar të dhënat...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Përdoruesit e Fundit</h3>
+                        <a href="users.html" class="btn btn-sm">Shiko të Gjithë</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="admin-table" id="recent-users-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Emri</th>
+                                    <th>Email</th>
+                                    <th>Roli</th>
+                                    <th>Data e Regjistrimit</th>
+                                    <th>Veprime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="loading-row">
+                                    <td colspan="6">
+                                        <div class="loading-spinner"></div>
+                                        <p>Duke ngarkuar të dhënat...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="../../index.html">Kthehu te Faqja Kryesore</a></li>
+                        <li><a href="reports.html">Menaxho Raportet</a></li>
+                        <li><a href="users.html">Menaxho Përdoruesit</a></li>
+                        <li><a href="notifications.html">Dërgo Njoftime</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for confirmation -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">Konfirmim</h3>
+            <p id="modal-message">A jeni të sigurt që dëshironi të kryeni këtë veprim?</p>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn btn-secondary">Anulo</button>
+                <button id="modal-confirm" class="btn btn-primary">Konfirmo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../js/api-service.js"></script>
+    <script src="../../js/auth-store.js"></script>
+    <script src="../../js/data-store.js"></script>
+    <script src="../../js/notifications.js"></script>
+    <script src="../../js/admin/admin-api.js"></script>
+    <script src="../../js/admin/admin-utils.js"></script>
+    <script src="../../js/admin/admin-dashboard.js"></script>
+    <script src="../../js/pwa.js"></script>
+</body>
+</html>

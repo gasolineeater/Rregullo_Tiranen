@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menaxhimi i Përdoruesve - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/notifications.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+                <span class="admin-badge">Admin</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="reports.html">Raportet</a></li>
+                    <li><a href="users.html" class="active">Përdoruesit</a></li>
+                    <li><a href="notifications.html">Njoftimet</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="admin-header">
+        <div class="container">
+            <h2>Menaxhimi i Përdoruesve</h2>
+            <p>Këtu mund të shikoni, filtroni dhe menaxhoni të gjithë përdoruesit e regjistruar në platformë.</p>
+        </div>
+    </section>
+
+    <section class="admin-content">
+        <div class="container">
+            <div class="admin-filters">
+                <div class="filter-group">
+                    <label for="role-filter">Filtro sipas Rolit:</label>
+                    <select id="role-filter">
+                        <option value="">Të Gjithë</option>
+                        <option value="user">Përdorues</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search-users">Kërko:</label>
+                    <input type="text" id="search-users" placeholder="Kërko sipas emrit ose email-it...">
+                </div>
+                <button id="apply-filters" class="btn btn-primary">Apliko Filtrat</button>
+            </div>
+
+            <div class="admin-tables">
+                <div class="table-container full-width">
+                    <div class="table-header">
+                        <h3>Lista e Përdoruesve</h3>
+                        <div class="table-actions">
+                            <button id="export-users" class="btn btn-sm">Eksporto CSV</button>
+                            <select id="users-per-page">
+                                <option value="10">10 për faqe</option>
+                                <option value="25">25 për faqe</option>
+                                <option value="50">50 për faqe</option>
+                                <option value="100">100 për faqe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="admin-table" id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Emri</th>
+                                    <th>Email</th>
+                                    <th>Telefoni</th>
+                                    <th>Lagjja</th>
+                                    <th>Roli</th>
+                                    <th>Data e Regjistrimit</th>
+                                    <th>Veprime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="loading-row">
+                                    <td colspan="8">
+                                        <div class="loading-spinner"></div>
+                                        <p>Duke ngarkuar të dhënat...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="users-pagination">
+                        <button class="pagination-prev" disabled>« E mëparshme</button>
+                        <div class="pagination-info">Faqja <span id="current-page">1</span> nga <span id="total-pages">1</span></div>
+                        <button class="pagination-next" disabled>E ardhshme »</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="../../index.html">Kthehu te Faqja Kryesore</a></li>
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li><a href="reports.html">Menaxho Raportet</a></li>
+                        <li><a href="notifications.html">Dërgo Njoftime</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for user details -->
+    <div id="user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="user-modal-title">Detajet e Përdoruesit</h3>
+            <div class="user-details">
+                <form id="user-form">
+                    <div class="form-group">
+                        <label for="user-fullname">Emri i Plotë:</label>
+                        <input type="text" id="user-fullname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Email:</label>
+                        <input type="email" id="user-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-phone">Telefoni:</label>
+                        <input type="text" id="user-phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-neighborhood">Lagjja:</label>
+                        <select id="user-neighborhood">
+                            <option value="">Zgjidhni një lagje</option>
+                            <option value="njesia1">Njësia Administrative 1</option>
+                            <option value="njesia2">Njësia Administrative 2</option>
+                            <option value="njesia3">Njësia Administrative 3</option>
+                            <option value="njesia4">Njësia Administrative 4</option>
+                            <option value="njesia5">Njësia Administrative 5</option>
+                            <option value="njesia6">Njësia Administrative 6</option>
+                            <option value="njesia7">Njësia Administrative 7</option>
+                            <option value="njesia8">Njësia Administrative 8</option>
+                            <option value="njesia9">Njësia Administrative 9</option>
+                            <option value="njesia10">Njësia Administrative 10</option>
+                            <option value="njesia11">Njësia Administrative 11</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-role">Roli:</label>
+                        <select id="user-role" required>
+                            <option value="user">Përdorues</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Ruaj Ndryshimet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for confirmation -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">Konfirmim</h3>
+            <p id="modal-message">A jeni të sigurt që dëshironi të kryeni këtë veprim?</p>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn btn-secondary">Anulo</button>
+                <button id="modal-confirm" class="btn btn-primary">Konfirmo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/api-service.js"></script>
+    <script src="../../js/auth-store.js"></script>
+    <script src="../../js/data-store.js"></script>
+    <script src="../../js/notifications.js"></script>
+    <script src="../../js/admin/admin-api.js"></script>
+    <script src="../../js/admin/admin-utils.js"></script>
+    <script src="../../js/admin/admin-users.js"></script>
+    <script src="../../js/pwa.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menaxhimi i Njoftimeve - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/notifications.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+                <span class="admin-badge">Admin</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="reports.html">Raportet</a></li>
+                    <li><a href="users.html">Përdoruesit</a></li>
+                    <li><a href="notifications.html" class="active">Njoftimet</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="admin-header">
+        <div class="container">
+            <h2>Menaxhimi i Njoftimeve</h2>
+            <p>Këtu mund të dërgoni njoftime të reja për të gjithë përdoruesit e platformës.</p>
+        </div>
+    </section>
+
+    <section class="admin-content">
+        <div class="container">
+            <div class="admin-card">
+                <div class="card-header">
+                    <h3>Dërgo Njoftim të Ri</h3>
+                </div>
+                <div class="card-body">
+                    <form id="notification-form">
+                        <div class="form-group">
+                            <label for="notification-title">Titulli i Njoftimit:</label>
+                            <input type="text" id="notification-title" required placeholder="Shkruani titullin e njoftimit...">
+                        </div>
+                        <div class="form-group">
+                            <label for="notification-message">Mesazhi i Njoftimit:</label>
+                            <textarea id="notification-message" rows="5" required placeholder="Shkruani mesazhin e njoftimit..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="notification-type">Lloji i Njoftimit:</label>
+                            <select id="notification-type" required>
+                                <option value="status">Përditësim Statusi</option>
+                                <option value="comment">Koment</option>
+                                <option value="nearby">Njoftim Afërsi</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Dërgo Njoftimin</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="admin-tables">
+                <div class="table-container full-width">
+                    <div class="table-header">
+                        <h3>Njoftimet e Dërguara së Fundmi</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="admin-table" id="notifications-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Titulli</th>
+                                    <th>Lloji</th>
+                                    <th>Data e Dërgimit</th>
+                                    <th>Numri i Marrësve</th>
+                                    <th>Veprime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="loading-row">
+                                    <td colspan="6">
+                                        <div class="loading-spinner"></div>
+                                        <p>Duke ngarkuar të dhënat...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="../../index.html">Kthehu te Faqja Kryesore</a></li>
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li><a href="reports.html">Menaxho Raportet</a></li>
+                        <li><a href="users.html">Menaxho Përdoruesit</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for notification details -->
+    <div id="notification-detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="notification-modal-title">Detajet e Njoftimit</h3>
+            <div class="notification-details">
+                <div class="info-group">
+                    <label>Titulli:</label>
+                    <span id="detail-notification-title"></span>
+                </div>
+                <div class="info-group">
+                    <label>Mesazhi:</label>
+                    <p id="detail-notification-message"></p>
+                </div>
+                <div class="info-group">
+                    <label>Lloji:</label>
+                    <span id="detail-notification-type"></span>
+                </div>
+                <div class="info-group">
+                    <label>Data e Dërgimit:</label>
+                    <span id="detail-notification-date"></span>
+                </div>
+                <div class="info-group">
+                    <label>Numri i Marrësve:</label>
+                    <span id="detail-notification-recipients"></span>
+                </div>
+                <div class="info-group">
+                    <label>Numri i Leximeve:</label>
+                    <span id="detail-notification-reads"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for confirmation -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">Konfirmim</h3>
+            <p id="modal-message">A jeni të sigurt që dëshironi të kryeni këtë veprim?</p>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn btn-secondary">Anulo</button>
+                <button id="modal-confirm" class="btn btn-primary">Konfirmo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success notification -->
+    <div id="success-notification" class="success-notification">
+        <div class="success-icon">✓</div>
+        <div class="success-message">Veprimi u krye me sukses!</div>
+    </div>
+
+    <script src="../../js/api-service.js"></script>
+    <script src="../../js/auth-store.js"></script>
+    <script src="../../js/data-store.js"></script>
+    <script src="../../js/notifications.js"></script>
+    <script src="../../js/admin/admin-api.js"></script>
+    <script src="../../js/admin/admin-utils.js"></script>
+    <script src="../../js/admin/admin-notifications.js"></script>
+    <script src="../../js/pwa.js"></script>
+</body>
+</html>
