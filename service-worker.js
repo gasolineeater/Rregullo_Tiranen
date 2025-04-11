@@ -18,6 +18,8 @@ const ASSETS_TO_CACHE = [
   '/js/map.js',
   '/js/report-detail.js',
   '/js/data-store.js',
+  '/js/auth-store.js',
+  '/js/api-service.js',
   '/js/pwa.js',
   '/manifest.json',
   'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap',
