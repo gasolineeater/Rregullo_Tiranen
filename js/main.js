@@ -1,6 +1,21 @@
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('Rregullo Tiranen application initialized');
 
+    // Check if notifications module is available and initialize it
+    if (typeof NotificationsModule !== 'undefined') {
+        try {
+            // Wait for AuthStore to initialize before initializing notifications
+            await AuthStore.initialize();
+
+            // Only initialize notifications if user is logged in
+            if (AuthStore.isLoggedIn()) {
+                NotificationsModule.initialize();
+            }
+        } catch (error) {
+            console.error('Error initializing notifications:', error);
+        }
+    }
+
     // Show loading indicator
     const loadingOverlay = document.createElement('div');
     loadingOverlay.className = 'loading-overlay';

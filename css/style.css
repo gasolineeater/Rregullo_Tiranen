@@ -1,12 +1,23 @@
 :root {
     /* Light Theme Colors (Default) */
     --color-primary: #C41E3A;
+    --color-primary-rgb: 196, 30, 58;
     --color-text: #333333;
+    --color-text-secondary: #666666;
     --color-background: #F8F8F8;
     --color-card-bg: #ffffff;
     --color-secondary: #506D84;
+    --color-secondary-rgb: 80, 109, 132;
     --color-success: #4A8C6F;
+    --color-success-rgb: 74, 140, 111;
     --color-progress: #D4AC0D;
+    --color-progress-rgb: 212, 172, 13;
+    --color-info: #3498db;
+    --color-info-rgb: 52, 152, 219;
+    --color-warning: #f39c12;
+    --color-warning-rgb: 243, 156, 18;
+    --color-danger: #e74c3c;
+    --color-danger-rgb: 231, 76, 60;
     --color-header-bg: #ffffff;
     --color-footer-bg: #e0e0e0;
     --color-shadow: rgba(0,0,0,0.1);
@@ -19,6 +30,7 @@
     /* Dark Theme Colors */
 .dark-mode {
     --color-text: #f0f0f0;
+    --color-text-secondary: #a0a0a0;
     --color-background: #1a1a1a;
     --color-card-bg: #2d2d2d;
     --color-header-bg: #252525;
