@@ -14,6 +14,14 @@ const DataStore = (function() {
     // Local cache of reports
     let reportsCache = null;
 
+    // Register for language changes
+    if (typeof LocalizationModule !== 'undefined') {
+        LocalizationModule.onLanguageChange(function(newLanguage) {
+            // No need to refresh data, but we might want to update any cached error messages
+            console.log('Language changed in DataStore:', newLanguage);
+        });
+    }
+
     // Initialize reports from localStorage
     function initReportsCache() {
         if (!reportsCache) {
@@ -22,7 +30,7 @@ const DataStore = (function() {
                 try {
                     reportsCache = JSON.parse(reportsJson);
                 } catch (e) {
-                    console.error('Error parsing reports data:', e);
+                    console.error(LocalizationModule.translate('dataStore.errors.parsing', 'Error parsing reports data:'), e);
                     reportsCache = [];
                 }
             } else {
@@ -51,7 +59,7 @@ const DataStore = (function() {
                 }
             }
         } catch (error) {
-            console.error('Error fetching reports from API:', error);
+            console.error(LocalizationModule.translate('dataStore.errors.fetchingReports', 'Error fetching reports from API:'), error);
         }
 
         // Fallback to local cache
@@ -69,7 +77,7 @@ const DataStore = (function() {
                 }
             }
         } catch (error) {
-            console.error('Error fetching filtered reports from API:', error);
+            console.error(LocalizationModule.translate('dataStore.errors.fetchingFilteredReports', 'Error fetching filtered reports from API:'), error);
         }
 
         // Fallback to filtering local cache
@@ -134,7 +142,7 @@ const DataStore = (function() {
                 }
             }
         } catch (error) {
-            console.error('Error saving report to API:', error);
+            console.error(LocalizationModule.translate('dataStore.errors.savingReport', 'Error saving report to API:'), error);
         }
 
         // Fallback to local storage
@@ -169,7 +177,7 @@ const DataStore = (function() {
                 }
             }
         } catch (error) {
-            console.error(`Error fetching report ${reportId} from API:`, error);
+            console.error(LocalizationModule.translate('dataStore.errors.fetchingReportById', 'Error fetching report {id} from API:').replace('{id}', reportId), error);
         }
 
         // Fallback to local cache
@@ -195,7 +203,7 @@ const DataStore = (function() {
                 }
             }
         } catch (error) {
-            console.error(`Error updating report ${reportId} status in API:`, error);
+            console.error(LocalizationModule.translate('dataStore.errors.updatingStatus', 'Error updating report {id} status in API:').replace('{id}', reportId), error);
         }
 
         // Fallback to local storage
@@ -239,7 +247,7 @@ const DataStore = (function() {
                 }
             }
         } catch (error) {
-            console.error(`Error adding comment to report ${reportId} in API:`, error);
+            console.error(LocalizationModule.translate('dataStore.errors.addingComment', 'Error adding comment to report {id} in API:').replace('{id}', reportId), error);
         }
 
         // Fallback to local storage
@@ -264,7 +272,7 @@ const DataStore = (function() {
                     name: AuthStore.getCurrentUser().fullname
                 } : {
                     id: 'anonymous',
-                    name: 'Anonim'
+                    name: LocalizationModule.translate('common.anonymous', 'Anonim')
                 }
             };
 
@@ -289,7 +297,7 @@ const DataStore = (function() {
                 }
             }
         } catch (error) {
-            console.error('Error fetching reports in radius from API:', error);
+            console.error(LocalizationModule.translate('dataStore.errors.fetchingReportsInRadius', 'Error fetching reports in radius from API:'), error);
         }
 
         // Fallback to filtering local cache
@@ -312,91 +320,102 @@ const DataStore = (function() {
         localStorage.removeItem(REPORTS_KEY);
     }
 
+    // Helper function to get localized sample data
+    function getLocalizedSampleData() {
+        // Get current language
+        const language = typeof LocalizationModule !== 'undefined' ?
+            LocalizationModule.getCurrentLanguage() : 'sq';
+
+        // Return sample data based on language
+        return [
+            {
+                category: 'infrastructure',
+                subcategory: 'road-damage',
+                type: LocalizationModule.translate('sampleData.roadDamage.type', 'Gropë e thellë'),
+                title: LocalizationModule.translate('sampleData.roadDamage.title', 'Gropë e madhe në rrugën "Myslym Shyri"'),
+                description: LocalizationModule.translate('sampleData.roadDamage.description', 'Gropë e thellë që shkakton probleme për makinat dhe këmbësorët'),
+                address: LocalizationModule.translate('sampleData.roadDamage.address', 'Rruga Myslym Shyri, pranë kryqëzimit me Rrugën e Kavajës'),
+                neighborhood: 'njesia5',
+                lat: 41.3275 + 0.015,
+                lng: 19.8187 - 0.02,
+                severity: 'high',
+                status: 'pending',
+                timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days ago
+            },
+            {
+                category: 'infrastructure',
+                subcategory: 'street-lighting',
+                type: LocalizationModule.translate('sampleData.streetLighting.type', 'Ndriçim i prishur'),
+                title: LocalizationModule.translate('sampleData.streetLighting.title', 'Ndriçim i dëmtuar në Bulevardin Zhan D\'Ark'),
+                description: LocalizationModule.translate('sampleData.streetLighting.description', 'Disa llamba të rrugës janë të prishura duke krijuar një zonë të errët dhe të pasigurt natën'),
+                address: LocalizationModule.translate('sampleData.streetLighting.address', 'Bulevardi Zhan D\'Ark, afër shkollës "Petro Nini Luarasi"'),
+                neighborhood: 'njesia10',
+                lat: 41.3275 - 0.01,
+                lng: 19.8187 + 0.015,
+                severity: 'medium',
+                status: 'in-progress',
+                timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString() // 14 days ago
+            },
+            {
+                category: 'environment',
+                subcategory: 'littering',
+                type: LocalizationModule.translate('sampleData.littering.type', 'Grumbullim mbeturinash'),
+                title: LocalizationModule.translate('sampleData.littering.title', 'Mbeturina të papastruara në Parkun e Liqenit'),
+                description: LocalizationModule.translate('sampleData.littering.description', 'Grumbull mbeturinash pranë zonës së piknikut që nuk është pastruar për disa ditë'),
+                address: LocalizationModule.translate('sampleData.littering.address', 'Parku i Liqenit Artificial, zona e piknikut'),
+                neighborhood: 'njesia6',
+                lat: 41.3275 + 0.008,
+                lng: 19.8187 + 0.01,
+                severity: 'medium',
+                status: 'pending',
+                timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString() // 3 days ago
+            },
+            {
+                category: 'public-services',
+                subcategory: 'water-utilities',
+                type: LocalizationModule.translate('sampleData.waterUtilities.type', 'Mungesë uji'),
+                title: LocalizationModule.translate('sampleData.waterUtilities.title', 'Problem me furnizimin me ujë në Rrugën Pjetër Budi'),
+                description: LocalizationModule.translate('sampleData.waterUtilities.description', 'Mungesa e ujit për më shumë se 48 orë në të gjithë pallatet e zonës'),
+                address: LocalizationModule.translate('sampleData.waterUtilities.address', 'Rruga Pjetër Budi, Pallati 7'),
+                neighborhood: 'njesia7',
+                lat: 41.3275 - 0.02,
+                lng: 19.8187 - 0.01,
+                severity: 'urgent',
+                status: 'resolved',
+                timestamp: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString() // 21 days ago
+            },
+            {
+                category: 'community',
+                subcategory: 'tree-planting',
+                type: LocalizationModule.translate('sampleData.treePlanting.type', 'Kërkesë për gjelbërim'),
+                title: LocalizationModule.translate('sampleData.treePlanting.title', 'Kërkesë për mbjellje pemësh në Bulevardin Bajram Curri'),
+                description: LocalizationModule.translate('sampleData.treePlanting.description', 'Zona ka nevojë për më shumë gjelbërim për të përmirësuar cilësinë e ajrit dhe estetikën'),
+                address: LocalizationModule.translate('sampleData.treePlanting.address', 'Bulevardi Bajram Curri, përballë Gjimnazit "Sami Frashëri"'),
+                neighborhood: 'njesia2',
+                lat: 41.3275 + 0.005,
+                lng: 19.8187 - 0.008,
+                severity: 'low',
+                status: 'pending',
+                timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() // 5 days ago
+            }
+        ];
+    }
+
     // Add some sample reports if none exist
     function initializeSampleData() {
         const reports = initReportsCache();
 
         if (reports.length === 0) {
-            const sampleReports = [
-                {
-                    category: 'infrastructure',
-                    subcategory: 'road-damage',
-                    type: 'Gropë e thellë',
-                    title: 'Gropë e madhe në rrugën "Myslym Shyri"',
-                    description: 'Gropë e thellë që shkakton probleme për makinat dhe këmbësorët',
-                    address: 'Rruga Myslym Shyri, pranë kryqëzimit me Rrugën e Kavajës',
-                    neighborhood: 'njesia5',
-                    lat: 41.3275 + 0.015,
-                    lng: 19.8187 - 0.02,
-                    severity: 'high',
-                    status: 'pending',
-                    timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days ago
-                },
-                {
-                    category: 'infrastructure',
-                    subcategory: 'street-lighting',
-                    type: 'Ndriçim i prishur',
-                    title: 'Ndriçim i dëmtuar në Bulevardin Zhan D\'Ark',
-                    description: 'Disa llamba të rrugës janë të prishura duke krijuar një zonë të errët dhe të pasigurt natën',
-                    address: 'Bulevardi Zhan D\'Ark, afër shkollës "Petro Nini Luarasi"',
-                    neighborhood: 'njesia10',
-                    lat: 41.3275 - 0.01,
-                    lng: 19.8187 + 0.015,
-                    severity: 'medium',
-                    status: 'in-progress',
-                    timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString() // 14 days ago
-                },
-                {
-                    category: 'environment',
-                    subcategory: 'littering',
-                    type: 'Grumbullim mbeturinash',
-                    title: 'Mbeturina të papastruara në Parkun e Liqenit',
-                    description: 'Grumbull mbeturinash pranë zonës së piknikut që nuk është pastruar për disa ditë',
-                    address: 'Parku i Liqenit Artificial, zona e piknikut',
-                    neighborhood: 'njesia6',
-                    lat: 41.3275 + 0.008,
-                    lng: 19.8187 + 0.01,
-                    severity: 'medium',
-                    status: 'pending',
-                    timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString() // 3 days ago
-                },
-                {
-                    category: 'public-services',
-                    subcategory: 'water-utilities',
-                    type: 'Mungesë uji',
-                    title: 'Problem me furnizimin me ujë në Rrugën Pjetër Budi',
-                    description: 'Mungesa e ujit për më shumë se 48 orë në të gjithë pallatet e zonës',
-                    address: 'Rruga Pjetër Budi, Pallati 7',
-                    neighborhood: 'njesia7',
-                    lat: 41.3275 - 0.02,
-                    lng: 19.8187 - 0.01,
-                    severity: 'urgent',
-                    status: 'resolved',
-                    timestamp: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString() // 21 days ago
-                },
-                {
-                    category: 'community',
-                    subcategory: 'tree-planting',
-                    type: 'Kërkesë për gjelbërim',
-                    title: 'Kërkesë për mbjellje pemësh në Bulevardin Bajram Curri',
-                    description: 'Zona ka nevojë për më shumë gjelbërim për të përmirësuar cilësinë e ajrit dhe estetikën',
-                    address: 'Bulevardi Bajram Curri, përballë Gjimnazit "Sami Frashëri"',
-                    neighborhood: 'njesia2',
-                    lat: 41.3275 + 0.005,
-                    lng: 19.8187 - 0.008,
-                    severity: 'low',
-                    status: 'pending',
-                    timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() // 5 days ago
-                }
-            ];
+            const sampleReports = getLocalizedSampleData();
 
             // Add IDs to sample reports
             sampleReports.forEach((report, index) => {
                 report.id = (Date.now() - index * 1000000).toString();
             });
 
+            // Add the sample reports to the cache
             saveReportsToCache(sampleReports);
-            console.log('Sample reports initialized');
+            console.log(LocalizationModule.translate('dataStore.info.sampleDataInitialized', 'Sample reports initialized'));
             return sampleReports;
         }
 
@@ -410,17 +429,17 @@ const DataStore = (function() {
             const reports = await ApiService.getAllReports();
             if (reports) {
                 backendAvailable = true;
-                console.log('Backend is available, using API for data storage');
+                console.log(LocalizationModule.translate('dataStore.info.usingBackend', 'Backend is available, using API for data storage'));
                 // Update local cache with reports from API
                 saveReportsToCache(reports);
                 return true;
             }
         } catch (error) {
-            console.error('Backend availability check failed:', error);
+            console.error(LocalizationModule.translate('dataStore.errors.backendCheck', 'Backend availability check failed:'), error);
             backendAvailable = false;
         }
 
-        console.warn('Backend is not available, using localStorage fallback');
+        console.warn(LocalizationModule.translate('dataStore.warnings.usingLocalStorage', 'Backend is not available, using localStorage fallback'));
         return false;
     }
 
@@ -452,6 +471,6 @@ const DataStore = (function() {
 // Initialize data store when the script loads
 document.addEventListener('DOMContentLoaded', function() {
     DataStore.initialize().then(() => {
-        console.log('DataStore initialized');
+        console.log(LocalizationModule.translate('dataStore.info.initialized', 'DataStore initialized'));
     });
 });
