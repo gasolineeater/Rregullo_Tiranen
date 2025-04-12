@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#C41E3A">
     <meta name="description" content="Shiko hartën e problemeve urbane të raportuara në Tiranë">
-    <title>Harta e Problemeve - Rregullo Tiranen</title>
+    <title data-i18n="map.pageTitle">Harta e Problemeve - Rregullo Tiranen</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/map.css">
     <link rel="stylesheet" href="../css/mobile.css">
@@ -42,71 +42,74 @@
     <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content" data-i18n="accessibility.skipToContent">Kalo te përmbajtja</a>
+
     <header class="main-header">
         <div class="container">
             <div class="logo">
-                <h1>Rregullo Tiranen</h1>
+                <h1 data-i18n="app.name">Rregullo Tiranen</h1>
             </div>
-            <nav class="main-nav">
+            <nav class="main-nav" role="navigation" aria-label="Main Navigation">
                 <ul>
-                    <li><a href="../index.html">Ballina</a></li>
-                    <li><a href="../report.html">Raporto</a></li>
-                    <li><a href="map.html" class="active">Shiko Hartën</a></li>
-                    <li><a href="#">Rreth Nesh</a></li>
-                    <li><a href="login.html">Hyrje</a></li>
-                    <li><a href="register.html">Regjistrim</a></li>
+                    <li><a href="../index.html" data-i18n="nav.home">Ballina</a></li>
+                    <li><a href="../report.html" data-i18n="nav.newReport">Raporto</a></li>
+                    <li><a href="map.html" class="active" data-i18n="nav.map">Shiko Hartën</a></li>
+                    <li><a href="#" data-i18n="nav.about">Rreth Nesh</a></li>
+                    <li><a href="login.html" data-i18n="nav.login">Hyrje</a></li>
+                    <li><a href="register.html" data-i18n="nav.register">Regjistrim</a></li>
                 </ul>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
                     <span class="icon">🌓</span>
-                    <span class="theme-label">Ndryshoni Temen</span>
+                    <span class="theme-label" data-i18n="common.theme">Ndryshoni Temen</span>
                 </button>
             </nav>
         </div>
     </header>
 
-    <section class="map-hero">
-        <div class="container">
-            <h2>Harta e Problemeve të Raportuara</h2>
-            <p>Shiko të gjitha problemet e raportuara në Tiranë dhe statusin e tyre</p>
-        </div>
-    </section>
+    <main id="main-content">
+        <section class="map-hero">
+            <div class="container">
+                <h2 data-i18n="map.title">Harta e Problemeve të Raportuara</h2>
+                <p data-i18n="map.subtitle">Shiko të gjitha problemet e raportuara në Tiranë dhe statusin e tyre</p>
+            </div>
+        </section>
 
     <section class="map-filters">
         <div class="container">
             <div class="filter-controls">
                 <div class="filter-group">
-                    <label for="category-filter">Kategoria</label>
+                    <label for="category-filter" data-i18n="map.filters.category">Kategoria</label>
                     <select id="category-filter">
-                        <option value="all" selected>Të gjitha kategoritë</option>
-                        <option value="infrastructure">Probleme me Infrastrukturën</option>
-                        <option value="environment">Probleme Mjedisore</option>
-                        <option value="public-services">Shërbime Publike</option>
-                        <option value="community">Përmirësime Komunitare</option>
+                        <option value="all" selected data-i18n="map.filters.allCategories">Të gjitha kategoritë</option>
+                        <option value="infrastructure" data-i18n="map.filters.infrastructure">Probleme me Infrastrukturën</option>
+                        <option value="environment" data-i18n="map.filters.environment">Probleme Mjedisore</option>
+                        <option value="public-services" data-i18n="map.filters.publicServices">Shërbime Publike</option>
+                        <option value="community" data-i18n="map.filters.community">Përmirësime Komunitare</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
-                    <label for="status-filter">Statusi</label>
+                    <label for="status-filter" data-i18n="map.filters.status">Statusi</label>
                     <select id="status-filter">
-                        <option value="all" selected>Të gjitha statuset</option>
-                        <option value="pending">Në pritje</option>
-                        <option value="in-progress">Në proces</option>
-                        <option value="resolved">Të zgjidhura</option>
+                        <option value="all" selected data-i18n="map.filters.allStatuses">Të gjitha statuset</option>
+                        <option value="pending" data-i18n="reportDetail.status.pending">Në pritje</option>
+                        <option value="in-progress" data-i18n="reportDetail.status.inProgress">Në proces</option>
+                        <option value="resolved" data-i18n="reportDetail.status.resolved">Të zgjidhura</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
-                    <label for="date-filter">Periudha</label>
+                    <label for="date-filter" data-i18n="map.filters.date">Periudha</label>
                     <select id="date-filter">
-                        <option value="all" selected>Të gjitha kohët</option>
-                        <option value="today">Sot</option>
-                        <option value="week">Javën e fundit</option>
-                        <option value="month">Muajin e fundit</option>
+                        <option value="all" selected data-i18n="map.filters.allTimes">Të gjitha kohët</option>
+                        <option value="today" data-i18n="common.today">Sot</option>
+                        <option value="week" data-i18n="common.lastWeek">Javën e fundit</option>
+                        <option value="month" data-i18n="common.lastMonth">Muajin e fundit</option>
                     </select>
                 </div>
 
-                <button id="apply-filters" class="btn btn-primary">Apliko Filtrat</button>
-                <button id="reset-filters" class="btn btn-secondary">Rivendos</button>
+                <button id="apply-filters" class="btn btn-primary" data-i18n="map.filters.apply">Apliko Filtrat</button>
+                <button id="reset-filters" class="btn btn-secondary" data-i18n="map.filters.reset">Rivendos</button>
             </div>
         </div>
     </section>
@@ -116,85 +119,86 @@
             <div class="map-legend">
                 <div class="legend-item">
                     <div class="legend-color infrastructure"></div>
-                    <span>Infrastrukturë</span>
+                    <span data-i18n="map.legend.infrastructure">Infrastrukturë</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color environment"></div>
-                    <span>Mjedis</span>
+                    <span data-i18n="map.legend.environment">Mjedis</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color public-services"></div>
-                    <span>Shërbime Publike</span>
+                    <span data-i18n="map.legend.publicServices">Shërbime Publike</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color community"></div>
-                    <span>Komunitet</span>
+                    <span data-i18n="map.legend.community">Komunitet</span>
                 </div>
                 <div class="legend-divider"></div>
                 <div class="legend-item">
                     <div class="status-indicator pending"></div>
-                    <span>Në pritje</span>
+                    <span data-i18n="reportDetail.status.pending">Në pritje</span>
                 </div>
                 <div class="legend-item">
                     <div class="status-indicator in-progress"></div>
-                    <span>Në proces</span>
+                    <span data-i18n="reportDetail.status.inProgress">Në proces</span>
                 </div>
                 <div class="legend-item">
                     <div class="status-indicator resolved"></div>
-                    <span>Të zgjidhura</span>
+                    <span data-i18n="reportDetail.status.resolved">Të zgjidhura</span>
                 </div>
             </div>
 
             <div id="full-map" class="full-map-container">
                 <!-- Map view toggle buttons -->
                 <div class="map-view-buttons">
-                    <button id="marker-view" class="map-view-button active">Shenja</button>
-                    <button id="cluster-view" class="map-view-button">Grupime</button>
-                    <button id="heat-view" class="map-view-button">Heatmap</button>
+                    <button id="marker-view" class="map-view-button active" data-i18n="map.views.markers">Shenja</button>
+                    <button id="cluster-view" class="map-view-button" data-i18n="map.views.clusters">Grupime</button>
+                    <button id="heat-view" class="map-view-button" data-i18n="map.views.heatmap">Heatmap</button>
                 </div>
 
                 <!-- Address search bar -->
                 <div class="address-search-container">
-                    <input type="text" id="address-search" class="address-search-input" placeholder="Kërko adresë..." />
+                    <input type="text" id="address-search" class="address-search-input" data-i18n-placeholder="map.search" placeholder="Kërko adresë..." />
                     <div id="address-search-results" class="address-search-results"></div>
                 </div>
             </div>
 
             <div class="map-stats">
                 <div class="stat-item">
-                    <strong>Probleme të shfaqura:</strong>
+                    <strong data-i18n="map.stats.visible">Probleme të shfaqura:</strong>
                     <span id="visible-issues">0</span>
                 </div>
                 <div class="stat-item">
-                    <strong>Totali i problemeve:</strong>
+                    <strong data-i18n="map.stats.total">Totali i problemeve:</strong>
                     <span id="total-issues">0</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer>
+    <footer role="contentinfo">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <h3>Rregullo Tiranen</h3>
-                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                    <h3 data-i18n="app.name">Rregullo Tiranen</h3>
+                    <p data-i18n="app.tagline">Një iniciativë qytetare për përmirësimin e Tiranës</p>
                 </div>
                 <div class="footer-links">
-                    <h4>Lidhje të Shpejta</h4>
+                    <h4 data-i18n="footer.quickLinks">Lidhje të Shpejta</h4>
                     <ul>
-                        <li><a href="../report.html">Raporto Problem</a></li>
-                        <li><a href="map.html">Shiko Hartën</a></li>
-                        <li><a href="#">Si Funksionon</a></li>
-                        <li><a href="#">Kontakto</a></li>
+                        <li><a href="../report.html" data-i18n="nav.newReport">Raporto Problem</a></li>
+                        <li><a href="map.html" data-i18n="nav.map">Shiko Hartën</a></li>
+                        <li><a href="#" data-i18n="nav.about">Si Funksionon</a></li>
+                        <li><a href="#" data-i18n="nav.contact">Kontakto</a></li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+                <p data-i18n="footer.copyright">&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
             </div>
         </div>
     </footer>
+    </main>
 
     <script src="../js/data-store.js"></script>
     <script src="../js/auth-store.js"></script>
