@@ -11,6 +11,14 @@ const AuthStore = (function() {
     // Local cache of current user
     let currentUser = null;
 
+    // Register for language changes
+    if (typeof LocalizationModule !== 'undefined') {
+        LocalizationModule.onLanguageChange(function(newLanguage) {
+            // No need to refresh data, but we might want to update any cached error messages
+            console.log('Language changed in AuthStore:', newLanguage);
+        });
+    }
+
     // Initialize current user from localStorage
     function initCurrentUser() {
         if (!currentUser) {
@@ -19,7 +27,7 @@ const AuthStore = (function() {
                 try {
                     currentUser = JSON.parse(userJson);
                 } catch (e) {
-                    console.error('Error parsing user data:', e);
+                    console.error(LocalizationModule.translate('authStore.errors.parsing', 'Error parsing user data:'), e);
                     localStorage.removeItem(CURRENT_USER_KEY);
                 }
             }
@@ -59,10 +67,10 @@ const AuthStore = (function() {
 
             return result;
         } catch (error) {
-            console.error('Registration error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.registration', 'Registration error:'), error);
             return {
                 success: false,
-                message: 'Ndodhi një gabim gjatë regjistrimit. Ju lutemi provoni përsëri.'
+                message: LocalizationModule.translate('authStore.messages.registrationError', 'Ndodhi një gabim gjatë regjistrimit. Ju lutemi provoni përsëri.')
             };
         }
     }
@@ -78,10 +86,10 @@ const AuthStore = (function() {
 
             return result;
         } catch (error) {
-            console.error('Login error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.login', 'Login error:'), error);
             return {
                 success: false,
-                message: 'Ndodhi një gabim gjatë hyrjes. Ju lutemi provoni përsëri.'
+                message: LocalizationModule.translate('authStore.messages.loginError', 'Ndodhi një gabim gjatë hyrjes. Ju lutemi provoni përsëri.')
             };
         }
     }
@@ -89,24 +97,25 @@ const AuthStore = (function() {
     // Logout user
     async function logoutUser() {
         try {
-            const result = await ApiService.logout();
+            // Call the logout API but don't store the result
+            await ApiService.logout();
 
             // Clear current user regardless of API result
             saveCurrentUser(null);
 
             return {
                 success: true,
-                message: 'Dalja u krye me sukses!'
+                message: LocalizationModule.translate('authStore.messages.logoutSuccess', 'Dalja u krye me sukses!')
             };
         } catch (error) {
-            console.error('Logout error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.logout', 'Logout error:'), error);
 
             // Still clear current user even if API fails
             saveCurrentUser(null);
 
             return {
                 success: true,
-                message: 'Dalja u krye me sukses!'
+                message: LocalizationModule.translate('authStore.messages.logoutSuccess', 'Dalja u krye me sukses!')
             };
         }
     }
@@ -122,10 +131,10 @@ const AuthStore = (function() {
 
             return result;
         } catch (error) {
-            console.error('Update profile error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.updateProfile', 'Update profile error:'), error);
             return {
                 success: false,
-                message: 'Ndodhi një gabim gjatë përditësimit të profilit. Ju lutemi provoni përsëri.'
+                message: LocalizationModule.translate('authStore.messages.updateProfileError', 'Ndodhi një gabim gjatë përditësimit të profilit. Ju lutemi provoni përsëri.')
             };
         }
     }
@@ -140,10 +149,10 @@ const AuthStore = (function() {
 
             return result;
         } catch (error) {
-            console.error('Change password error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.changePassword', 'Change password error:'), error);
             return {
                 success: false,
-                message: 'Ndodhi një gabim gjatë ndryshimit të fjalëkalimit. Ju lutemi provoni përsëri.'
+                message: LocalizationModule.translate('authStore.messages.changePasswordError', 'Ndodhi një gabim gjatë ndryshimit të fjalëkalimit. Ju lutemi provoni përsëri.')
             };
         }
     }
@@ -151,10 +160,10 @@ const AuthStore = (function() {
     // Delete user account
     async function deleteAccount(password) {
         // This would need to be implemented in the API
-        console.warn('Account deletion not implemented in API yet');
+        console.warn(LocalizationModule.translate('authStore.warnings.accountDeletionNotImplemented', 'Account deletion not implemented in API yet'));
         return {
             success: false,
-            message: 'Fshirja e llogarisë nuk është e disponueshme aktualisht.'
+            message: LocalizationModule.translate('authStore.messages.accountDeletionNotAvailable', 'Fshirja e llogarisë nuk është e disponueshme aktualisht.')
         };
     }
 
@@ -177,10 +186,10 @@ const AuthStore = (function() {
 
             return result;
         } catch (error) {
-            console.error('Update notification settings error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.updateNotificationSettings', 'Update notification settings error:'), error);
             return {
                 success: false,
-                message: 'Ndodhi një gabim gjatë përditësimit të cilësimeve të njoftimeve. Ju lutemi provoni përsëri.'
+                message: LocalizationModule.translate('authStore.messages.updateNotificationSettingsError', 'Ndodhi një gabim gjatë përditësimit të cilësimeve të njoftimeve. Ju lutemi provoni përsëri.')
             };
         }
     }
@@ -190,7 +199,7 @@ const AuthStore = (function() {
         try {
             return await ApiService.getUserReports();
         } catch (error) {
-            console.error('Get user reports error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.getUserReports', 'Get user reports error:'), error);
             return [];
         }
     }
@@ -200,7 +209,7 @@ const AuthStore = (function() {
         try {
             return await ApiService.getUserNotifications();
         } catch (error) {
-            console.error('Get user notifications error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.getUserNotifications', 'Get user notifications error:'), error);
             return [];
         }
     }
@@ -210,7 +219,7 @@ const AuthStore = (function() {
         try {
             return await ApiService.markNotificationAsRead(notificationId);
         } catch (error) {
-            console.error('Mark notification as read error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.markNotificationAsRead', 'Mark notification as read error:'), error);
             return false;
         }
     }
@@ -220,7 +229,7 @@ const AuthStore = (function() {
         try {
             return await ApiService.deleteNotification(notificationId);
         } catch (error) {
-            console.error('Delete notification error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.deleteNotification', 'Delete notification error:'), error);
             return false;
         }
     }
@@ -230,7 +239,7 @@ const AuthStore = (function() {
         try {
             return await ApiService.markAllNotificationsAsRead();
         } catch (error) {
-            console.error('Mark all notifications as read error:', error);
+            console.error(LocalizationModule.translate('authStore.errors.markAllNotificationsAsRead', 'Mark all notifications as read error:'), error);
             return false;
         }
     }
@@ -249,7 +258,7 @@ const AuthStore = (function() {
 
             return false;
         } catch (error) {
-            console.error('Backend availability check failed:', error);
+            console.error(LocalizationModule.translate('authStore.errors.backendCheck', 'Backend availability check failed:'), error);
             return false;
         }
     }
@@ -259,9 +268,9 @@ const AuthStore = (function() {
         const backendAvailable = await checkBackendAvailability();
 
         if (backendAvailable) {
-            console.log('Backend is available, using API for authentication');
+            console.log(LocalizationModule.translate('authStore.info.usingBackend', 'Backend is available, using API for authentication'));
         } else {
-            console.warn('Backend is not available, using localStorage fallback');
+            console.warn(LocalizationModule.translate('authStore.warnings.usingLocalStorage', 'Backend is not available, using localStorage fallback'));
 
             // If we have a token but backend is not available, clear user data
             if (localStorage.getItem('rregullo_tiranen_token')) {
@@ -294,6 +303,6 @@ const AuthStore = (function() {
 // Initialize auth store when the script loads
 document.addEventListener('DOMContentLoaded', function() {
     AuthStore.initialize().then(() => {
-        console.log('AuthStore initialized');
+        console.log(LocalizationModule.translate('authStore.info.initialized', 'AuthStore initialized'));
     });
 });
