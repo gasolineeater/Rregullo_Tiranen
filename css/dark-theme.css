@@ -8,19 +8,19 @@
     /* Text colors */
     --color-text: #f0f0f0;
     --color-text-secondary: #a0a0a0;
-    
+
     /* Background colors */
     --color-background: #121212;
     --color-card-bg: #1e1e1e;
     --color-header-bg: #1a1a1a;
     --color-footer-bg: #1a1a1a;
-    
+
     /* UI colors */
     --color-primary: #ff4d6d;
     --color-primary-rgb: 255, 77, 109;
     --color-secondary: #7fb3d5;
     --color-secondary-rgb: 127, 179, 213;
-    
+
     /* Status colors */
     --color-success: #5aad85;
     --color-success-rgb: 90, 173, 133;
@@ -32,7 +32,7 @@
     --color-warning-rgb: 247, 180, 76;
     --color-danger: #eb6559;
     --color-danger-rgb: 235, 101, 89;
-    
+
     /* Form and UI elements */
     --color-disabled: #333;
     --color-disabled-text: #777;
@@ -151,30 +151,44 @@
 
 /* Leaflet Map Specific Styles */
 .dark-theme .leaflet-container {
-    background-color: #242424;
+    background-color: #242424 !important;
 }
 
 .dark-theme .leaflet-tile {
-    filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+    filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7) !important;
 }
 
 .dark-theme .leaflet-control-attribution {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #ddd;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    color: #ddd !important;
 }
 
 .dark-theme .leaflet-control-attribution a {
-    color: #bbb;
+    color: #bbb !important;
 }
 
 .dark-theme .leaflet-control-zoom a {
-    background-color: #333;
-    color: #f0f0f0;
-    border-color: #555;
+    background-color: #333 !important;
+    color: #f0f0f0 !important;
+    border-color: #555 !important;
 }
 
 .dark-theme .leaflet-control-zoom a:hover {
-    background-color: #444;
+    background-color: #444 !important;
+}
+
+/* Ensure map container is visible */
+.dark-theme #map-container {
+    background-color: #242424 !important;
+    border: 1px solid #444 !important;
+}
+
+/* Fix for map tiles in dark mode */
+.dark-theme .leaflet-layer,
+.dark-theme .leaflet-control-zoom-in,
+.dark-theme .leaflet-control-zoom-out,
+.dark-theme .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%) !important;
 }
 
 /* Map Markers */

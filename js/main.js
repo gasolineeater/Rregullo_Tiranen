@@ -1,6 +1,15 @@
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('Rregullo Tiranen application initialized');
 
+    // Wait a short time to ensure all resources are loaded
+    setTimeout(() => {
+        // Initialize home map if we're on the homepage
+        if (document.getElementById('map-container')) {
+            console.log('Found map container, initializing map');
+            initializeHomeMap();
+        }
+    }, 100);
+
     // Initialize performance utilities if available
     if (typeof PerformanceUtils !== 'undefined') {
         PerformanceUtils.initialize();
@@ -62,40 +71,54 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // Initialize the map on the homepage
-    const mapContainer = document.getElementById('map-container');
-    if (mapContainer) {
-        console.log('Initializing map on homepage');
+    function initializeHomeMap() {
+        console.log('Initializing home map function called');
+        const mapContainer = document.getElementById('map-container');
+        if (!mapContainer) {
+            console.error('Map container not found');
+            return;
+        }
 
-        // Initialize the map centered on Tirana
-        const tiranaCenterLat = 41.3275;
-        const tiranaCenterLng = 19.8187;
+        console.log('Map container found, initializing map');
 
-        // Store map in window object so we can access it later for theme changes
-        window.homeMap = L.map('map-container').setView([tiranaCenterLat, tiranaCenterLng], 12);
+        try {
+            // Initialize the map centered on Tirana
+            const tiranaCenterLat = 41.3275;
+            const tiranaCenterLng = 19.8187;
 
-        // Add OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 19
-        }).addTo(window.homeMap);
+            // Store map in window object so we can access it later for theme changes
+            window.homeMap = L.map('map-container', {
+                zoomControl: true,
+                attributionControl: true
+            }).setView([tiranaCenterLat, tiranaCenterLng], 12);
 
-        // Get reports from DataStore - handle async properly
-        DataStore.initialize().then(() => {
-            return DataStore.getAllReports();
-        }).then(reports => {
-            // Add markers for each report
-            reports.forEach(report => {
-            // Create custom icon based on category
-            const markerColor = getMarkerColor(report.category);
-            const markerIcon = L.divIcon({
-                className: `custom-marker ${report.category} ${report.status}`,
-                html: `<div style="background-color: ${markerColor};"></div>`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
+            console.log('Map object created:', window.homeMap);
 
-            // Create marker and add to map
-            const marker = L.marker([report.lat, report.lng], { icon: markerIcon }).addTo(window.homeMap);
+            // Add OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(window.homeMap);
+
+            console.log('Tile layer added to map');
+
+            // Get reports from DataStore
+            DataStore.getAllReports().then(reports => {
+                console.log('Reports loaded:', reports.length);
+
+                // Add markers for each report
+                reports.forEach(report => {
+                    // Create custom icon based on category
+                    const markerColor = getMarkerColor(report.category);
+                    const markerIcon = L.divIcon({
+                        className: `custom-marker ${report.category} ${report.status}`,
+                        html: `<div style="background-color: ${markerColor};"></div>`,
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12]
+                    });
+
+                    // Create marker and add to map
+                    const marker = L.marker([report.lat, report.lng], { icon: markerIcon }).addTo(window.homeMap);
 
             // Add popup with report details
             marker.bindPopup(`
@@ -209,14 +232,52 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
-        // Refresh map when it becomes visible (fixes rendering issues)
-        setTimeout(() => {
-            window.homeMap.invalidateSize();
-        }, 100);
+                    // Refresh map when it becomes visible (fixes rendering issues)
+                    setTimeout(() => {
+                        if (window.homeMap) {
+                            window.homeMap.invalidateSize();
+                            console.log('Map size invalidated');
+                        }
+                    }, 300);
+                });
+
+                // Add legend to the map if it doesn't exist
+                if (!document.querySelector('.map-legend')) {
+                    addMapLegend(mapContainer);
+                }
+            }).catch(error => {
+                console.error('Error loading reports for map:', error);
             });
-        }).catch(error => {
-            console.error('Error loading reports for map:', error);
-        });
+        } catch (error) {
+            console.error('Error initializing map:', error);
+        }
+    }
+
+    // Function to add map legend
+    function addMapLegend(mapContainer) {
+        const legendContainer = document.createElement('div');
+        legendContainer.className = 'map-legend';
+        legendContainer.innerHTML = `
+            <div class="legend-item">
+                <div class="legend-color infrastructure"></div>
+                <span>Infrastrukturë</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color environment"></div>
+                <span>Mjedis</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color public-services"></div>
+                <span>Shërbime Publike</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color community"></div>
+                <span>Komunitet</span>
+            </div>
+        `;
+
+        // Insert legend before the map container
+        mapContainer.parentNode.insertBefore(legendContainer, mapContainer);
     }
 
     // Update the report button to link to the report page
