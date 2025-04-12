@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const locateControl = L.control.locate({
         position: 'topleft',
         strings: {
-            title: LocalizationModule.translate('map.showMyLocation', 'Trego vendndodhjen time')
+            title: LocalizationHelper.translateWithVars('map.showMyLocation', {}, 'Trego vendndodhjen time')
         },
         locateOptions: {
             enableHighAccuracy: true,
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mapContainer.classList.add('loading');
             const loadingIndicator = document.createElement('div');
             loadingIndicator.className = 'map-loading-indicator';
-            loadingIndicator.innerHTML = `<div class="spinner"></div><p>${LocalizationModule.translate('common.loading', 'Duke ngarkuar të dhënat...')}</p>`;
+            loadingIndicator.innerHTML = `<div class="spinner"></div><p>${LocalizationHelper.translateWithVars('common.loading', {}, 'Duke ngarkuar të dhënat...')}</p>`;
             mapContainer.appendChild(loadingIndicator);
         }
 
@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 // Show loading state
-                addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationModule.translate('map.searching', 'Duke kërkuar...')}</div>`;
+                addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationHelper.translateWithVars('map.searching', {}, 'Duke kërkuar...')}</div>`;
                 addressSearchResults.classList.add('active');
 
                 // Use Nominatim API to search for addresses
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add results
                 if (data.length === 0) {
-                    addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationModule.translate('map.noResults', 'Nuk u gjet asnjë rezultat')}</div>`;
+                    addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationHelper.translateWithVars('map.noResults', {}, 'Nuk u gjet asnjë rezultat')}</div>`;
                 } else {
                     data.forEach(result => {
                         const resultElement = document.createElement('div');
@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Error searching for address:', error);
-                addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationModule.translate('map.searchError', 'Ndodhi një gabim gjatë kërkimit')}</div>`;
+                addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationHelper.translateWithVars('map.searchError', {}, 'Ndodhi një gabim gjatë kërkimit')}</div>`;
             }
         }, 500));
 
@@ -579,13 +579,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getCategoryName(category) {
-        switch(category) {
-            case 'infrastructure': return LocalizationModule.translate('reportDetail.category.infrastructure', 'Infrastrukturë');
-            case 'environment': return LocalizationModule.translate('reportDetail.category.environment', 'Mjedis');
-            case 'public-services': return LocalizationModule.translate('reportDetail.category.publicServices', 'Shërbime Publike');
-            case 'community': return LocalizationModule.translate('reportDetail.category.community', 'Komunitet');
-            default: return LocalizationModule.translate('common.other', 'Tjetër');
-        }
+        // Use the LocalizationHelper function for category translation
+        return LocalizationHelper.translateCategory(category);
     }
 
     function getSubcategoryName(subcategory) {
@@ -621,40 +616,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Try to get the translation using a key based on the subcategory ID
         const translationKey = `reportDetail.subcategory.${subcategory ? subcategory.replace(/-/g, '') : 'unknown'}`;
-        return LocalizationModule.translate(translationKey, fallbackText);
+        return LocalizationHelper.translateSubcategory(subcategory);
     }
 
     function getStatusName(status) {
-        switch(status) {
-            case 'pending': return LocalizationModule.translate('reportDetail.status.pending', 'Në pritje');
-            case 'in-progress': return LocalizationModule.translate('reportDetail.status.inProgress', 'Në proces');
-            case 'resolved': return LocalizationModule.translate('reportDetail.status.resolved', 'I zgjidhur');
-            default: return LocalizationModule.translate('common.unknown', 'I panjohur');
-        }
+        // Use the LocalizationHelper function for status translation
+        return LocalizationHelper.translateStatus(status);
     }
 
     function formatDate(dateString) {
-        if (!dateString) return LocalizationModule.translate('common.notAvailable', 'N/A');
-
-        const date = new Date(dateString);
-        // Get current language for date formatting
-        const language = LocalizationModule.getCurrentLanguage() || 'sq';
-
-        // Map language code to locale
-        const localeMap = {
-            'sq': 'sq-AL',
-            'en': 'en-US'
-        };
-
-        const locale = localeMap[language] || 'sq-AL';
-
-        return date.toLocaleDateString(locale, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        // Use the LocalizationHelper function for date formatting
+        return LocalizationHelper.formatDateTime(dateString);
     }
 
     // Function to refresh markers when language changes

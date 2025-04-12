@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Show loading indicator
     const loadingOverlay = document.createElement('div');
     loadingOverlay.className = 'loading-overlay';
-    loadingOverlay.innerHTML = `<div class="loading-spinner"></div><p>${LocalizationModule.translate('common.loading', 'Duke ngarkuar të dhënat...')}</p>`;
+    loadingOverlay.innerHTML = `<div class="loading-spinner"></div><p>${LocalizationHelper.translateWithVars('common.loading', {}, 'Duke ngarkuar të dhënat...')}</p>`;
     document.body.appendChild(loadingOverlay);
 
     try {
         // Initialize data store
         await DataStore.initialize();
         await AuthStore.initialize();
-
+        
         // Register for language changes to update dynamic content
         if (typeof LocalizationModule !== 'undefined') {
             LocalizationModule.onLanguageChange(function(newLanguage) {
@@ -34,41 +34,16 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         if (!reportId) {
             // No report ID provided, redirect to map page
-            alert(LocalizationModule.translate('reportDetail.notFound', 'Nuk u gjet asnjë raport me këtë ID.'));
+            alert(LocalizationHelper.translateWithVars('reportDetail.notFound', {}, 'Nuk u gjet asnjë raport me këtë ID.'));
             window.location.href = 'map.html';
             return;
         }
 
-        // Get report data from API
-        const report = await DataStore.getReportById(reportId);
-
-        if (!report) {
-            // Report not found, redirect to map page
-            alert(LocalizationModule.translate('reportDetail.notFound', 'Nuk u gjet asnjë raport me këtë ID.'));
-            window.location.href = 'map.html';
-            return;
-        }
-
-        // Populate report details
-        populateReportDetails(report);
-
-        // Initialize map
-        initializeMap(report);
-
-        // Display photos if available
-        displayPhotos(report);
-
-        // Display comments if available
-        displayComments(report);
-
-        // Set up comment form
-        setupCommentForm(report);
-
-        // Set up status update functionality
-        setupStatusUpdate(report);
+        // Load report details
+        await loadReportDetails(reportId);
     } catch (error) {
         console.error('Error loading report details:', error);
-        alert(LocalizationModule.translate('common.loadingError', 'Ndodhi një gabim gjatë ngarkimit të të dhënave. Ju lutemi provoni përsëri.'));
+        alert(LocalizationHelper.translateWithVars('common.loadingError', {}, 'Ndodhi një gabim gjatë ngarkimit të të dhënave. Ju lutemi provoni përsëri.'));
     } finally {
         // Remove loading overlay
         document.body.removeChild(loadingOverlay);
@@ -76,92 +51,128 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 /**
+ * Load report details from API or local storage
+ */
+async function loadReportDetails(reportId) {
+    try {
+        // Get report details
+        const report = await DataStore.getReportById(reportId);
+
+        if (!report) {
+            alert(LocalizationHelper.translateWithVars('reportDetail.notFound', {}, 'Nuk u gjet asnjë raport me këtë ID.'));
+            window.location.href = 'map.html';
+            return;
+        }
+
+        // Populate page with report details
+        populateReportDetails(report);
+
+        // Display photos if available
+        await displayPhotos(report);
+
+        // Display comments if available
+        displayComments(report);
+
+        // Set up status update functionality
+        setupStatusUpdate(report);
+    } catch (error) {
+        console.error('Error loading report details:', error);
+        alert(LocalizationHelper.translateWithVars('common.loadingError', {}, 'Ndodhi një gabim gjatë ngarkimit të të dhënave. Ju lutemi provoni përsëri.'));
+    }
+}
+
+/**
  * Populate the page with report details
  */
 function populateReportDetails(report) {
     // Set page title
-    document.title = `${report.title} - ${LocalizationModule.translate('app.name', 'Rregullo Tiranen')}`;
+    document.title = `${report.title} - ${LocalizationHelper.translateWithVars('app.name', {}, 'Rregullo Tiranen')}`;
 
     // Basic info
     document.getElementById('report-title').textContent = report.title;
-    document.getElementById('report-date').textContent = `${LocalizationModule.translate('reportDetail.reportedOn', 'Raportuar më')}: ${formatDate(report.timestamp)}`;
+    document.getElementById('report-date').textContent = `${LocalizationHelper.translateWithVars('reportDetail.reportedOn', {}, 'Raportuar më')}: ${LocalizationHelper.formatDateTime(report.timestamp)}`;
 
     const statusElement = document.getElementById('report-status');
     statusElement.textContent = getStatusName(report.status);
     statusElement.className = `report-status ${report.status}`;
 
-    // General information
+    // Category and location
     document.getElementById('report-category').textContent = getCategoryName(report.category);
     document.getElementById('report-subcategory').textContent = getSubcategoryName(report.subcategory);
-    document.getElementById('report-type').textContent = report.type || 'N/A';
     document.getElementById('report-severity').textContent = getSeverityName(report.severity);
-
-    // Location information
-    document.getElementById('report-address').textContent = report.address || 'N/A';
+    document.getElementById('report-address').textContent = report.address;
     document.getElementById('report-neighborhood').textContent = getNeighborhoodName(report.neighborhood);
     document.getElementById('report-coordinates').textContent = `${report.lat.toFixed(6)}, ${report.lng.toFixed(6)}`;
 
     // Description
-    document.getElementById('report-description-text').textContent = report.description || LocalizationModule.translate('reportDetail.noDescription', 'Nuk ka përshkrim të disponueshëm.');
+    document.getElementById('report-description-text').textContent = report.description || LocalizationHelper.translateWithVars('reportDetail.noDescription', {}, 'Nuk ka përshkrim të disponueshëm.');
 
     // Timeline
     updateTimeline(report);
 }
 
 /**
- * Initialize the map with the report location
- */
-function initializeMap(report) {
-    const mapContainer = document.getElementById('report-location-map');
-    if (!mapContainer) return;
-
-    const reportMap = L.map('report-location-map').setView([report.lat, report.lng], 15);
-
-    // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19
-    }).addTo(reportMap);
-
-    // Add marker for report location
-    const markerColor = getMarkerColor(report.category);
-    const markerIcon = L.divIcon({
-        className: `custom-marker ${report.category} ${report.status}`,
-        html: `<div style="background-color: ${markerColor};"></div>`,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
-    });
-
-    const marker = L.marker([report.lat, report.lng], { icon: markerIcon }).addTo(reportMap);
-    marker.bindPopup(`<div class="map-marker-popup"><strong>${report.title}</strong></div>`);
-
-    // Refresh map when it becomes visible (fixes rendering issues)
-    setTimeout(() => {
-        reportMap.invalidateSize();
-    }, 100);
-}
-
-/**
- * Update the status timeline based on report status
+ * Update the timeline with status changes
  */
 function updateTimeline(report) {
-    // Reported date
-    document.getElementById('reported-date').textContent = formatDate(report.timestamp);
-    document.getElementById('status-reported').classList.add('active');
+    const timelineContainer = document.getElementById('report-timeline');
+    if (!timelineContainer) return;
 
-    // In progress date
-    if (report.status === 'in-progress' || report.status === 'resolved') {
-        document.getElementById('status-in-progress').classList.add('active');
-        const inProgressDate = report.statusUpdates?.inProgress?.date || report.lastUpdated || '';
-        document.getElementById('in-progress-date').textContent = inProgressDate ? formatDate(inProgressDate) : 'Data e papërcaktuar';
+    // Clear existing timeline
+    timelineContainer.innerHTML = '';
+
+    // Create timeline items
+    const timelineItems = [];
+
+    // Add creation event
+    timelineItems.push({
+        date: report.timestamp,
+        status: 'created',
+        text: 'Raporti u krijua'
+    });
+
+    // Add status updates if available
+    if (report.statusUpdates) {
+        for (const [status, update] of Object.entries(report.statusUpdates)) {
+            timelineItems.push({
+                date: update.date,
+                status: status,
+                text: `Statusi u ndryshua në "${getStatusName(status)}"`,
+                comment: update.comment
+            });
+        }
     }
 
-    // Resolved date
-    if (report.status === 'resolved') {
-        document.getElementById('status-resolved').classList.add('active');
-        const resolvedDate = report.statusUpdates?.resolved?.date || report.lastUpdated || '';
-        document.getElementById('resolved-date').textContent = resolvedDate ? formatDate(resolvedDate) : 'Data e papërcaktuar';
-    }
+    // Sort timeline items by date (newest first)
+    timelineItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Create timeline HTML
+    timelineItems.forEach(item => {
+        const timelineItem = document.createElement('div');
+        timelineItem.className = `timeline-item ${item.status}`;
+
+        const timelineDate = document.createElement('div');
+        timelineDate.className = 'timeline-date';
+        timelineDate.textContent = formatDate(item.date);
+
+        const timelineContent = document.createElement('div');
+        timelineContent.className = 'timeline-content';
+
+        const timelineText = document.createElement('p');
+        timelineText.textContent = item.text;
+        timelineContent.appendChild(timelineText);
+
+        if (item.comment) {
+            const timelineComment = document.createElement('p');
+            timelineComment.className = 'timeline-comment';
+            timelineComment.textContent = `"${item.comment}"`;
+            timelineContent.appendChild(timelineComment);
+        }
+
+        timelineItem.appendChild(timelineDate);
+        timelineItem.appendChild(timelineContent);
+        timelineContainer.appendChild(timelineItem);
+    });
 }
 
 /**
@@ -172,215 +183,92 @@ async function displayPhotos(report) {
     const noPhotosMessage = document.getElementById('no-photos-message');
     const photosContainer = document.getElementById('report-photos-container');
 
-    if (!photosGrid) return;
-
-    // Show loading indicator
-    const loadingIndicator = document.createElement('div');
-    loadingIndicator.className = 'loading-indicator';
-    loadingIndicator.innerHTML = '<div class="spinner"></div><p>Duke ngarkuar fotot...</p>';
-    photosGrid.appendChild(loadingIndicator);
+    if (!photosGrid || !photosContainer) return;
 
     try {
-        // Get photos from API if available
-        let photos = [];
+        // Check if report has photos
         if (report.photos && report.photos.length > 0) {
-            photos = report.photos;
-        } else {
-            // Try to fetch photos from API
-            try {
-                const result = await ApiService.getReportPhotos(report._id || report.id);
-                if (result.success && result.photos && result.photos.length > 0) {
-                    photos = result.photos;
-                }
-            } catch (error) {
-                console.error('Error fetching photos from API:', error);
-            }
-        }
-
-        // Remove loading indicator
-        if (loadingIndicator.parentNode === photosGrid) {
-            photosGrid.removeChild(loadingIndicator);
-        }
-
-        // Check if we have photos to display
-        if (photos && photos.length > 0) {
+            // Show photos container
+            photosContainer.style.display = 'block';
+            
             // Hide no photos message
             if (noPhotosMessage) {
                 noPhotosMessage.style.display = 'none';
             }
 
-            // Create photo modal container if it doesn't exist
-            let photoModal = document.getElementById('photo-modal');
-            if (!photoModal) {
-                photoModal = document.createElement('div');
-                photoModal.id = 'photo-modal';
-                photoModal.className = 'photo-modal';
-                photoModal.innerHTML = `
-                    <span class="photo-modal-close">&times;</span>
-                    <img class="photo-modal-content" id="photo-modal-img">
-                    <div class="photo-modal-controls">
-                        <button class="photo-nav prev">&lsaquo;</button>
-                        <button class="photo-nav next">&rsaquo;</button>
-                    </div>
-                    <div class="photo-modal-counter">1 / ${photos.length}</div>
-                `;
-                document.body.appendChild(photoModal);
-
-                // Add event listener to close modal
-                const closeBtn = photoModal.querySelector('.photo-modal-close');
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', function() {
-                        photoModal.style.display = 'none';
-                    });
-                }
-
-                // Close modal when clicking outside the image
-                photoModal.addEventListener('click', function(event) {
-                    if (event.target === photoModal) {
-                        photoModal.style.display = 'none';
-                    }
-                });
-
-                // Add keyboard navigation
-                document.addEventListener('keydown', function(e) {
-                    if (photoModal.style.display === 'flex') {
-                        if (e.key === 'Escape') {
-                            photoModal.style.display = 'none';
-                        } else if (e.key === 'ArrowLeft') {
-                            navigatePhoto(-1);
-                        } else if (e.key === 'ArrowRight') {
-                            navigatePhoto(1);
-                        }
-                    }
-                });
-
-                // Add navigation buttons
-                const prevBtn = photoModal.querySelector('.photo-nav.prev');
-                const nextBtn = photoModal.querySelector('.photo-nav.next');
-
-                if (prevBtn) {
-                    prevBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        navigatePhoto(-1);
-                    });
-                }
-
-                if (nextBtn) {
-                    nextBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        navigatePhoto(1);
-                    });
-                }
-            }
-
             // Clear existing photos
             photosGrid.innerHTML = '';
 
-            // Add photos to grid
-            photos.forEach((photo, index) => {
+            // Add each photo to the grid
+            for (const photo of report.photos) {
                 const photoItem = document.createElement('div');
                 photoItem.className = 'photo-item';
-                photoItem.dataset.index = index;
 
-                // Create image element with lazy loading
                 const img = document.createElement('img');
+                img.alt = 'Report photo';
+                img.dataset.src = photo; // Store original photo path
 
-                // Determine the correct URL for the photo
+                // Determine photo URL (local or API)
                 let photoUrl;
                 if (photo.startsWith('http')) {
                     photoUrl = photo;
-                } else if (photo.startsWith('/')) {
-                    photoUrl = `http://localhost:5000${photo}`;
                 } else {
+                    // Assume photo is stored in uploads folder on server
                     photoUrl = `http://localhost:5000/uploads/${photo}`;
                 }
 
-                // Use data-src for lazy loading
-                img.dataset.src = photoUrl;
-                img.alt = `Foto ${index + 1} e raportit`;
+                // Use PerformanceUtils if available
+                if (typeof PerformanceUtils !== 'undefined') {
+                    PerformanceUtils.loadImage(img, photoUrl);
+                } else {
+                    img.src = photoUrl;
+                }
 
-                // Add a low-quality placeholder or loading indicator
-                img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect width="300" height="200" fill="%23cccccc"%3E%3C/rect%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="%23555555"%3EDuke ngarkuar...%3C/text%3E%3C/svg%3E';
-                img.className = 'lazy-image';
-
-                // Add click event to open modal
-                photoItem.addEventListener('click', function() {
-                    // Ensure the image is loaded before opening modal
-                    if (typeof PerformanceUtils !== 'undefined' && img.dataset.src) {
-                        PerformanceUtils.loadImage(img, img.dataset.src);
-                    }
-                    openPhotoModal(index, photos);
+                // Add click event to open photo in modal
+                img.addEventListener('click', function() {
+                    openPhotoModal(photo);
                 });
 
                 photoItem.appendChild(img);
                 photosGrid.appendChild(photoItem);
-            });
-
-            // Initialize lazy loading if PerformanceUtils is available
-            if (typeof PerformanceUtils !== 'undefined') {
-                PerformanceUtils.lazyLoadImages('.lazy-image');
-            }
-
-            // Show photos container
-            if (photosContainer) {
-                photosContainer.style.display = 'block';
             }
         } else {
             // No photos to display
             if (noPhotosMessage) {
                 // Update the message text with localized version
-                noPhotosMessage.textContent = LocalizationModule.translate('reportDetail.noPhotos', 'Nuk ka foto të disponueshme për këtë raport.');
+                noPhotosMessage.textContent = LocalizationHelper.translateWithVars('reportDetail.noPhotos', {}, 'Nuk ka foto të disponueshme për këtë raport.');
                 noPhotosMessage.style.display = 'block';
             }
         }
     } catch (error) {
         console.error('Error displaying photos:', error);
-
-        // Remove loading indicator
-        if (loadingIndicator.parentNode === photosGrid) {
-            photosGrid.removeChild(loadingIndicator);
-        }
-
-        // Show error message
-        if (noPhotosMessage) {
-            noPhotosMessage.style.display = 'block';
-            noPhotosMessage.textContent = 'Ndodhi një gabim gjatë ngarkimit të fotove. Ju lutemi provoni përsëri.';
-        }
     }
 }
 
 /**
- * Open photo modal with the selected photo
+ * Open photo in modal
  */
-function openPhotoModal(index, photos) {
-    const photoModal = document.getElementById('photo-modal');
+function openPhotoModal(photo) {
+    const modal = document.getElementById('photo-modal');
     const modalImg = document.getElementById('photo-modal-img');
-    const counter = photoModal.querySelector('.photo-modal-counter');
+    const closeBtn = document.querySelector('.close-photo-modal');
 
-    if (!photoModal || !modalImg) return;
+    if (!modal || !modalImg) return;
 
-    // Set current photo index
-    photoModal.dataset.currentIndex = index;
+    // Show modal
+    modal.style.display = 'flex';
 
-    // Update counter
-    if (counter) {
-        counter.textContent = `${index + 1} / ${photos.length}`;
-    }
-
-    // Set image source
-    const photo = photos[index];
+    // Determine photo URL (local or API)
     let photoUrl;
-
     if (photo.startsWith('http')) {
         photoUrl = photo;
-    } else if (photo.startsWith('/')) {
-        photoUrl = `http://localhost:5000${photo}`;
     } else {
+        // Assume photo is stored in uploads folder on server
         photoUrl = `http://localhost:5000/uploads/${photo}`;
     }
 
     // Show loading indicator in modal with localized text
-    const loadingText = LocalizationModule.translate('common.loading', 'Duke ngarkuar...');
+    const loadingText = LocalizationHelper.translateWithVars('common.loading', {}, 'Duke ngarkuar...');
     modalImg.src = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect width="300" height="200" fill="%23333333"%3E%3C/rect%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="%23ffffff"%3E${encodeURIComponent(loadingText)}%3C/text%3E%3C/svg%3E`;
 
     // Use PerformanceUtils if available
@@ -390,48 +278,30 @@ function openPhotoModal(index, photos) {
         modalImg.src = photoUrl;
     }
 
-    // Show modal
-    photoModal.style.display = 'flex';
-}
+    // Close modal when clicking close button
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    };
 
-/**
- * Navigate to previous or next photo
- */
-function navigatePhoto(direction) {
-    const photoModal = document.getElementById('photo-modal');
-    if (!photoModal) return;
-
-    const currentIndex = parseInt(photoModal.dataset.currentIndex || 0);
-    const photosGrid = document.getElementById('photos-grid');
-    if (!photosGrid) return;
-
-    const photoItems = photosGrid.querySelectorAll('.photo-item');
-    if (!photoItems.length) return;
-
-    // Calculate new index
-    let newIndex = currentIndex + direction;
-    if (newIndex < 0) newIndex = photoItems.length - 1;
-    if (newIndex >= photoItems.length) newIndex = 0;
-
-    // Get photos array
-    const photos = Array.from(photoItems).map(item => {
-        const img = item.querySelector('img');
-        // Use data-src if available (for lazy loaded images)
-        return img.dataset.src || img.src;
-    });
-
-    // Open modal with new index
-    openPhotoModal(newIndex, photos);
+    // Close modal when clicking outside the image
+    modal.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
 }
 
 /**
  * Display comments if available
  */
 function displayComments(report) {
-    const commentsList = document.getElementById('comments-list');
+    const commentsContainer = document.getElementById('comments-container');
     const noCommentsMessage = document.getElementById('no-comments-message');
 
-    if (!commentsList) return;
+    if (!commentsContainer) return;
+
+    // Clear existing comments
+    commentsContainer.innerHTML = '';
 
     // Check if report has comments
     if (report.comments && report.comments.length > 0) {
@@ -440,41 +310,33 @@ function displayComments(report) {
             noCommentsMessage.style.display = 'none';
         }
 
-        // Clear existing comments
-        commentsList.innerHTML = '';
+        // Sort comments by date (newest first)
+        const sortedComments = [...report.comments].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-        // Add comments to list
-        report.comments.forEach(comment => {
-            const commentItem = document.createElement('div');
-            commentItem.className = 'comment-item';
-
-            // Get user initial for avatar
-            const userInitial = comment.user?.name ?
-                comment.user.name.charAt(0).toUpperCase() :
-                'A';
-
-            // Format comment date
-            const commentDate = formatDate(comment.createdAt || comment.timestamp);
-
-            // Create comment HTML
-            commentItem.innerHTML = `
+        // Add each comment to the container
+        sortedComments.forEach(comment => {
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment';
+            commentElement.innerHTML = `
                 <div class="comment-header">
-                    <div class="comment-author">
-                        <div class="comment-author-avatar">${userInitial}</div>
-                        <span>${comment.user?.name || LocalizationModule.translate('common.anonymous', 'Anonim')}</span>
+                    <div class="comment-user">
+                        <span>${comment.user?.name || LocalizationHelper.translateWithVars('common.anonymous', {}, 'Anonim')}</span>
                     </div>
-                    <div class="comment-date">${commentDate}</div>
+                    <div class="comment-date">
+                        <span>${formatDate(comment.timestamp)}</span>
+                    </div>
                 </div>
-                <div class="comment-text">${comment.text}</div>
+                <div class="comment-body">
+                    <p>${comment.text}</p>
+                </div>
             `;
-
-            commentsList.appendChild(commentItem);
+            commentsContainer.appendChild(commentElement);
         });
     } else {
         // Show no comments message
         if (noCommentsMessage) {
             // Update the message text with localized version
-            noCommentsMessage.textContent = LocalizationModule.translate('reportDetail.noComments', 'Nuk ka komente për këtë raport.');
+            noCommentsMessage.textContent = LocalizationHelper.translateWithVars('reportDetail.noComments', {}, 'Nuk ka komente për këtë raport.');
             noCommentsMessage.style.display = 'block';
         }
     }
@@ -494,7 +356,7 @@ function setupCommentForm(report) {
         const commentText = document.getElementById('comment-text').value.trim();
 
         if (!commentText) {
-            alert(LocalizationModule.translate('reportDetail.emptyCommentError', 'Ju lutemi shkruani një koment përpara se ta dërgoni.'));
+            alert(LocalizationHelper.translateWithVars('reportDetail.emptyCommentError', {}, 'Ju lutemi shkruani një koment përpara se ta dërgoni.'));
             return;
         }
 
@@ -502,7 +364,7 @@ function setupCommentForm(report) {
         const submitBtn = commentForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.textContent;
         submitBtn.disabled = true;
-        submitBtn.textContent = LocalizationModule.translate('common.sending', 'Duke dërguar...');
+        submitBtn.textContent = LocalizationHelper.translateWithVars('common.sending', {}, 'Duke dërguar...');
 
         try {
             // Add comment via API
@@ -517,13 +379,13 @@ function setupCommentForm(report) {
                 displayComments(updatedReport);
 
                 // Show success message
-                alert(LocalizationModule.translate('reportDetail.commentSuccess', 'Komenti u shtua me sukses!'));
+                alert(LocalizationHelper.translateWithVars('reportDetail.commentSuccess', {}, 'Komenti u shtua me sukses!'));
             } else {
-                alert(LocalizationModule.translate('reportDetail.commentError', 'Ndodhi një gabim gjatë shtimit të komentit. Ju lutemi provoni përsëri.'));
+                alert(LocalizationHelper.translateWithVars('reportDetail.commentError', {}, 'Ndodhi një gabim gjatë shtimit të komentit. Ju lutemi provoni përsëri.'));
             }
         } catch (error) {
             console.error('Error adding comment:', error);
-            alert(LocalizationModule.translate('reportDetail.commentError', 'Ndodhi një gabim gjatë shtimit të komentit. Ju lutemi provoni përsëri.'));
+            alert(LocalizationHelper.translateWithVars('reportDetail.commentError', {}, 'Ndodhi një gabim gjatë shtimit të komentit. Ju lutemi provoni përsëri.'));
         } finally {
             // Reset button state
             submitBtn.disabled = false;
@@ -533,34 +395,37 @@ function setupCommentForm(report) {
 }
 
 /**
- * Set up the status update functionality
+ * Set up status update functionality
  */
 function setupStatusUpdate(report) {
+    const statusBtn = document.getElementById('update-status-btn');
     const modal = document.getElementById('status-modal');
-    const updateBtn = document.getElementById('update-status-btn');
     const closeBtn = document.querySelector('.close-modal');
     const cancelBtn = document.querySelector('.cancel-modal');
     const statusForm = document.getElementById('status-update-form');
     const statusSelect = document.getElementById('new-status');
 
-    // Set current status as selected
-    if (statusSelect) {
-        const options = statusSelect.querySelectorAll('option');
-        options.forEach(option => {
-            if (option.value === report.status) {
-                option.selected = true;
-            }
-        });
+    if (!statusBtn || !modal || !statusForm || !statusSelect) return;
+
+    // Only show status update button for authenticated users
+    if (AuthStore.isLoggedIn()) {
+        statusBtn.style.display = 'block';
+    } else {
+        statusBtn.style.display = 'none';
+        return;
     }
 
-    // Open modal
-    if (updateBtn) {
-        updateBtn.addEventListener('click', function() {
-            modal.style.display = 'block';
-        });
-    }
+    // Open modal when clicking status update button
+    statusBtn.addEventListener('click', function() {
+        modal.style.display = 'block';
+        
+        // Set current status as selected
+        if (statusSelect) {
+            statusSelect.value = report.status;
+        }
+    });
 
-    // Close modal
+    // Close modal when clicking close button or cancel button
     if (closeBtn) {
         closeBtn.addEventListener('click', function() {
             modal.style.display = 'none';
@@ -573,7 +438,7 @@ function setupStatusUpdate(report) {
         });
     }
 
-    // Close modal when clicking outside
+    // Close modal when clicking outside the modal content
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
@@ -593,29 +458,29 @@ function setupStatusUpdate(report) {
                 const submitBtn = statusForm.querySelector('button[type="submit"]');
                 const originalBtnText = submitBtn.textContent;
                 submitBtn.disabled = true;
-                submitBtn.textContent = LocalizationModule.translate('common.updating', 'Duke përditësuar...');
+                submitBtn.textContent = LocalizationHelper.translateWithVars('common.updating', {}, 'Duke përditësuar...');
 
                 try {
                     // Update report status
                     const success = await DataStore.updateReportStatus(report.id, newStatus, comment);
 
                     if (success) {
-                        alert(LocalizationModule.translate('reportDetail.statusUpdateSuccess', 'Statusi i raportit u përditësua me sukses!'));
+                        alert(LocalizationHelper.translateWithVars('reportDetail.statusUpdateSuccess', {}, 'Statusi i raportit u përditësua me sukses!'));
                         // Reload page to show updated status
                         window.location.reload();
                     } else {
-                        alert(LocalizationModule.translate('reportDetail.statusUpdateError', 'Ndodhi një gabim gjatë përditësimit të statusit. Ju lutemi provoni përsëri.'));
+                        alert(LocalizationHelper.translateWithVars('reportDetail.statusUpdateError', {}, 'Ndodhi një gabim gjatë përditësimit të statusit. Ju lutemi provoni përsëri.'));
                     }
                 } catch (error) {
                     console.error('Error updating status:', error);
-                    alert(LocalizationModule.translate('reportDetail.statusUpdateError', 'Ndodhi një gabim gjatë përditësimit të statusit. Ju lutemi provoni përsëri.'));
+                    alert(LocalizationHelper.translateWithVars('reportDetail.statusUpdateError', {}, 'Ndodhi një gabim gjatë përditësimit të statusit. Ju lutemi provoni përsëri.'));
                 } finally {
                     // Reset button state
                     submitBtn.disabled = false;
                     submitBtn.textContent = originalBtnText;
                 }
             } else if (newStatus === report.status) {
-                alert('Ju zgjodhët të njëjtin status. Nuk u bë asnjë ndryshim.');
+                alert(LocalizationHelper.translateWithVars('reportDetail.sameStatus', {}, 'Ju zgjodhët të njëjtin status. Nuk u bë asnjë ndryshim.'));
                 modal.style.display = 'none';
             }
         });
@@ -626,91 +491,28 @@ function setupStatusUpdate(report) {
  * Helper functions
  */
 function getCategoryName(category) {
-    switch(category) {
-        case 'infrastructure': return LocalizationModule.translate('reportDetail.category.infrastructure', 'Infrastrukturë');
-        case 'environment': return LocalizationModule.translate('reportDetail.category.environment', 'Mjedis');
-        case 'public-services': return LocalizationModule.translate('reportDetail.category.publicServices', 'Shërbime Publike');
-        case 'community': return LocalizationModule.translate('reportDetail.category.community', 'Komunitet');
-        default: return category || LocalizationModule.translate('common.undefined', 'E papërcaktuar');
-    }
+    // Use the LocalizationHelper function for category translation
+    return LocalizationHelper.translateCategory(category);
 }
 
 function getSubcategoryName(subcategory) {
-    const subcategoryMap = {
-        // Infrastructure
-        'road-damage': 'Dëmtime të rrugëve',
-        'sidewalk-damage': 'Dëmtime të trotuareve',
-        'street-lighting': 'Ndriçimi rrugor',
-        'public-facilities': 'Objekte publike',
-        'traffic-signals': 'Sinjalistika',
-
-        // Environment
-        'littering': 'Mbeturina',
-        'green-space': 'Hapësira të gjelbërta',
-        'pollution': 'Ndotje',
-        'tree-planting': 'Mbjellje pemësh',
-
-        // Public Services
-        'waste-collection': 'Grumbullimi i mbeturinave',
-        'public-transport': 'Transporti publik',
-        'water-utilities': 'Ujë dhe shërbime',
-        'public-building': 'Ndërtesa publike',
-
-        // Community
-        'beautification': 'Zbukurim i lagjes',
-        'public-safety': 'Siguria publike',
-        'accessibility': 'Aksesueshmëria',
-        'cultural-preservation': 'Trashëgimia kulturore'
-    };
-
-    // If we have a mapping, use it as a fallback
-    const fallbackText = subcategoryMap[subcategory] || subcategory || 'E papërcaktuar';
-
-    // Try to get the translation using a key based on the subcategory ID
-    const translationKey = `reportDetail.subcategory.${subcategory ? subcategory.replace(/-/g, '') : 'unknown'}`;
-    return LocalizationModule.translate(translationKey, fallbackText);
+    // Use the LocalizationHelper function for subcategory translation
+    return LocalizationHelper.translateSubcategory(subcategory);
 }
 
 function getStatusName(status) {
-    switch(status) {
-        case 'pending': return LocalizationModule.translate('reportDetail.status.pending', 'Në pritje');
-        case 'in-progress': return LocalizationModule.translate('reportDetail.status.inProgress', 'Në proces');
-        case 'resolved': return LocalizationModule.translate('reportDetail.status.resolved', 'I zgjidhur');
-        default: return LocalizationModule.translate('common.unknown', 'I panjohur');
-    }
+    // Use the LocalizationHelper function for status translation
+    return LocalizationHelper.translateStatus(status);
 }
 
 function getSeverityName(severity) {
-    switch(severity) {
-        case 'low': return LocalizationModule.translate('reportDetail.severity.low', 'I ulët');
-        case 'medium': return LocalizationModule.translate('reportDetail.severity.medium', 'Mesatar');
-        case 'high': return LocalizationModule.translate('reportDetail.severity.high', 'I lartë');
-        case 'urgent': return LocalizationModule.translate('reportDetail.severity.urgent', 'Urgjent');
-        default: return severity || LocalizationModule.translate('common.undefined', 'I papërcaktuar');
-    }
+    // Use the LocalizationHelper function for severity translation
+    return LocalizationHelper.translateSeverity(severity);
 }
 
 function getNeighborhoodName(neighborhood) {
-    const neighborhoodMap = {
-        'njesia1': 'Njësia Administrative 1',
-        'njesia2': 'Njësia Administrative 2',
-        'njesia3': 'Njësia Administrative 3',
-        'njesia4': 'Njësia Administrative 4',
-        'njesia5': 'Njësia Administrative 5',
-        'njesia6': 'Njësia Administrative 6',
-        'njesia7': 'Njësia Administrative 7',
-        'njesia8': 'Njësia Administrative 8',
-        'njesia9': 'Njësia Administrative 9',
-        'njesia10': 'Njësia Administrative 10',
-        'njesia11': 'Njësia Administrative 11'
-    };
-
-    // If we have a mapping, use it as a fallback
-    const fallbackText = neighborhoodMap[neighborhood] || neighborhood || 'E papërcaktuar';
-
-    // Try to get the translation using a key based on the neighborhood ID
-    const translationKey = `reportDetail.neighborhood.${neighborhood || 'unknown'}`;
-    return LocalizationModule.translate(translationKey, fallbackText);
+    // Use the LocalizationHelper function for neighborhood translation
+    return LocalizationHelper.translateNeighborhood(neighborhood);
 }
 
 function getMarkerColor(category) {
@@ -724,25 +526,6 @@ function getMarkerColor(category) {
 }
 
 function formatDate(dateString) {
-    if (!dateString) return LocalizationModule.translate('common.notAvailable', 'N/A');
-
-    const date = new Date(dateString);
-    // Get current language for date formatting
-    const language = LocalizationModule.getCurrentLanguage() || 'sq';
-
-    // Map language code to locale
-    const localeMap = {
-        'sq': 'sq-AL',
-        'en': 'en-US'
-    };
-
-    const locale = localeMap[language] || 'sq-AL';
-
-    return date.toLocaleDateString(locale, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
+    // Use the LocalizationHelper function for date formatting
+    return LocalizationHelper.formatDateTime(dateString);
 }
