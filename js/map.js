@@ -6,6 +6,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Map page initialized');
 
+    // Register for language changes to update dynamic content
+    if (typeof LocalizationModule !== 'undefined') {
+        LocalizationModule.onLanguageChange(function(newLanguage) {
+            // Refresh markers to update popup content with new language
+            refreshMarkers();
+        });
+    }
+
     // Initialize map
     const mapContainer = document.getElementById('full-map');
     if (!mapContainer) return;
@@ -62,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const locateControl = L.control.locate({
         position: 'topleft',
         strings: {
-            title: 'Trego vendndodhjen time'
+            title: LocalizationModule.translate('map.showMyLocation', 'Trego vendndodhjen time')
         },
         locateOptions: {
             enableHighAccuracy: true,
@@ -114,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mapContainer.classList.add('loading');
             const loadingIndicator = document.createElement('div');
             loadingIndicator.className = 'map-loading-indicator';
-            loadingIndicator.innerHTML = '<div class="spinner"></div><p>Duke ngarkuar të dhënat...</p>';
+            loadingIndicator.innerHTML = `<div class="spinner"></div><p>${LocalizationModule.translate('common.loading', 'Duke ngarkuar të dhënat...')}</p>`;
             mapContainer.appendChild(loadingIndicator);
         }
 
@@ -154,17 +162,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 // Add popup with report details
+                const categoryLabel = LocalizationModule.translate('reportDetail.category', 'Kategoria');
+                const subcategoryLabel = LocalizationModule.translate('reportDetail.subcategory', 'Nënkategoria');
+                const statusLabel = LocalizationModule.translate('reportDetail.status.label', 'Statusi');
+                const dateLabel = LocalizationModule.translate('reportDetail.date', 'Data');
+                const addressLabel = LocalizationModule.translate('reportDetail.address', 'Adresa');
+                const viewDetailsLabel = LocalizationModule.translate('map.viewDetails', 'Shiko detajet e plota');
+
                 marker.bindPopup(`
                     <div class="map-marker-popup">
                         <strong>${report.title}</strong>
-                        <span>Kategoria: ${getCategoryName(report.category)}</span>
-                        <span>Nënkategoria: ${getSubcategoryName(report.subcategory)}</span>
-                        <span>Statusi: ${getStatusName(report.status)}</span>
-                        <span>Data: ${formatDate(report.timestamp)}</span>
+                        <span>${categoryLabel}: ${getCategoryName(report.category)}</span>
+                        <span>${subcategoryLabel}: ${getSubcategoryName(report.subcategory)}</span>
+                        <span>${statusLabel}: ${getStatusName(report.status)}</span>
+                        <span>${dateLabel}: ${formatDate(report.timestamp)}</span>
                         <p>${report.description.substring(0, 100)}${report.description.length > 100 ? '...' : ''}</p>
-                        <span>Adresa: ${report.address}</span>
+                        <span>${addressLabel}: ${report.address}</span>
                         <div class="popup-actions">
-                            <a href="report-detail.html?id=${report.id}" class="popup-link">Shiko detajet e plota</a>
+                            <a href="report-detail.html?id=${report.id}" class="popup-link">${viewDetailsLabel}</a>
                         </div>
                     </div>
                 `);
@@ -320,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 // Show loading state
-                addressSearchResults.innerHTML = '<div class="address-search-result">Duke kërkuar...</div>';
+                addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationModule.translate('map.searching', 'Duke kërkuar...')}</div>`;
                 addressSearchResults.classList.add('active');
 
                 // Use Nominatim API to search for addresses
@@ -332,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add results
                 if (data.length === 0) {
-                    addressSearchResults.innerHTML = '<div class="address-search-result">Nuk u gjet asnjë rezultat</div>';
+                    addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationModule.translate('map.noResults', 'Nuk u gjet asnjë rezultat')}</div>`;
                 } else {
                     data.forEach(result => {
                         const resultElement = document.createElement('div');
@@ -355,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Error searching for address:', error);
-                addressSearchResults.innerHTML = '<div class="address-search-result">Ndodhi një gabim gjatë kërkimit</div>';
+                addressSearchResults.innerHTML = `<div class="address-search-result">${LocalizationModule.translate('map.searchError', 'Ndodhi një gabim gjatë kërkimit')}</div>`;
             }
         }, 500));
 
@@ -565,11 +580,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getCategoryName(category) {
         switch(category) {
-            case 'infrastructure': return 'Infrastrukturë';
-            case 'environment': return 'Mjedis';
-            case 'public-services': return 'Shërbime Publike';
-            case 'community': return 'Komunitet';
-            default: return 'Tjetër';
+            case 'infrastructure': return LocalizationModule.translate('reportDetail.category.infrastructure', 'Infrastrukturë');
+            case 'environment': return LocalizationModule.translate('reportDetail.category.environment', 'Mjedis');
+            case 'public-services': return LocalizationModule.translate('reportDetail.category.publicServices', 'Shërbime Publike');
+            case 'community': return LocalizationModule.translate('reportDetail.category.community', 'Komunitet');
+            default: return LocalizationModule.translate('common.other', 'Tjetër');
         }
     }
 
@@ -601,27 +616,81 @@ document.addEventListener('DOMContentLoaded', function() {
             'cultural-preservation': 'Trashëgimia kulturore'
         };
 
-        return subcategoryMap[subcategory] || subcategory || 'E papërcaktuar';
+        // If we have a mapping, use it as a fallback
+        const fallbackText = subcategoryMap[subcategory] || subcategory || 'E papërcaktuar';
+
+        // Try to get the translation using a key based on the subcategory ID
+        const translationKey = `reportDetail.subcategory.${subcategory ? subcategory.replace(/-/g, '') : 'unknown'}`;
+        return LocalizationModule.translate(translationKey, fallbackText);
     }
 
     function getStatusName(status) {
         switch(status) {
-            case 'pending': return 'Në pritje';
-            case 'in-progress': return 'Në proces';
-            case 'resolved': return 'I zgjidhur';
-            default: return 'I panjohur';
+            case 'pending': return LocalizationModule.translate('reportDetail.status.pending', 'Në pritje');
+            case 'in-progress': return LocalizationModule.translate('reportDetail.status.inProgress', 'Në proces');
+            case 'resolved': return LocalizationModule.translate('reportDetail.status.resolved', 'I zgjidhur');
+            default: return LocalizationModule.translate('common.unknown', 'I panjohur');
         }
     }
 
     function formatDate(dateString) {
+        if (!dateString) return LocalizationModule.translate('common.notAvailable', 'N/A');
+
         const date = new Date(dateString);
-        return date.toLocaleDateString('sq-AL', {
+        // Get current language for date formatting
+        const language = LocalizationModule.getCurrentLanguage() || 'sq';
+
+        // Map language code to locale
+        const localeMap = {
+            'sq': 'sq-AL',
+            'en': 'en-US'
+        };
+
+        const locale = localeMap[language] || 'sq-AL';
+
+        return date.toLocaleDateString(locale, {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
         });
+    }
+
+    // Function to refresh markers when language changes
+    function refreshMarkers() {
+        // Only refresh if we have markers
+        if (allMarkers.length > 0) {
+            // Update all marker popups with new translations
+            allMarkers.forEach(marker => {
+                const report = marker.options.reportData;
+                if (report) {
+                    // Get translated labels
+                    const categoryLabel = LocalizationModule.translate('reportDetail.category', 'Kategoria');
+                    const subcategoryLabel = LocalizationModule.translate('reportDetail.subcategory', 'Nënkategoria');
+                    const statusLabel = LocalizationModule.translate('reportDetail.status.label', 'Statusi');
+                    const dateLabel = LocalizationModule.translate('reportDetail.date', 'Data');
+                    const addressLabel = LocalizationModule.translate('reportDetail.address', 'Adresa');
+                    const viewDetailsLabel = LocalizationModule.translate('map.viewDetails', 'Shiko detajet e plota');
+
+                    // Update popup content
+                    marker.setPopupContent(`
+                        <div class="map-marker-popup">
+                            <strong>${report.title}</strong>
+                            <span>${categoryLabel}: ${getCategoryName(report.category)}</span>
+                            <span>${subcategoryLabel}: ${getSubcategoryName(report.subcategory)}</span>
+                            <span>${statusLabel}: ${getStatusName(report.status)}</span>
+                            <span>${dateLabel}: ${formatDate(report.timestamp)}</span>
+                            <p>${report.description.substring(0, 100)}${report.description.length > 100 ? '...' : ''}</p>
+                            <span>${addressLabel}: ${report.address}</span>
+                            <div class="popup-actions">
+                                <a href="report-detail.html?id=${report.id}" class="popup-link">${viewDetailsLabel}</a>
+                            </div>
+                        </div>
+                    `);
+                }
+            });
+        }
     }
 
     // Initialize the map
