@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Show loading indicator
     const loadingOverlay = document.createElement('div');
     loadingOverlay.className = 'loading-overlay';
-    loadingOverlay.innerHTML = '<div class="loading-spinner"></div><p>Duke ngarkuar të dhënat...</p>';
+    loadingOverlay.innerHTML = `<div class="loading-spinner"></div><p>${LocalizationModule.translate('common.loading', 'Duke ngarkuar të dhënat...')}</p>`;
     document.body.appendChild(loadingOverlay);
 
     try {
@@ -17,13 +17,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         await DataStore.initialize();
         await AuthStore.initialize();
 
+        // Register for language changes to update dynamic content
+        if (typeof LocalizationModule !== 'undefined') {
+            LocalizationModule.onLanguageChange(function(newLanguage) {
+                // Reload the current page to update all dynamic content with new language
+                const currentReportId = new URLSearchParams(window.location.search).get('id');
+                if (currentReportId) {
+                    loadReportDetails(currentReportId);
+                }
+            });
+        }
+
         // Get report ID from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const reportId = urlParams.get('id');
 
         if (!reportId) {
             // No report ID provided, redirect to map page
-            alert('Nuk u gjet asnjë raport me këtë ID.');
+            alert(LocalizationModule.translate('reportDetail.notFound', 'Nuk u gjet asnjë raport me këtë ID.'));
             window.location.href = 'map.html';
             return;
         }
@@ -33,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         if (!report) {
             // Report not found, redirect to map page
-            alert('Nuk u gjet asnjë raport me këtë ID.');
+            alert(LocalizationModule.translate('reportDetail.notFound', 'Nuk u gjet asnjë raport me këtë ID.'));
             window.location.href = 'map.html';
             return;
         }
@@ -57,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         setupStatusUpdate(report);
     } catch (error) {
         console.error('Error loading report details:', error);
-        alert('Ndodhi një gabim gjatë ngarkimit të të dhënave. Ju lutemi provoni përsëri.');
+        alert(LocalizationModule.translate('common.loadingError', 'Ndodhi një gabim gjatë ngarkimit të të dhënave. Ju lutemi provoni përsëri.'));
     } finally {
         // Remove loading overlay
         document.body.removeChild(loadingOverlay);
@@ -69,11 +80,11 @@ document.addEventListener('DOMContentLoaded', async function() {
  */
 function populateReportDetails(report) {
     // Set page title
-    document.title = `${report.title} - Rregullo Tiranen`;
+    document.title = `${report.title} - ${LocalizationModule.translate('app.name', 'Rregullo Tiranen')}`;
 
     // Basic info
     document.getElementById('report-title').textContent = report.title;
-    document.getElementById('report-date').textContent = `Raportuar më: ${formatDate(report.timestamp)}`;
+    document.getElementById('report-date').textContent = `${LocalizationModule.translate('reportDetail.reportedOn', 'Raportuar më')}: ${formatDate(report.timestamp)}`;
 
     const statusElement = document.getElementById('report-status');
     statusElement.textContent = getStatusName(report.status);
@@ -91,7 +102,7 @@ function populateReportDetails(report) {
     document.getElementById('report-coordinates').textContent = `${report.lat.toFixed(6)}, ${report.lng.toFixed(6)}`;
 
     // Description
-    document.getElementById('report-description-text').textContent = report.description || 'Nuk ka përshkrim të disponueshëm.';
+    document.getElementById('report-description-text').textContent = report.description || LocalizationModule.translate('reportDetail.noDescription', 'Nuk ka përshkrim të disponueshëm.');
 
     // Timeline
     updateTimeline(report);
@@ -317,6 +328,8 @@ async function displayPhotos(report) {
         } else {
             // No photos to display
             if (noPhotosMessage) {
+                // Update the message text with localized version
+                noPhotosMessage.textContent = LocalizationModule.translate('reportDetail.noPhotos', 'Nuk ka foto të disponueshme për këtë raport.');
                 noPhotosMessage.style.display = 'block';
             }
         }
@@ -366,8 +379,9 @@ function openPhotoModal(index, photos) {
         photoUrl = `http://localhost:5000/uploads/${photo}`;
     }
 
-    // Show loading indicator in modal
-    modalImg.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect width="300" height="200" fill="%23333333"%3E%3C/rect%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="%23ffffff"%3EDuke ngarkuar...%3C/text%3E%3C/svg%3E';
+    // Show loading indicator in modal with localized text
+    const loadingText = LocalizationModule.translate('common.loading', 'Duke ngarkuar...');
+    modalImg.src = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect width="300" height="200" fill="%23333333"%3E%3C/rect%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="%23ffffff"%3E${encodeURIComponent(loadingText)}%3C/text%3E%3C/svg%3E`;
 
     // Use PerformanceUtils if available
     if (typeof PerformanceUtils !== 'undefined') {
@@ -447,7 +461,7 @@ function displayComments(report) {
                 <div class="comment-header">
                     <div class="comment-author">
                         <div class="comment-author-avatar">${userInitial}</div>
-                        <span>${comment.user?.name || 'Anonim'}</span>
+                        <span>${comment.user?.name || LocalizationModule.translate('common.anonymous', 'Anonim')}</span>
                     </div>
                     <div class="comment-date">${commentDate}</div>
                 </div>
@@ -456,6 +470,13 @@ function displayComments(report) {
 
             commentsList.appendChild(commentItem);
         });
+    } else {
+        // Show no comments message
+        if (noCommentsMessage) {
+            // Update the message text with localized version
+            noCommentsMessage.textContent = LocalizationModule.translate('reportDetail.noComments', 'Nuk ka komente për këtë raport.');
+            noCommentsMessage.style.display = 'block';
+        }
     }
 }
 
@@ -473,7 +494,7 @@ function setupCommentForm(report) {
         const commentText = document.getElementById('comment-text').value.trim();
 
         if (!commentText) {
-            alert('Ju lutemi shkruani një koment përpara se ta dërgoni.');
+            alert(LocalizationModule.translate('reportDetail.emptyCommentError', 'Ju lutemi shkruani një koment përpara se ta dërgoni.'));
             return;
         }
 
@@ -481,7 +502,7 @@ function setupCommentForm(report) {
         const submitBtn = commentForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.textContent;
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Duke dërguar...';
+        submitBtn.textContent = LocalizationModule.translate('common.sending', 'Duke dërguar...');
 
         try {
             // Add comment via API
@@ -496,13 +517,13 @@ function setupCommentForm(report) {
                 displayComments(updatedReport);
 
                 // Show success message
-                alert('Komenti u shtua me sukses!');
+                alert(LocalizationModule.translate('reportDetail.commentSuccess', 'Komenti u shtua me sukses!'));
             } else {
-                alert('Ndodhi një gabim gjatë shtimit të komentit. Ju lutemi provoni përsëri.');
+                alert(LocalizationModule.translate('reportDetail.commentError', 'Ndodhi një gabim gjatë shtimit të komentit. Ju lutemi provoni përsëri.'));
             }
         } catch (error) {
             console.error('Error adding comment:', error);
-            alert('Ndodhi një gabim gjatë shtimit të komentit. Ju lutemi provoni përsëri.');
+            alert(LocalizationModule.translate('reportDetail.commentError', 'Ndodhi një gabim gjatë shtimit të komentit. Ju lutemi provoni përsëri.'));
         } finally {
             // Reset button state
             submitBtn.disabled = false;
@@ -572,22 +593,22 @@ function setupStatusUpdate(report) {
                 const submitBtn = statusForm.querySelector('button[type="submit"]');
                 const originalBtnText = submitBtn.textContent;
                 submitBtn.disabled = true;
-                submitBtn.textContent = 'Duke përditësuar...';
+                submitBtn.textContent = LocalizationModule.translate('common.updating', 'Duke përditësuar...');
 
                 try {
                     // Update report status
                     const success = await DataStore.updateReportStatus(report.id, newStatus, comment);
 
                     if (success) {
-                        alert('Statusi i raportit u përditësua me sukses!');
+                        alert(LocalizationModule.translate('reportDetail.statusUpdateSuccess', 'Statusi i raportit u përditësua me sukses!'));
                         // Reload page to show updated status
                         window.location.reload();
                     } else {
-                        alert('Ndodhi një gabim gjatë përditësimit të statusit. Ju lutemi provoni përsëri.');
+                        alert(LocalizationModule.translate('reportDetail.statusUpdateError', 'Ndodhi një gabim gjatë përditësimit të statusit. Ju lutemi provoni përsëri.'));
                     }
                 } catch (error) {
                     console.error('Error updating status:', error);
-                    alert('Ndodhi një gabim gjatë përditësimit të statusit. Ju lutemi provoni përsëri.');
+                    alert(LocalizationModule.translate('reportDetail.statusUpdateError', 'Ndodhi një gabim gjatë përditësimit të statusit. Ju lutemi provoni përsëri.'));
                 } finally {
                     // Reset button state
                     submitBtn.disabled = false;
@@ -606,11 +627,11 @@ function setupStatusUpdate(report) {
  */
 function getCategoryName(category) {
     switch(category) {
-        case 'infrastructure': return 'Infrastrukturë';
-        case 'environment': return 'Mjedis';
-        case 'public-services': return 'Shërbime Publike';
-        case 'community': return 'Komunitet';
-        default: return category || 'E papërcaktuar';
+        case 'infrastructure': return LocalizationModule.translate('reportDetail.category.infrastructure', 'Infrastrukturë');
+        case 'environment': return LocalizationModule.translate('reportDetail.category.environment', 'Mjedis');
+        case 'public-services': return LocalizationModule.translate('reportDetail.category.publicServices', 'Shërbime Publike');
+        case 'community': return LocalizationModule.translate('reportDetail.category.community', 'Komunitet');
+        default: return category || LocalizationModule.translate('common.undefined', 'E papërcaktuar');
     }
 }
 
@@ -642,25 +663,30 @@ function getSubcategoryName(subcategory) {
         'cultural-preservation': 'Trashëgimia kulturore'
     };
 
-    return subcategoryMap[subcategory] || subcategory || 'E papërcaktuar';
+    // If we have a mapping, use it as a fallback
+    const fallbackText = subcategoryMap[subcategory] || subcategory || 'E papërcaktuar';
+
+    // Try to get the translation using a key based on the subcategory ID
+    const translationKey = `reportDetail.subcategory.${subcategory ? subcategory.replace(/-/g, '') : 'unknown'}`;
+    return LocalizationModule.translate(translationKey, fallbackText);
 }
 
 function getStatusName(status) {
     switch(status) {
-        case 'pending': return 'Në pritje';
-        case 'in-progress': return 'Në proces';
-        case 'resolved': return 'I zgjidhur';
-        default: return 'I panjohur';
+        case 'pending': return LocalizationModule.translate('reportDetail.status.pending', 'Në pritje');
+        case 'in-progress': return LocalizationModule.translate('reportDetail.status.inProgress', 'Në proces');
+        case 'resolved': return LocalizationModule.translate('reportDetail.status.resolved', 'I zgjidhur');
+        default: return LocalizationModule.translate('common.unknown', 'I panjohur');
     }
 }
 
 function getSeverityName(severity) {
     switch(severity) {
-        case 'low': return 'I ulët';
-        case 'medium': return 'Mesatar';
-        case 'high': return 'I lartë';
-        case 'urgent': return 'Urgjent';
-        default: return severity || 'I papërcaktuar';
+        case 'low': return LocalizationModule.translate('reportDetail.severity.low', 'I ulët');
+        case 'medium': return LocalizationModule.translate('reportDetail.severity.medium', 'Mesatar');
+        case 'high': return LocalizationModule.translate('reportDetail.severity.high', 'I lartë');
+        case 'urgent': return LocalizationModule.translate('reportDetail.severity.urgent', 'Urgjent');
+        default: return severity || LocalizationModule.translate('common.undefined', 'I papërcaktuar');
     }
 }
 
@@ -679,7 +705,12 @@ function getNeighborhoodName(neighborhood) {
         'njesia11': 'Njësia Administrative 11'
     };
 
-    return neighborhoodMap[neighborhood] || neighborhood || 'E papërcaktuar';
+    // If we have a mapping, use it as a fallback
+    const fallbackText = neighborhoodMap[neighborhood] || neighborhood || 'E papërcaktuar';
+
+    // Try to get the translation using a key based on the neighborhood ID
+    const translationKey = `reportDetail.neighborhood.${neighborhood || 'unknown'}`;
+    return LocalizationModule.translate(translationKey, fallbackText);
 }
 
 function getMarkerColor(category) {
@@ -693,10 +724,21 @@ function getMarkerColor(category) {
 }
 
 function formatDate(dateString) {
-    if (!dateString) return 'N/A';
+    if (!dateString) return LocalizationModule.translate('common.notAvailable', 'N/A');
 
     const date = new Date(dateString);
-    return date.toLocaleDateString('sq-AL', {
+    // Get current language for date formatting
+    const language = LocalizationModule.getCurrentLanguage() || 'sq';
+
+    // Map language code to locale
+    const localeMap = {
+        'sq': 'sq-AL',
+        'en': 'en-US'
+    };
+
+    const locale = localeMap[language] || 'sq-AL';
+
+    return date.toLocaleDateString(locale, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
