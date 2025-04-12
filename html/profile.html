@@ -9,9 +9,21 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/mobile.css">
+    <link rel="stylesheet" href="../css/dark-theme.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="../manifest.json">
     <link rel="apple-touch-icon" href="../images/icons/icon-192x192.png">
+
+    <!-- Theme initialization script -->
+    <script>
+        // Check for saved theme preference and apply it immediately
+        (function() {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                document.documentElement.classList.add("dark-theme");
+            }
+        })();
+    </script>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -335,6 +347,7 @@
 
     <script src="../js/data-store.js"></script>
     <script src="../js/auth-store.js"></script>
+    <script src="../js/theme-manager.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/profile.js"></script>
     <script src="../js/pwa.js"></script>

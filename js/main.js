@@ -70,13 +70,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         const tiranaCenterLat = 41.3275;
         const tiranaCenterLng = 19.8187;
 
-        const homeMap = L.map('map-container').setView([tiranaCenterLat, tiranaCenterLng], 12);
+        // Store map in window object so we can access it later for theme changes
+        window.homeMap = L.map('map-container').setView([tiranaCenterLat, tiranaCenterLng], 12);
 
         // Add OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 19
-        }).addTo(homeMap);
+        }).addTo(window.homeMap);
 
         // Get reports from DataStore - handle async properly
         DataStore.initialize().then(() => {
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
 
             // Create marker and add to map
-            const marker = L.marker([report.lat, report.lng], { icon: markerIcon }).addTo(homeMap);
+            const marker = L.marker([report.lat, report.lng], { icon: markerIcon }).addTo(window.homeMap);
 
             // Add popup with report details
             marker.bindPopup(`
@@ -210,7 +211,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Refresh map when it becomes visible (fixes rendering issues)
         setTimeout(() => {
-            homeMap.invalidateSize();
+            window.homeMap.invalidateSize();
         }, 100);
             });
         }).catch(error => {
@@ -262,35 +263,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
-    // Initialize theme toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = themeToggle.querySelector('.icon');
-    const themeLabel = themeToggle.querySelector('.theme-label');
-
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        updateThemeToggle(true);
-    }
-
-    themeToggle.addEventListener('click', function() {
-        const isDarkMode = document.body.classList.toggle('dark-mode');
-
-        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-
-        updateThemeToggle(isDarkMode);
-    });
-
-    function updateThemeToggle(isDarkMode) {
-        if (isDarkMode) {
-            themeIcon.textContent = '☀️';
-            themeLabel.textContent = 'Tema e Ndritshme';
-        } else {
-            themeIcon.textContent = '🌓';
-            themeLabel.textContent = 'Tema e Errët';
-        }
-    }
+    // Theme toggle is now handled by theme-manager.js
 
     // Function to update navigation based on authentication status
     async function updateNavigation() {
