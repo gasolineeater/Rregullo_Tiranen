@@ -38,6 +38,33 @@
     --color-shadow: rgba(0,0,0,0.3);
 }
 
+/* Additional dark mode styles for specific elements */
+.dark-mode .main-header {
+    background-color: var(--color-header-bg);
+}
+
+.dark-mode .main-nav a {
+    color: var(--color-text);
+}
+
+.dark-mode .main-footer {
+    background-color: var(--color-footer-bg);
+    color: var(--color-text);
+}
+
+.dark-mode .card {
+    background-color: var(--color-card-bg);
+    color: var(--color-text);
+}
+
+.dark-mode .btn {
+    border-color: #444;
+}
+
+.dark-mode .leaflet-container {
+    background-color: #333;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -188,9 +215,7 @@ a {
     font-weight: 500;
 }
 
-.dark-mode .main-header {
-    background-color: var(--color-header-bg);
-}
+/* Dark mode header styles moved to consolidated section above */
 
 .dark-mode .logo h1 {
     color: var(--color-primary);

@@ -78,11 +78,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             maxZoom: 19
         }).addTo(homeMap);
 
-        // Get reports from DataStore
-        const reports = DataStore.getAllReports();
-
-        // Add markers for each report
-        reports.forEach(report => {
+        // Get reports from DataStore - handle async properly
+        DataStore.initialize().then(() => {
+            return DataStore.getAllReports();
+        }).then(reports => {
+            // Add markers for each report
+            reports.forEach(report => {
             // Create custom icon based on category
             const markerColor = getMarkerColor(report.category);
             const markerIcon = L.divIcon({
@@ -211,6 +212,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         setTimeout(() => {
             homeMap.invalidateSize();
         }, 100);
+            });
+        }).catch(error => {
+            console.error('Error loading reports for map:', error);
+        });
     }
 
     // Update the report button to link to the report page
@@ -238,6 +243,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
+    // Initialize mobile menu toggle
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+
+    if (mobileMenuToggle && mainNav) {
+        mobileMenuToggle.addEventListener('click', function() {
+            mobileMenuToggle.classList.toggle('active');
+            mainNav.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!mainNav.contains(event.target) && !mobileMenuToggle.contains(event.target) && mainNav.classList.contains('active')) {
+                mainNav.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            }
+        });
+    }
+
+    // Initialize theme toggle
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle.querySelector('.icon');
     const themeLabel = themeToggle.querySelector('.theme-label');
