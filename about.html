@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rreth nesh - Rregullo Tiranen, platforma për raportimin e problemeve urbane në Tiranë">
+    <meta name="theme-color" content="#C41E3A">
+    <title>Rreth Nesh - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
+
+    <!-- Theme initialization script -->
+    <script>
+        // Check for saved theme preference and apply it immediately
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-theme');
+            }
+        })();
+    </script>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html">Rregullo Tiranen</a></h1>
+            </div>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Ballina</a></li>
+                    <li><a href="html/map.html">Harta</a></li>
+                    <li><a href="report.html">Raporto</a></li>
+                    <li><a href="about.html" class="active">Rreth Nesh</a></li>
+                    <li>
+                        <button id="theme-toggle" class="theme-toggle">
+                            <span class="icon">🌓</span>
+                            <span class="theme-label">Tema e Errët</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="about-hero">
+            <div class="container">
+                <h1>Rreth Nesh</h1>
+                <p class="subtitle">Njohuni me ekipin dhe misionin tonë për të përmirësuar Tiranën</p>
+            </div>
+        </section>
+
+        <section class="about-mission">
+            <div class="container">
+                <h2>Misioni Ynë</h2>
+                <div class="mission-content">
+                    <div class="mission-text">
+                        <p>Rregullo Tiranen është një platformë inovative që synon të fuqizojë qytetarët e Tiranës për të kontribuar në përmirësimin e qytetit të tyre. Ne besojmë se çdo qytetar ka një rol të rëndësishëm në krijimin e një mjedisi urban më të mirë dhe më të qëndrueshëm.</p>
+                        <p>Platforma jonë mundëson raportimin e shpejtë dhe të lehtë të problemeve urbane, duke krijuar një urë komunikimi midis qytetarëve dhe autoriteteve lokale. Qëllimi ynë është të nxisim pjesëmarrjen qytetare dhe të përmirësojmë cilësinë e jetës në Tiranë.</p>
+                        <p>Ne angazhohemi për transparencë, bashkëpunim dhe zgjidhje efektive të problemeve urbane. Besojmë se teknologjia mund të jetë një mjet i fuqishëm për ndryshim pozitiv në komunitet.</p>
+                    </div>
+                    <div class="mission-image">
+                        <img src="images/mission.jpg" alt="Pamje e Tiranës">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-founders">
+            <div class="container">
+                <h2>Themelueset</h2>
+                <div class="founders-grid">
+                    <div class="founder-card">
+                        <div class="founder-image">
+                            <img src="images/founder-maria.jpg" alt="Maria Kacani">
+                        </div>
+                        <div class="founder-info">
+                            <h3>Maria Kacani</h3>
+                            <p class="founder-title">Bashkëthemeluese & Zhvilluese</p>
+                            <p class="founder-bio">Maria është studente e Inxhinierisë Kompjuterike në Universitetin Metropolitan Tirana. Me pasion për teknologjinë dhe inovacionin urban, ajo drejton zhvillimin teknik të platformës Rregullo Tiranen. Ekspertiza e saj në zhvillimin e aplikacioneve web dhe mobile ka qenë thelbësore për krijimin e një platforme të përdorshme dhe efektive.</p>
+                            <div class="founder-social">
+                                <a href="#" class="social-link">LinkedIn</a>
+                                <a href="#" class="social-link">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="founder-card">
+                        <div class="founder-image">
+                            <img src="images/founder-eliza.jpg" alt="Eliza Cepi">
+                        </div>
+                        <div class="founder-info">
+                            <h3>Eliza Cepi</h3>
+                            <p class="founder-title">Bashkëthemeluese & Dizajnere UX</p>
+                            <p class="founder-bio">Eliza është studente e Inxhinierisë Kompjuterike në Universitetin Metropolitan Tirana, me fokus të veçantë në dizajnin e ndërfaqes së përdoruesit dhe përvojën e përdoruesit. Vizioni i saj kreativ dhe të kuptuarit e thellë të nevojave të përdoruesve kanë formësuar ndërfaqen intuitive dhe të bukur të Rregullo Tiranen. Eliza beson në fuqinë e dizajnit për të zgjidhur probleme sociale.</p>
+                            <div class="founder-social">
+                                <a href="#" class="social-link">LinkedIn</a>
+                                <a href="#" class="social-link">Behance</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-story">
+            <div class="container">
+                <h2>Historia Jonë</h2>
+                <div class="story-content">
+                    <p>Rregullo Tiranen lindi nga një projekt universitar në vitin 2023, kur Maria dhe Eliza, dy studente të apasionuara të Inxhinierisë Kompjuterike në Universitetin Metropolitan Tirana, identifikuan nevojën për një platformë që do të mundësonte qytetarët e Tiranës të kontribuonin aktivisht në përmirësimin e qytetit të tyre.</p>
+                    <p>Duke parë sfidat urbane që përballej Tirana dhe mungesën e një kanali efektiv komunikimi midis qytetarëve dhe autoriteteve, ato vendosën të krijojnë një zgjidhje teknologjike që do të fuqizonte komunitetin. Me mbështetjen e profesorëve dhe ekspertëve të fushës, ato zhvilluan një prototip fillestar që tërhoqi vëmendjen e autoriteteve lokale dhe organizatave të shoqërisë civile.</p>
+                    <p>Sot, Rregullo Tiranen është shndërruar në një platformë të plotë që po ndihmon në transformimin e Tiranës në një qytet më të mirë për të gjithë. Vizioni i Marias dhe Elizës vazhdon të udhëheqë zhvillimin e platformës, me fokus në inovacion, përfshirje dhe përmirësim të vazhdueshëm.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-values">
+            <div class="container">
+                <h2>Vlerat Tona</h2>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">🤝</div>
+                        <h3>Bashkëpunim</h3>
+                        <p>Besojmë në fuqinë e bashkëpunimit midis qytetarëve, autoriteteve dhe komunitetit për të zgjidhur sfidat urbane.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🔍</div>
+                        <h3>Transparencë</h3>
+                        <p>Angazhohemi për transparencë në të gjitha proceset, duke siguruar që çdo raport të ndiqet dhe të komunikohet qartë.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">💡</div>
+                        <h3>Inovacion</h3>
+                        <p>Përdorim teknologjinë dhe idetë inovative për të krijuar zgjidhje efektive për problemet urbane.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">♿</div>
+                        <h3>Përfshirje</h3>
+                        <p>Platforma jonë është projektuar për të qenë e aksesueshme dhe e përdorshme nga të gjithë qytetarët, pavarësisht aftësive të tyre.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="about-contact">
+            <div class="container">
+                <h2>Na Kontaktoni</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <p><strong>Email:</strong> <a href="mailto:info@rregullotiranen.al">info@rregullotiranen.al</a></p>
+                        <p><strong>Telefon:</strong> +355 69 123 4567</p>
+                        <p><strong>Adresa:</strong> Rruga "Myslym Shyri", Tiranë, Shqipëri</p>
+                        <div class="social-links">
+                            <a href="#" class="social-link">Facebook</a>
+                            <a href="#" class="social-link">Instagram</a>
+                            <a href="#" class="social-link">Twitter</a>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <label for="name">Emri</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mesazhi</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Dërgo</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Rregullo Tiranen</h2>
+                    <p>Platforma për raportimin e problemeve urbane në Tiranë</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Lidhje të Shpejta</h3>
+                    <ul>
+                        <li><a href="index.html">Ballina</a></li>
+                        <li><a href="html/map.html">Harta</a></li>
+                        <li><a href="report.html">Raporto</a></li>
+                        <li><a href="about.html">Rreth Nesh</a></li>
+                        <li><a href="html/privacy.html">Privatësia</a></li>
+                        <li><a href="html/terms.html">Kushtet e Përdorimit</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Kontakt</h3>
+                    <p>Email: info@rregullotiranen.al</p>
+                    <p>Tel: +355 69 123 4567</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data-store.js"></script>
+    <script src="js/auth-store.js"></script>
+    <script src="js/theme-manager.js"></script>
+    <script src="js/image-handler.js"></script>
+    <script src="js/about.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/pwa.js"></script>
+</body>
+</html>

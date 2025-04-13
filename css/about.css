@@ -1,0 +1,298 @@
+/**
+ * About Us Page Styles
+ * Rregullo Tiranen
+ */
+
+/* Hero Section */
+.about-hero {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.about-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.about-hero .subtitle {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* Mission Section */
+.about-mission {
+    padding: 4rem 0;
+    background-color: var(--color-background);
+}
+
+.mission-content {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.mission-text {
+    flex: 1;
+}
+
+.mission-text p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.mission-image {
+    flex: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.mission-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Founders Section */
+.about-founders {
+    padding: 4rem 0;
+    background-color: var(--color-card-bg);
+}
+
+.founders-grid {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.founder-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px var(--color-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.founder-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px var(--color-shadow);
+}
+
+.founder-image {
+    height: 300px;
+    overflow: hidden;
+}
+
+.founder-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.founder-card:hover .founder-image img {
+    transform: scale(1.05);
+}
+
+.founder-info {
+    padding: 1.5rem;
+}
+
+.founder-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+}
+
+.founder-title {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+}
+
+.founder-bio {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.founder-social {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.social-link:hover {
+    background-color: rgba(var(--color-primary-rgb), 0.8);
+}
+
+/* Story Section */
+.about-story {
+    padding: 4rem 0;
+    background-color: var(--color-background);
+}
+
+.story-content {
+    max-width: 800px;
+    margin: 2rem auto 0;
+    line-height: 1.8;
+}
+
+.story-content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Values Section */
+.about-values {
+    padding: 4rem 0;
+    background-color: var(--color-card-bg);
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.value-card {
+    background-color: var(--color-background);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 12px var(--color-shadow);
+    transition: transform 0.3s ease;
+}
+
+.value-card:hover {
+    transform: translateY(-5px);
+}
+
+.value-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.value-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+}
+
+.value-card p {
+    line-height: 1.6;
+}
+
+/* Contact Section */
+.about-contact {
+    padding: 4rem 0;
+    background-color: var(--color-background);
+}
+
+.contact-content {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.contact-info {
+    flex: 1;
+}
+
+.contact-info p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.contact-info .social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.contact-form {
+    flex: 2;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .mission-content,
+    .founders-grid,
+    .contact-content {
+        flex-direction: column;
+    }
+
+    .founder-image {
+        height: 250px;
+    }
+
+    .about-hero {
+        padding: 3rem 0;
+    }
+
+    .about-hero h1 {
+        font-size: 2rem;
+    }
+
+    .about-mission,
+    .about-founders,
+    .about-story,
+    .about-values,
+    .about-contact {
+        padding: 3rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .founder-image {
+        height: 200px;
+    }
+}
