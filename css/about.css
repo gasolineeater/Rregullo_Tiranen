@@ -136,11 +136,26 @@
     border-radius: 4px;
     text-decoration: none;
     font-size: 0.9rem;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .social-link:hover {
     background-color: rgba(var(--color-primary-rgb), 0.8);
+}
+
+/* Dark theme specific styles for social links */
+:root.dark-theme .social-link,
+:root.dark-theme .footer-contact .social-link,
+:root.dark-theme .contact-info .social-link {
+    color: #000;
+    font-weight: 600;
+    background-color: var(--color-primary);
+}
+
+:root.dark-theme .social-link:hover,
+:root.dark-theme .footer-contact .social-link:hover,
+:root.dark-theme .contact-info .social-link:hover {
+    background-color: rgba(var(--color-primary-rgb), 0.9);
 }
 
 /* Story Section */
@@ -204,6 +219,12 @@
 .about-contact {
     padding: 4rem 0;
     background-color: var(--color-background);
+}
+
+/* Dark theme specific styles for contact form button */
+:root.dark-theme .about-contact .btn-primary {
+    color: #000;
+    font-weight: 600;
 }
 
 .contact-content {
