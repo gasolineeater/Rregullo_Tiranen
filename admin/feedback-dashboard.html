@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <title>Paneli i Reagimeve - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dark-theme.css">
+    <link rel="stylesheet" href="../css/accessibility.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    
+    <!-- Theme initialization script -->
+    <script>
+        // Check for saved theme preference and apply it immediately
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-theme');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Kalo te përmbajtja</a>
+    
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="../index.html">Rregullo Tiranen</a></h1>
+            </div>
+            <nav class="admin-nav">
+                <ul>
+                    <li><a href="index.html">Paneli</a></li>
+                    <li><a href="reports.html">Raportet</a></li>
+                    <li><a href="users.html">Përdoruesit</a></li>
+                    <li class="active"><a href="feedback-dashboard.html">Reagimet</a></li>
+                    <li><a href="settings.html">Cilësimet</a></li>
+                </ul>
+            </nav>
+            <div class="theme-toggle">
+                <button id="theme-toggle-btn" aria-label="Ndrysho temën">
+                    <span class="theme-icon light">☀️</span>
+                    <span class="theme-icon dark">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="admin-content">
+        <div class="container">
+            <div class="admin-header">
+                <h2>Paneli i Reagimeve</h2>
+                <div class="admin-actions">
+                    <button id="export-csv" class="btn btn-secondary">Eksporto CSV</button>
+                    <button id="clear-feedback" class="btn btn-danger">Pastro të Gjitha</button>
+                </div>
+            </div>
+            
+            <div class="admin-filters">
+                <div class="filter-group">
+                    <label for="filter-type">Lloji:</label>
+                    <select id="filter-type">
+                        <option value="">Të gjitha</option>
+                        <option value="bug">Problem teknik</option>
+                        <option value="feature">Kërkesë për veçori</option>
+                        <option value="usability">Problem përdorimi</option>
+                        <option value="performance">Problem performance</option>
+                        <option value="other">Tjetër</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-feature">Veçoria:</label>
+                    <select id="filter-feature">
+                        <option value="">Të gjitha</option>
+                        <option value="swipe">Gjestet e rrëshqitjes</option>
+                        <option value="pinch">Zmadhimi me gishta</option>
+                        <option value="haptic">Reagimi haptik</option>
+                        <option value="animations">Animacionet</option>
+                        <option value="other">Tjetër</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-rating">Vlerësimi:</label>
+                    <select id="filter-rating">
+                        <option value="">Të gjitha</option>
+                        <option value="5">5 yje</option>
+                        <option value="4">4 yje</option>
+                        <option value="3">3 yje</option>
+                        <option value="2">2 yje</option>
+                        <option value="1">1 yll</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search-feedback">Kërko:</label>
+                    <input type="text" id="search-feedback" placeholder="Kërko në reagime...">
+                </div>
+            </div>
+            
+            <div class="feedback-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-feedback">0</div>
+                    <div class="stat-label">Reagime Totale</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avg-rating">0.0</div>
+                    <div class="stat-label">Vlerësimi Mesatar</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="bug-count">0</div>
+                    <div class="stat-label">Probleme Teknike</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="feature-count">0</div>
+                    <div class="stat-label">Kërkesa për Veçori</div>
+                </div>
+            </div>
+            
+            <div class="feedback-list-container">
+                <table class="feedback-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Lloji</th>
+                            <th>Veçoria</th>
+                            <th>Vlerësimi</th>
+                            <th>Përshkrimi</th>
+                            <th>Pajisja</th>
+                            <th>Veprime</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedback-list">
+                        <!-- Feedback items will be added here dynamically -->
+                        <tr class="no-feedback-message">
+                            <td colspan="7">Nuk ka reagime për të shfaqur.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <button id="prev-page" class="btn btn-secondary" disabled>Prapa</button>
+                <span id="page-info">Faqja 1 nga 1</span>
+                <button id="next-page" class="btn btn-secondary" disabled>Para</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="feedback-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detajet e Reagimit</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="feedback-details">
+                <!-- Feedback details will be added here dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close">Mbyll</button>
+                <button class="btn btn-danger" id="delete-feedback">Fshi</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Konfirmo</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">A jeni të sigurt që dëshironi të vazhdoni?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close">Anulo</button>
+                <button class="btn btn-danger" id="confirm-action">Konfirmo</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>© 2023 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="../index.html">Kryefaqja</a></li>
+                        <li><a href="../about.html">Rreth Nesh</a></li>
+                        <li><a href="../html/how-it-works.html">Si Funksionon</a></li>
+                        <li><a href="../terms.html">Kushtet e Përdorimit</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme-manager.js"></script>
+    <script src="js/feedback-dashboard.js"></script>
+</body>
+</html>

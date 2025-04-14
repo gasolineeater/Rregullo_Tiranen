@@ -1,0 +1,362 @@
+/**
+ * Admin styles for Rregullo Tiranen
+ * Styles for admin dashboard and related pages
+ */
+
+/* Admin layout */
+.admin-content {
+    padding: 2rem 0;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.admin-header h2 {
+    margin: 0;
+    color: var(--color-text);
+}
+
+.admin-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Admin navigation */
+.admin-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-nav li {
+    margin-right: 1rem;
+}
+
+.admin-nav a {
+    color: var(--color-text);
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.admin-nav a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.admin-nav li.active a {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Filters */
+.admin-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    flex: 1;
+}
+
+.filter-group label {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.filter-group select,
+.filter-group input {
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background-color: var(--color-card-bg);
+    color: var(--color-text);
+}
+
+/* Stats */
+.feedback-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+/* Feedback table */
+.feedback-list-container {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.feedback-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.feedback-table th,
+.feedback-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.feedback-table th {
+    background-color: rgba(0, 0, 0, 0.02);
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.feedback-table tr:last-child td {
+    border-bottom: none;
+}
+
+.feedback-table tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.feedback-table .no-feedback-message {
+    text-align: center;
+    color: var(--color-text-light);
+    padding: 2rem;
+}
+
+.feedback-description {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.feedback-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.feedback-actions button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* Rating stars */
+.rating-stars {
+    color: #FFD700;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.pagination button {
+    padding: 0.5rem 1rem;
+}
+
+.pagination #page-info {
+    color: var(--color-text);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--color-text);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-text-light);
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+/* Feedback details */
+.feedback-detail {
+    margin-bottom: 1rem;
+}
+
+.feedback-detail-label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-text);
+}
+
+.feedback-detail-value {
+    color: var(--color-text);
+}
+
+.feedback-detail-description {
+    white-space: pre-wrap;
+}
+
+.device-details {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.device-details h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.device-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.device-detail {
+    margin-bottom: 0.5rem;
+}
+
+.device-detail-label {
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+    color: var(--color-text-light);
+}
+
+.device-detail-value {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    word-break: break-word;
+}
+
+/* Dark theme styles */
+:root.dark-theme .admin-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+:root.dark-theme .feedback-table th {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+:root.dark-theme .feedback-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .admin-actions {
+        width: 100%;
+    }
+    
+    .admin-actions button {
+        flex: 1;
+    }
+    
+    .admin-nav ul {
+        flex-wrap: wrap;
+    }
+    
+    .admin-nav li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .filter-group {
+        min-width: 100%;
+    }
+    
+    .feedback-table th:nth-child(5),
+    .feedback-table td:nth-child(5),
+    .feedback-table th:nth-child(6),
+    .feedback-table td:nth-child(6) {
+        display: none;
+    }
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <title>Paneli Administrativ - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dark-theme.css">
+    <link rel="stylesheet" href="../css/accessibility.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    
+    <!-- Theme initialization script -->
+    <script>
+        // Check for saved theme preference and apply it immediately
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-theme');
+            }
+        })();
+    </script>
+    
+    <style>
+        .admin-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .dashboard-card {
+            background-color: var(--color-card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dashboard-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+        
+        .dashboard-card p {
+            margin-bottom: 1.5rem;
+            color: var(--color-text-light);
+        }
+        
+        .dashboard-card .btn {
+            width: 100%;
+        }
+        
+        .dashboard-card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Kalo te përmbajtja</a>
+    
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="../index.html">Rregullo Tiranen</a></h1>
+            </div>
+            <nav class="admin-nav">
+                <ul>
+                    <li class="active"><a href="index.html">Paneli</a></li>
+                    <li><a href="reports.html">Raportet</a></li>
+                    <li><a href="users.html">Përdoruesit</a></li>
+                    <li><a href="feedback-dashboard.html">Reagimet</a></li>
+                    <li><a href="settings.html">Cilësimet</a></li>
+                </ul>
+            </nav>
+            <div class="theme-toggle">
+                <button id="theme-toggle-btn" aria-label="Ndrysho temën">
+                    <span class="theme-icon light">☀️</span>
+                    <span class="theme-icon dark">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="admin-content">
+        <div class="container">
+            <div class="admin-header">
+                <h2>Paneli Administrativ</h2>
+            </div>
+            
+            <div class="admin-dashboard">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">📊</div>
+                    <h3>Statistikat</h3>
+                    <p>Shiko statistikat e aplikacionit, përfshirë numrin e raportimeve, përdoruesve dhe më shumë.</p>
+                    <a href="#" class="btn btn-primary">Shiko Statistikat</a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">📝</div>
+                    <h3>Raportet</h3>
+                    <p>Menaxho raportet e dërguara nga përdoruesit, përfshirë aprovimin, refuzimin dhe përditësimin e statusit.</p>
+                    <a href="reports.html" class="btn btn-primary">Menaxho Raportet</a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">👥</div>
+                    <h3>Përdoruesit</h3>
+                    <p>Menaxho përdoruesit e aplikacionit, përfshirë krijimin, modifikimin dhe fshirjen e llogarive.</p>
+                    <a href="users.html" class="btn btn-primary">Menaxho Përdoruesit</a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">💬</div>
+                    <h3>Reagimet</h3>
+                    <p>Shiko dhe analizo reagimet e përdoruesve për veçoritë mobile të aplikacionit.</p>
+                    <a href="feedback-dashboard.html" class="btn btn-primary">Shiko Reagimet</a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">🔔</div>
+                    <h3>Njoftimet</h3>
+                    <p>Dërgo njoftime për përdoruesit e aplikacionit për përditësime, njoftime dhe më shumë.</p>
+                    <a href="#" class="btn btn-primary">Menaxho Njoftimet</a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">⚙️</div>
+                    <h3>Cilësimet</h3>
+                    <p>Konfiguro cilësimet e aplikacionit, përfshirë opsionet e sigurisë, privatësisë dhe më shumë.</p>
+                    <a href="settings.html" class="btn btn-primary">Konfiguro Cilësimet</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>© 2023 Rregullo Tiranen. Të gjitha të drejtat e rezervuara.</p>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="../index.html">Kryefaqja</a></li>
+                        <li><a href="../about.html">Rreth Nesh</a></li>
+                        <li><a href="../html/how-it-works.html">Si Funksionon</a></li>
+                        <li><a href="../terms.html">Kushtet e Përdorimit</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme-manager.js"></script>
+</body>
+</html>
