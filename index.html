@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/auth-ui.css">
     <link rel="stylesheet" href="css/page-navigation.css">
     <link rel="stylesheet" href="css/pwa.css">
+    <link rel="stylesheet" href="css/accessibility.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
@@ -53,6 +54,8 @@
             crossorigin=""></script>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Kalo te përmbajtja</a>
+
     <header class="main-header">
         <div class="container">
             <div class="logo">
@@ -100,6 +103,7 @@
         </div>
     </header>
 
+    <main id="main-content">
     <section class="hero">
         <div class="container">
             <div class="hero-content">
@@ -155,6 +159,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <footer>
         <div class="container">
@@ -182,6 +187,10 @@
 
     <!-- Script loader for dynamic script loading -->
     <script src="js/script-loader.js"></script>
+
+    <!-- Accessibility enhancements -->
+    <script src="js/accessibility-enhancements.js"></script>
+    <script src="js/high-contrast.js"></script>
 
     <!-- Add to Home Screen button -->
     <div id="add-to-home" class="pwa-install-prompt">
