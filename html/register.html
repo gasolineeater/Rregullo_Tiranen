@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../css/auth.css">
     <link rel="stylesheet" href="../css/mobile.css">
     <link rel="stylesheet" href="../css/dark-theme.css">
+    <link rel="stylesheet" href="../css/auth-ui.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="../manifest.json">
     <link rel="apple-touch-icon" href="../images/icons/icon-192x192.png">
@@ -53,23 +54,23 @@
                     <h2>Krijoni një Llogari të Re</h2>
                     <p>Regjistrohuni për të raportuar dhe ndjekur problemet urbane</p>
                 </div>
-                
+
                 <form id="register-form" class="auth-form">
                     <div class="form-field">
                         <label for="fullname">Emri i Plotë</label>
                         <input type="text" id="fullname" name="fullname" required placeholder="Shkruani emrin tuaj të plotë">
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required placeholder="Shkruani emailin tuaj">
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="phone">Numri i Telefonit (opsional)</label>
                         <input type="tel" id="phone" name="phone" placeholder="Shkruani numrin tuaj të telefonit">
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="password">Fjalëkalimi</label>
                         <div class="password-field">
@@ -85,7 +86,7 @@
                             <span class="strength-text" id="strength-text">Fjalëkalimi duhet të ketë të paktën 8 karaktere</span>
                         </div>
                     </div>
-                    
+
                     <div class="form-field">
                         <label for="confirm-password">Konfirmoni Fjalëkalimin</label>
                         <div class="password-field">
@@ -95,23 +96,23 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="form-field checkbox-field">
                         <input type="checkbox" id="terms" name="terms" required>
                         <label for="terms">Unë pranoj <a href="#">Kushtet e Përdorimit</a> dhe <a href="#">Politikën e Privatësisë</a></label>
                     </div>
-                    
+
                     <div class="auth-message" id="register-message"></div>
-                    
+
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary btn-block">Regjistrohu</button>
                     </div>
                 </form>
-                
+
                 <div class="auth-divider">
                     <span>OSE</span>
                 </div>
-                
+
                 <div class="social-login">
                     <button class="btn btn-social btn-google">
                         <span class="social-icon">G</span>
@@ -122,7 +123,7 @@
                         <span>Regjistrohu me Facebook</span>
                     </button>
                 </div>
-                
+
                 <div class="auth-footer">
                     <p>Keni tashmë një llogari? <a href="login.html">Hyni</a></p>
                 </div>
@@ -153,6 +154,10 @@
         </div>
     </footer>
 
+    <script src="../js/data-store.js"></script>
+    <script src="../js/auth-store.js"></script>
+    <script src="../js/api-service.js"></script>
+    <script src="../js/theme-manager.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/pwa.js"></script>

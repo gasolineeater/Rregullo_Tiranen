@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/about.css">
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="css/auth-ui.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
@@ -45,16 +46,36 @@
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.html">Ballina</a></li>
-                    <li><a href="html/map.html">Harta</a></li>
                     <li><a href="report.html">Raporto</a></li>
+                    <li><a href="html/map.html">Shiko Hartën</a></li>
                     <li><a href="about.html" class="active">Rreth Nesh</a></li>
-                    <li>
-                        <button id="theme-toggle" class="theme-toggle">
-                            <span class="icon">🌓</span>
-                            <span class="theme-label">Tema e Errët</span>
-                        </button>
+                    <li class="auth-links" id="auth-links">
+                        <a href="html/login.html" class="login-link">Hyrje</a>
+                        <a href="html/register.html" class="register-link">Regjistrim</a>
+                    </li>
+                    <li class="user-menu-container" id="user-menu-container" style="display: none;">
+                        <div class="user-menu">
+                            <button class="user-menu-toggle" id="user-menu-toggle">
+                                <div class="user-avatar">
+                                    <span class="user-initial" id="user-initial">U</span>
+                                </div>
+                                <span class="user-name" id="user-name">Përdorues</span>
+                                <span class="dropdown-icon">▼</span>
+                            </button>
+                            <div class="user-dropdown" id="user-dropdown">
+                                <ul>
+                                    <li><a href="html/profile.html">Profili Im</a></li>
+                                    <li><a href="html/notifications.html">Njoftimet</a></li>
+                                    <li><a href="#" id="logout-btn">Dilni</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </li>
                 </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
             </nav>
         </div>
     </header>
@@ -234,6 +255,7 @@
     <script src="js/auth-store.js"></script>
     <script src="js/api-service.js"></script>
     <script src="js/theme-manager.js"></script>
+    <script src="js/auth-ui.js"></script>
     <script src="js/image-handler.js"></script>
     <script src="js/about.js"></script>
     <script src="js/main.js"></script>

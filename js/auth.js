@@ -58,9 +58,17 @@ document.addEventListener('DOMContentLoaded', async function() {
                     messageElement.textContent = result.message;
                     messageElement.className = 'auth-message success';
 
-                    // Redirect to homepage after successful login
+                    // Get return URL from query parameters if it exists
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const returnUrl = urlParams.get('returnUrl');
+
+                    // Redirect to return URL or homepage after successful login
                     setTimeout(() => {
-                        window.location.href = '../index.html';
+                        if (returnUrl) {
+                            window.location.href = returnUrl;
+                        } else {
+                            window.location.href = '../index.html';
+                        }
                     }, 1500);
                 } else {
                     messageElement.textContent = result.message;
@@ -161,9 +169,17 @@ document.addEventListener('DOMContentLoaded', async function() {
                         console.error('Error logging in after registration:', loginError);
                     }
 
-                    // Redirect to homepage after successful registration
+                    // Get return URL from query parameters if it exists
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const returnUrl = urlParams.get('returnUrl');
+
+                    // Redirect to return URL or homepage after successful registration
                     setTimeout(() => {
-                        window.location.href = '../index.html';
+                        if (returnUrl) {
+                            window.location.href = returnUrl;
+                        } else {
+                            window.location.href = '../index.html';
+                        }
                     }, 1500);
                 } else {
                     messageElement.textContent = result.message;
