@@ -581,6 +581,79 @@ const ApiService = (function() {
         }
     }
 
+    // Submit contact form
+    async function submitContactForm(formData) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/contact`, {
+                method: 'POST',
+                headers: getHeaders(),
+                body: JSON.stringify(formData)
+            });
+
+            const data = await handleResponse(response);
+
+            return {
+                success: true,
+                message: 'Mesazhi u dërgua me sukses!',
+                data: data.data
+            };
+        } catch (error) {
+            // Fallback to local storage if API fails
+            console.log('API failed, using local storage fallback');
+
+            // Get existing messages or initialize empty array
+            const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+
+            // Add timestamp to the message
+            const message = {
+                ...formData,
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                status: 'unread'
+            };
+
+            // Add new message to the array
+            messages.push(message);
+
+            // Save back to local storage
+            localStorage.setItem('contactMessages', JSON.stringify(messages));
+
+            return {
+                success: true,
+                message: 'Mesazhi u dërgua me sukses!',
+                data: message
+            };
+        }
+    }
+
+    // Get all contact form submissions (admin only)
+    async function getContactMessages() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/contact`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
+
+            const data = await handleResponse(response);
+
+            return {
+                success: true,
+                data: data.data
+            };
+        } catch (error) {
+            // Fallback to local storage if API fails
+            console.log('API failed, using local storage fallback');
+
+            // Get existing messages or initialize empty array
+            const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+
+            return {
+                success: true,
+                data: messages
+            };
+        }
+    }
+
     // Public API
     return {
         register,
@@ -605,6 +678,8 @@ const ApiService = (function() {
         markAllNotificationsAsRead,
         uploadReportPhoto,
         deleteReportPhoto,
-        getReportPhotos
+        getReportPhotos,
+        submitContactForm,
+        getContactMessages
     };
 })();

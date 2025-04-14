@@ -136,9 +136,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             submitBtn.textContent = 'Duke dërguar...';
 
             try {
-                // Save report using DataStore (which will try API first, then fallback to localStorage)
-                const savedReport = await DataStore.saveReport(reportToSave);
+                // Use ApiService to submit the report
+                const response = await ApiService.createReport(reportToSave);
 
+                if (!response.success) {
+                    throw new Error(response.message || 'Failed to save report');
+                }
+
+                const savedReport = response.report;
                 console.log('Report saved:', savedReport);
 
                 // Handle photo uploads if there are any
@@ -150,7 +155,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                     for (let i = 0; i < photoFiles.length; i++) {
                         try {
                             submitBtn.textContent = `Duke ngarkuar foton ${i+1}/${photoFiles.length}...`;
-                            await ApiService.uploadReportPhoto(savedReport._id, photoFiles[i]);
+                            const photoResponse = await ApiService.uploadReportPhoto(savedReport._id, photoFiles[i]);
+
+                            if (!photoResponse.success) {
+                                console.error('Error uploading photo:', photoResponse.message);
+                            }
                         } catch (photoError) {
                             console.error('Error uploading photo:', photoError);
                             // Continue with other photos even if one fails
