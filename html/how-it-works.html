@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <meta name="description" content="Mësoni se si funksionon platforma Rregullo Tiranen për raportimin e problemeve urbane">
+    <title>Si Funksionon - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/mobile.css">
+    <link rel="stylesheet" href="../css/dark-theme.css">
+    <link rel="stylesheet" href="../css/auth-ui.css">
+    <link rel="stylesheet" href="../css/page-navigation.css">
+    <link rel="stylesheet" href="../css/how-it-works.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../images/icons/icon-192x192.png">
+
+    <!-- Theme initialization script -->
+    <script>
+        // Check for saved theme preference and apply it immediately
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-theme');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="../index.html">Rregullo Tiranen</a></h1>
+            </div>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">Ballina</a></li>
+                    <li><a href="../report.html">Raporto</a></li>
+                    <li><a href="map.html">Shiko Hartën</a></li>
+                    <li><a href="../about.html">Rreth Nesh</a></li>
+                    <li class="auth-links" id="auth-links">
+                        <a href="login.html" class="login-link">Hyrje</a>
+                        <a href="register.html" class="register-link">Regjistrim</a>
+                    </li>
+                    <li class="user-menu-container" id="user-menu-container" style="display: none;">
+                        <div class="user-menu">
+                            <button class="user-menu-toggle" id="user-menu-toggle">
+                                <div class="user-avatar">
+                                    <span class="user-initial" id="user-initial">U</span>
+                                </div>
+                                <span class="user-name" id="user-name">Përdorues</span>
+                                <span class="dropdown-icon">▼</span>
+                            </button>
+                            <div class="user-dropdown" id="user-dropdown">
+                                <ul>
+                                    <li><a href="profile.html">Profili Im</a></li>
+                                    <li><a href="notifications.html">Njoftimet</a></li>
+                                    <li><a href="#" id="logout-btn">Dilni</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="how-it-works-hero">
+            <div class="container">
+                <h1>Si Funksionon Rregullo Tiranen</h1>
+                <p class="subtitle">Udhëzues i thjeshtë për përdorimin e platformës sonë</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="page-navigation">
+                <ul>
+                    <li><a href="#overview">Përmbledhje</a></li>
+                    <li><a href="#registration">Regjistrimi</a></li>
+                    <li><a href="#reporting">Raportimi</a></li>
+                    <li><a href="#tracking">Ndjekja e Raporteve</a></li>
+                    <li><a href="#community">Komuniteti</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <section id="overview" class="how-it-works-section">
+            <div class="container">
+                <h2>Përmbledhje e Platformës</h2>
+                <div class="how-it-works-content">
+                    <div class="how-it-works-text">
+                        <p>Rregullo Tiranen është një platformë që i lejon qytetarët të raportojnë probleme urbane në Tiranë dhe të ndjekin zgjidhjen e tyre. Platforma jonë shërben si një urë lidhëse midis qytetarëve dhe autoriteteve lokale, duke mundësuar një proces më efikas dhe transparent për zgjidhjen e problemeve urbane.</p>
+                        <p>Me Rregullo Tiranen, ju mund të:</p>
+                        <ul>
+                            <li>Raportoni probleme urbane si gropa në rrugë, ndriçim të prishur, mbeturina, etj.</li>
+                            <li>Shikoni raportet e tjera në hartë dhe të mbështesni ato</li>
+                            <li>Ndiqni statusin e raporteve tuaja dhe të merrni njoftime për përditësimet</li>
+                            <li>Kontribuoni në komunitetin e qytetarëve aktivë për një Tiranë më të mirë</li>
+                        </ul>
+                    </div>
+                    <div class="how-it-works-image">
+                        <img src="../images/platform-overview.jpg" alt="Përmbledhje e platformës Rregullo Tiranen">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="registration" class="how-it-works-section">
+            <div class="container">
+                <h2>Regjistrimi dhe Hyrja</h2>
+                <div class="how-it-works-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Krijoni një llogari</h3>
+                        <p>Vizitoni faqen e regjistrimit dhe plotësoni formularin me të dhënat tuaja. Mund të regjistroheni duke përdorur emailin tuaj ose llogaritë e mediave sociale.</p>
+                        <a href="register.html" class="btn btn-primary">Regjistrohu Tani</a>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Konfirmoni emailin tuaj</h3>
+                        <p>Pas regjistrimit, do të merrni një email konfirmimi. Klikoni në lidhjen në email për të verifikuar llogarinë tuaj.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Hyni në llogarinë tuaj</h3>
+                        <p>Pas konfirmimit, mund të hyni në llogarinë tuaj duke përdorur emailin dhe fjalëkalimin që keni zgjedhur gjatë regjistrimit.</p>
+                        <a href="login.html" class="btn btn-secondary">Hyrje</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reporting" class="how-it-works-section">
+            <div class="container">
+                <h2>Raportimi i Problemeve</h2>
+                <div class="how-it-works-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Klikoni "Raporto"</h3>
+                        <p>Në faqen kryesore ose në menunë e navigimit, klikoni butonin "Raporto" për të filluar procesin e raportimit.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Zgjidhni kategorinë</h3>
+                        <p>Zgjidhni kategorinë që përshkruan më mirë problemin që dëshironi të raportoni (p.sh., infrastrukturë, mjedis, shërbime publike, etj.).</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Vendosni vendndodhjen</h3>
+                        <p>Përdorni hartën për të treguar vendndodhjen e saktë të problemit. Mund të përdorni edhe vendndodhjen tuaj aktuale ose të kërkoni një adresë.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>Përshkruani problemin</h3>
+                        <p>Jepni një përshkrim të detajuar të problemit dhe ngarkoni foto nëse është e mundur. Fotot ndihmojnë në vlerësimin e problemit.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <h3>Dërgoni raportin</h3>
+                        <p>Rishikoni të dhënat dhe klikoni "Dërgo" për të përfunduar raportimin. Do të merrni një konfirmim dhe një numër reference për raportin tuaj.</p>
+                    </div>
+                </div>
+                <div class="cta-box">
+                    <h3>Gati për të raportuar një problem?</h3>
+                    <p>Ndihmo në përmirësimin e Tiranës duke raportuar problemet urbane që vëren.</p>
+                    <a href="../report.html" class="btn btn-primary">Raporto Tani</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="tracking" class="how-it-works-section">
+            <div class="container">
+                <h2>Ndjekja e Raporteve</h2>
+                <div class="how-it-works-content">
+                    <div class="how-it-works-text">
+                        <p>Pasi keni dërguar një raport, mund të ndiqni statusin e tij dhe të merrni përditësime për progresin e zgjidhjes së problemit.</p>
+                        <h3>Si të ndiqni raportet tuaja:</h3>
+                        <ol>
+                            <li>Hyni në llogarinë tuaj</li>
+                            <li>Shkoni te "Profili Im" dhe zgjidhni seksionin "Raportet e Mia"</li>
+                            <li>Këtu do të shihni të gjitha raportet që keni dërguar dhe statusin e tyre aktual</li>
+                            <li>Klikoni në një raport për të parë detajet dhe historinë e përditësimeve</li>
+                        </ol>
+                        <h3>Statuset e raporteve:</h3>
+                        <ul>
+                            <li><strong>Në pritje</strong>: Raporti është dërguar dhe është në pritje të shqyrtimit</li>
+                            <li><strong>Në shqyrtim</strong>: Raporti është duke u shqyrtuar nga autoritetet përkatëse</li>
+                            <li><strong>Në proces</strong>: Puna për zgjidhjen e problemit ka filluar</li>
+                            <li><strong>Zgjidhur</strong>: Problemi është zgjidhur</li>
+                            <li><strong>Mbyllur</strong>: Raporti është mbyllur (me shpjegim për arsyen)</li>
+                        </ul>
+                    </div>
+                    <div class="how-it-works-image">
+                        <img src="../images/report-tracking.jpg" alt="Ndjekja e raporteve në platformën Rregullo Tiranen">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="community" class="how-it-works-section">
+            <div class="container">
+                <h2>Pjesëmarrja në Komunitet</h2>
+                <div class="how-it-works-content">
+                    <div class="how-it-works-text">
+                        <p>Rregullo Tiranen është më shumë se një platformë raportimi - është një komunitet qytetarësh aktivë që punojnë së bashku për të përmirësuar qytetin tonë.</p>
+                        <h3>Si të kontribuoni në komunitet:</h3>
+                        <ul>
+                            <li><strong>Mbështesni raportet e tjera</strong>: Klikoni "Mbështes" në raportet që mendoni se janë të rëndësishme. Raportet me më shumë mbështetje marrin më shumë vëmendje.</li>
+                            <li><strong>Komentoni dhe jepni informacion shtesë</strong>: Mund të komentoni në raportet ekzistuese për të dhënë informacion shtesë ose për të ndarë përvojën tuaj.</li>
+                            <li><strong>Ndani raportet në mediat sociale</strong>: Ndani raportet për të rritur ndërgjegjësimin dhe për të tërhequr vëmendjen ndaj problemeve të rëndësishme.</li>
+                            <li><strong>Jepni sugjerime për përmirësimin e platformës</strong>: Na ndihmoni të përmirësojmë platformën duke na dërguar sugjerime dhe komente.</li>
+                        </ul>
+                        <p>Së bashku, mund të bëjmë një ndryshim të vërtetë në Tiranë!</p>
+                    </div>
+                    <div class="how-it-works-image">
+                        <img src="../images/community.jpg" alt="Komuniteti i Rregullo Tiranen">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="container">
+                <h2>Pyetje të Shpeshta</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h3>A mund të raportoj pa u regjistruar?</h3>
+                        <p>Jo, regjistrimi është i nevojshëm për të dërguar raporte. Kjo na ndihmon të mbajmë cilësinë e raporteve dhe të komunikojmë me ju për përditësimet.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Sa kohë duhet për të zgjidhur një problem?</h3>
+                        <p>Koha e zgjidhjes varet nga natyra dhe kompleksiteti i problemit. Disa probleme mund të zgjidhen brenda disa ditëve, ndërsa të tjerat mund të kërkojnë më shumë kohë. Ju do të merrni përditësime për progresin e raportit tuaj.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Kush i shqyrton dhe zgjidh problemet e raportuara?</h3>
+                        <p>Raportet dërgohen te autoritetet përkatëse lokale, si Bashkia e Tiranës, ndërmarrjet publike, ose departamentet përkatëse, në varësi të natyrës së problemit.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>A mund të raportoj probleme anonime?</h3>
+                        <p>Jo, të gjitha raportet kërkojnë një llogari të verifikuar. Megjithatë, informacioni juaj personal nuk do të shfaqet publikisht në hartë ose në detajet e raportit.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Çfarë ndodh nëse raporti im refuzohet?</h3>
+                        <p>Nëse raporti juaj refuzohet, do të merrni një njoftim me arsyen e refuzimit. Arsyet e zakonshme përfshijnë informacion të pamjaftueshëm, raporte duplikate, ose probleme që nuk janë në juridiksionin e autoriteteve lokale.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="get-started-section">
+            <div class="container">
+                <h2>Gati për të Filluar?</h2>
+                <p>Bëhu pjesë e komunitetit Rregullo Tiranen dhe ndihmo në përmirësimin e qytetit tonë.</p>
+                <div class="cta-buttons">
+                    <a href="register.html" class="btn btn-primary">Regjistrohu Tani</a>
+                    <a href="../report.html" class="btn btn-secondary">Raporto një Problem</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="../report.html">Raporto Problem</a></li>
+                        <li><a href="map.html">Shiko Hartën</a></li>
+                        <li><a href="how-it-works.html">Si Funksionon</a></li>
+                        <li><a href="../about.html#contact">Kontakto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara. <a href="../terms.html">Kushtet e Përdorimit</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data-store.js"></script>
+    <script src="../js/auth-store.js"></script>
+    <script src="../js/api-service.js"></script>
+    <script src="../js/theme-manager.js"></script>
+    <script src="../js/auth-ui.js"></script>
+    <script src="../js/page-navigation.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/pwa.js"></script>
+</body>
+</html>

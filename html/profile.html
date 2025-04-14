@@ -24,7 +24,7 @@
             }
         })();
     </script>
-    
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -109,7 +109,7 @@
                 <button class="tab-btn" data-tab="account-settings">Cilësimet e Llogarisë</button>
                 <button class="tab-btn" data-tab="notifications">Njoftimet</button>
             </div>
-            
+
             <div class="tab-content active" id="my-reports">
                 <div class="reports-filter">
                     <div class="filter-group">
@@ -142,20 +142,20 @@
                     </div>
                     <button class="btn btn-primary" id="apply-filters">Apliko</button>
                 </div>
-                
+
                 <div class="reports-list" id="reports-list">
                     <!-- Reports will be loaded here dynamically -->
                     <div class="no-reports-message" id="no-reports-message">
                         <p>Nuk keni bërë ende asnjë raportim. <a href="../report.html">Raportoni një problem</a> për të filluar.</p>
                     </div>
                 </div>
-                
+
                 <div class="reports-map-container">
                     <h3>Raportimet e Mia në Hartë</h3>
                     <div id="user-reports-map" class="user-reports-map"></div>
                 </div>
             </div>
-            
+
             <div class="tab-content" id="account-settings">
                 <div class="settings-card">
                     <h3>Informacioni i Profilit</h3>
@@ -164,18 +164,18 @@
                             <label for="settings-fullname">Emri i Plotë</label>
                             <input type="text" id="settings-fullname" name="fullname" placeholder="Emri juaj i plotë">
                         </div>
-                        
+
                         <div class="form-field">
                             <label for="settings-email">Email</label>
                             <input type="email" id="settings-email" name="email" placeholder="Email-i juaj" readonly>
                             <small>Email-i nuk mund të ndryshohet</small>
                         </div>
-                        
+
                         <div class="form-field">
                             <label for="settings-phone">Numri i Telefonit</label>
                             <input type="tel" id="settings-phone" name="phone" placeholder="Numri juaj i telefonit">
                         </div>
-                        
+
                         <div class="form-field">
                             <label for="settings-neighborhood">Lagjja/Zona</label>
                             <select id="settings-neighborhood" name="neighborhood">
@@ -193,13 +193,13 @@
                                 <option value="njesia11">Njësia Administrative 11</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">Ruaj Ndryshimet</button>
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="settings-card">
                     <h3>Ndrysho Fjalëkalimin</h3>
                     <form id="password-form" class="settings-form">
@@ -212,7 +212,7 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="form-field">
                             <label for="new-password">Fjalëkalimi i Ri</label>
                             <div class="password-field">
@@ -228,7 +228,7 @@
                                 <span class="strength-text" id="new-strength-text">Fjalëkalimi duhet të ketë të paktën 8 karaktere</span>
                             </div>
                         </div>
-                        
+
                         <div class="form-field">
                             <label for="confirm-new-password">Konfirmoni Fjalëkalimin e Ri</label>
                             <div class="password-field">
@@ -238,23 +238,23 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">Ndrysho Fjalëkalimin</button>
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="settings-card danger-zone">
                     <h3>Zona e Rrezikut</h3>
                     <p>Kujdes: Veprimet e mëposhtme nuk mund të zhbëhen!</p>
-                    
+
                     <div class="danger-actions">
                         <button class="btn btn-danger" id="delete-account-btn">Fshij Llogarinë Time</button>
                     </div>
                 </div>
             </div>
-            
+
             <div class="tab-content" id="notifications">
                 <div class="settings-card">
                     <h3>Cilësimet e Njoftimeve</h3>
@@ -263,33 +263,33 @@
                             <input type="checkbox" id="notify-status" name="notify-status" checked>
                             <label for="notify-status">Njoftimet për ndryshimet e statusit të raportimeve</label>
                         </div>
-                        
+
                         <div class="form-field checkbox-field">
                             <input type="checkbox" id="notify-comments" name="notify-comments" checked>
                             <label for="notify-comments">Njoftimet për komente të reja në raportimet tuaja</label>
                         </div>
-                        
+
                         <div class="form-field checkbox-field">
                             <input type="checkbox" id="notify-nearby" name="notify-nearby" checked>
                             <label for="notify-nearby">Njoftimet për probleme të reja në zonën tuaj</label>
                         </div>
-                        
+
                         <div class="form-field checkbox-field">
                             <input type="checkbox" id="notify-email" name="notify-email" checked>
                             <label for="notify-email">Merrni njoftimet edhe me email</label>
                         </div>
-                        
+
                         <div class="form-field checkbox-field">
                             <input type="checkbox" id="notify-push" name="notify-push" checked>
                             <label for="notify-push">Merrni njoftime push në pajisjen tuaj</label>
                         </div>
-                        
+
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">Ruaj Cilësimet</button>
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="notifications-list">
                     <h3>Njoftimet e Fundit</h3>
                     <div id="notifications-container">
@@ -334,8 +334,8 @@
                     <ul>
                         <li><a href="../report.html">Raporto Problem</a></li>
                         <li><a href="map.html">Shiko Hartën</a></li>
-                        <li><a href="#">Si Funksionon</a></li>
-                        <li><a href="#">Kontakto</a></li>
+                        <li><a href="how-it-works.html">Si Funksionon</a></li>
+                        <li><a href="../about.html#contact">Kontakto</a></li>
                     </ul>
                 </div>
             </div>
