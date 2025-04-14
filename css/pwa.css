@@ -1,0 +1,103 @@
+/**
+ * PWA styles for Rregullo Tiranen
+ * Styles for PWA-related UI elements like install prompts
+ */
+
+.pwa-install-prompt {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+    animation: slide-up 0.3s ease;
+}
+
+.pwa-install-prompt button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pwa-install-prompt button::before {
+    content: "📱";
+    font-size: 1.2rem;
+}
+
+/* Offline indicator */
+.offline-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--color-warning);
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    font-weight: bold;
+    z-index: 1001;
+    display: none;
+}
+
+/* App installed banner */
+.app-installed-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--color-success);
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    font-weight: bold;
+    z-index: 1001;
+    display: none;
+    animation: slide-down 0.3s ease;
+}
+
+/* Animations */
+@keyframes slide-up {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Dark theme styles */
+:root.dark-theme .pwa-install-prompt {
+    background-color: var(--color-card-bg-dark);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .pwa-install-prompt {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        text-align: center;
+    }
+    
+    .pwa-install-prompt button {
+        width: 100%;
+        justify-content: center;
+    }
+}
