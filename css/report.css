@@ -18,6 +18,7 @@
 
 .report-form-section {
     padding: var(--spacing-medium) 0 var(--spacing-large);
+    scroll-margin-top: 80px;
 }
 
 .report-form {

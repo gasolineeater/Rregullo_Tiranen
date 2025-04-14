@@ -27,6 +27,7 @@
 .about-mission {
     padding: 4rem 0;
     background-color: var(--color-background);
+    scroll-margin-top: 80px;
 }
 
 .mission-content {
@@ -62,6 +63,7 @@
 .about-founders {
     padding: 4rem 0;
     background-color: var(--color-card-bg);
+    scroll-margin-top: 80px;
 }
 
 .founders-grid {
@@ -162,6 +164,7 @@
 .about-story {
     padding: 4rem 0;
     background-color: var(--color-background);
+    scroll-margin-top: 80px;
 }
 
 .story-content {
@@ -178,6 +181,7 @@
 .about-values {
     padding: 4rem 0;
     background-color: var(--color-card-bg);
+    scroll-margin-top: 80px;
 }
 
 .values-grid {
@@ -219,6 +223,7 @@
 .about-contact {
     padding: 4rem 0;
     background-color: var(--color-background);
+    scroll-margin-top: 80px;
 }
 
 /* Dark theme specific styles for contact form button */
