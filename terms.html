@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C41E3A">
+    <meta name="description" content="Kushtet e përdorimit dhe politika e privatësisë për platformën Rregullo Tiranen">
+    <title>Kushtet e Përdorimit - Rregullo Tiranen</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="css/auth-ui.css">
+    <link rel="stylesheet" href="css/terms.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
+
+    <!-- Theme initialization script -->
+    <script>
+        // Check for saved theme preference and apply it immediately
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-theme');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Rregullo Tiranen</h1>
+            </div>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Ballina</a></li>
+                    <li><a href="report.html">Raporto</a></li>
+                    <li><a href="html/map.html">Shiko Hartën</a></li>
+                    <li><a href="about.html">Rreth Nesh</a></li>
+                    <li class="auth-links" id="auth-links">
+                        <a href="html/login.html" class="login-link">Hyrje</a>
+                        <a href="html/register.html" class="register-link">Regjistrim</a>
+                    </li>
+                    <li class="user-menu-container" id="user-menu-container" style="display: none;">
+                        <div class="user-menu">
+                            <button class="user-menu-toggle" id="user-menu-toggle">
+                                <div class="user-avatar">
+                                    <span class="user-initial" id="user-initial">U</span>
+                                </div>
+                                <span class="user-name" id="user-name">Përdorues</span>
+                                <span class="dropdown-icon">▼</span>
+                            </button>
+                            <div class="user-dropdown" id="user-dropdown">
+                                <ul>
+                                    <li><a href="html/profile.html">Profili Im</a></li>
+                                    <li><a href="html/notifications.html">Njoftimet</a></li>
+                                    <li><a href="#" id="logout-btn">Dilni</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="icon">🌓</span>
+                    <span class="theme-label">Ndryshoni Temen</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="terms-container">
+        <div class="container">
+            <div class="terms-header">
+                <h1>Kushtet e Përdorimit dhe Politika e Privatësisë</h1>
+                <p class="last-updated">Përditësuar më: 1 Qershor 2025</p>
+            </div>
+
+            <div class="terms-navigation">
+                <ul>
+                    <li><a href="#terms-of-service">Kushtet e Përdorimit</a></li>
+                    <li><a href="#privacy-policy">Politika e Privatësisë</a></li>
+                    <li><a href="#data-collection">Mbledhja e të Dhënave</a></li>
+                    <li><a href="#user-rights">Të Drejtat e Përdoruesit</a></li>
+                    <li><a href="#contact-info">Informacioni i Kontaktit</a></li>
+                </ul>
+            </div>
+
+            <section id="terms-of-service" class="terms-section">
+                <h2>Kushtet e Përdorimit</h2>
+                
+                <div class="terms-content">
+                    <h3>1. Pranimi i Kushteve</h3>
+                    <p>Duke përdorur platformën "Rregullo Tiranen", ju pranoni të respektoni këto kushte përdorimi. Nëse nuk jeni dakord me ndonjë pjesë të këtyre kushteve, ju lutemi të mos e përdorni platformën tonë.</p>
+                    
+                    <h3>2. Përshkrimi i Shërbimit</h3>
+                    <p>"Rregullo Tiranen" është një platformë që mundëson raportimin e problemeve urbane në qytetin e Tiranës. Platforma lejon përdoruesit të raportojnë probleme të ndryshme infrastrukturore, mjedisore dhe të shërbimeve publike, me qëllim përmirësimin e cilësisë së jetës në qytet.</p>
+                    
+                    <h3>3. Regjistrimi dhe Llogaritë e Përdoruesve</h3>
+                    <p>Për të përdorur disa funksione të platformës, mund t'ju kërkohet të krijoni një llogari. Ju jeni përgjegjës për ruajtjen e konfidencialitetit të llogarisë dhe fjalëkalimit tuaj, si dhe për të gjitha aktivitetet që ndodhin nën llogarinë tuaj. Ju duhet të na njoftoni menjëherë për çdo përdorim të paautorizuar të llogarisë suaj.</p>
+                    
+                    <h3>4. Përmbajtja e Përdoruesit</h3>
+                    <p>Duke dërguar përmbajtje në platformën tonë (përfshirë raportet, komentet, fotot), ju i jepni "Rregullo Tiranen" një licencë jo-ekskluzive, të transferueshme, pa honorare, të nënlicencueshme, për të përdorur, riprodhuar, modifikuar, përshtatur, publikuar, transmetuar, shfaqur dhe shpërndarë përmbajtjen në çdo media dhe përmes çdo kanali mediatik.</p>
+                    
+                    <h3>5. Sjellja e Përdoruesit</h3>
+                    <p>Ju pranoni të mos përdorni platformën për qëllime të paligjshme ose të ndaluara nga këto kushte. Ju nuk do të përdorni platformën në asnjë mënyrë që mund të dëmtojë, çaktivizojë, mbingarkojë ose dëmtojë platformën, ose të ndërhyjë në përdorimin dhe gëzimin e platformës nga ndonjë palë tjetër.</p>
+                    
+                    <h3>6. Përmbajtja e Ndaluar</h3>
+                    <p>Ju nuk mund të postoni përmbajtje që:</p>
+                    <ul>
+                        <li>Është e paligjshme, kërcënuese, abuzive, ngacmuese, shpifëse, vulgare, obscene, pornografike, ose që shkel privatësinë e një pale të tretë</li>
+                        <li>Përbën ose inkurajon një vepër penale, shkel të drejtat e ndonjë pale, ose përndryshe krijon përgjegjësi ose shkel ndonjë ligj</li>
+                        <li>Përmban softuer virus ose ndonjë kod kompjuterik, skedar ose program që është projektuar për të ndërprerë, shkatërruar ose kufizuar funksionalitetin e ndonjë softueri ose hardueri kompjuterik</li>
+                        <li>Përmban reklama ose kërkesa për biznes</li>
+                    </ul>
+                    
+                    <h3>7. Ndryshimet në Shërbim</h3>
+                    <p>"Rregullo Tiranen" rezervon të drejtën të modifikojë ose ndërpresë, përkohësisht ose përgjithmonë, shërbimin (ose ndonjë pjesë të tij) me ose pa njoftim. Ju pranoni që "Rregullo Tiranen" nuk do të jetë përgjegjëse ndaj jush ose ndonjë pale të tretë për ndonjë modifikim, pezullim ose ndërprerje të shërbimit.</p>
+                    
+                    <h3>8. Përfundimi</h3>
+                    <p>"Rregullo Tiranen" mund të përfundojë ose pezullojë qasjen tuaj në platformë menjëherë, pa njoftim paraprak ose përgjegjësi, për çdo arsye, përfshirë, pa kufizim, nëse shkelni Kushtet e Përdorimit. Të gjitha dispozitat e Kushteve të Përdorimit që nga natyra e tyre duhet të mbijetojnë përfundimin do të mbijetojnë përfundimin, përfshirë, pa kufizim, dispozitat e pronësisë, heqjet e garancisë, dëmshpërblimin dhe kufizimet e përgjegjësisë.</p>
+                    
+                    <h3>9. Ndryshimet në Kushtet e Përdorimit</h3>
+                    <p>"Rregullo Tiranen" rezervon të drejtën, sipas gjykimit të saj, të përditësojë, ndryshojë ose zëvendësojë çdo pjesë të këtyre Kushteve të Përdorimit duke postuar përditësime dhe ndryshime në platformën tonë. Është përgjegjësia juaj të kontrolloni platformën tonë periodikisht për ndryshime. Përdorimi i vazhdueshëm i platformës pas postimit të ndryshimeve në këto Kushte Përdorimi përbën pranimin tuaj të këtyre ndryshimeve.</p>
+                </div>
+            </section>
+
+            <section id="privacy-policy" class="terms-section">
+                <h2>Politika e Privatësisë</h2>
+                
+                <div class="terms-content">
+                    <h3>1. Hyrje</h3>
+                    <p>Kjo Politikë Privatësie përshkruan se si "Rregullo Tiranen" mbledh, përdor dhe shpalos informacionin tuaj personal kur përdorni platformën tonë. Duke përdorur platformën, ju pranoni praktikat e përshkruara në këtë politikë.</p>
+                    
+                    <h3>2. Informacioni që Mbledhim</h3>
+                    <p>Ne mbledhim disa lloje informacioni nga dhe për përdoruesit e platformës sonë, duke përfshirë:</p>
+                    <ul>
+                        <li><strong>Informacion personal</strong>: Emri, adresa e email-it, numri i telefonit, dhe informacione të tjera që ju zgjidhni të na jepni gjatë regjistrimit ose kur raportoni një problem.</li>
+                        <li><strong>Informacion i vendndodhjes</strong>: Kur raportoni një problem, ne mbledhim të dhëna të vendndodhjes për të identifikuar vendndodhjen e problemit të raportuar.</li>
+                        <li><strong>Përmbajtje e përdoruesit</strong>: Fotot, përshkrimet dhe komentet që ju postoni në platformë.</li>
+                        <li><strong>Informacion i pajisjes</strong>: Informacion për pajisjen dhe lidhjen tuaj të internetit, përfshirë adresën tuaj IP, sistemin operativ, dhe llojin e shfletuesit.</li>
+                        <li><strong>Informacion i përdorimit</strong>: Informacion për se si përdorni platformën tonë, si faqet që vizitoni dhe kohën që kaloni në to.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="data-collection" class="terms-section">
+                <h2>Mbledhja e të Dhënave</h2>
+                
+                <div class="terms-content">
+                    <h3>1. Si Mbledhim Informacionin</h3>
+                    <p>Ne mbledhim informacion në disa mënyra:</p>
+                    <ul>
+                        <li><strong>Informacion që ju na jepni</strong>: Kur regjistroheni, raportoni një problem, ose komunikoni me ne.</li>
+                        <li><strong>Informacion automatik</strong>: Kur përdorni platformën tonë, ne mbledhim automatikisht informacion për pajisjen dhe përdorimin tuaj.</li>
+                        <li><strong>Cookies dhe teknologji të ngjashme</strong>: Ne përdorim cookies dhe teknologji të ngjashme për të mbledhur informacion për aktivitetin tuaj në platformën tonë.</li>
+                    </ul>
+                    
+                    <h3>2. Si Përdorim Informacionin</h3>
+                    <p>Ne përdorim informacionin që mbledhim për:</p>
+                    <ul>
+                        <li>Të ofruar, mirëmbajtur dhe përmirësuar platformën tonë</li>
+                        <li>Të përpunuar raportet e problemeve dhe t'i dërguar ato tek autoritetet përkatëse</li>
+                        <li>Të komunikuar me ju, përfshirë dërgimin e njoftimeve për përditësimet e raporteve tuaja</li>
+                        <li>Të personalizuar përvojën tuaj në platformë</li>
+                        <li>Të analizuar se si përdoruesit përdorin platformën tonë</li>
+                        <li>Të zbuluar, parandaluar dhe adresuar aktivitetet mashtruese, të paligjshme ose problematike</li>
+                    </ul>
+                    
+                    <h3>3. Shpalosja e Informacionit</h3>
+                    <p>Ne mund të ndajmë informacionin tuaj me:</p>
+                    <ul>
+                        <li><strong>Autoritetet lokale</strong>: Për të adresuar problemet e raportuara</li>
+                        <li><strong>Ofruesit e shërbimeve</strong>: Kompanitë që na ndihmojnë të ofrojmë shërbimin tonë</li>
+                        <li><strong>Partnerët</strong>: Organizatat që bashkëpunojnë me ne për të përmirësuar qytetin</li>
+                        <li><strong>Për të përmbushur ligjin</strong>: Kur besojmë se zbulimi është i nevojshëm për të përmbushur një detyrim ligjor</li>
+                        <li><strong>Me pëlqimin tuaj</strong>: Në raste të tjera kur kemi pëlqimin tuaj për ta bërë këtë</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="user-rights" class="terms-section">
+                <h2>Të Drejtat e Përdoruesit</h2>
+                
+                <div class="terms-content">
+                    <h3>1. Të Drejtat Tuaja</h3>
+                    <p>Në varësi të ligjeve të zbatueshme, ju mund të keni të drejtat e mëposhtme në lidhje me të dhënat tuaja personale:</p>
+                    <ul>
+                        <li><strong>E drejta për qasje</strong>: Ju mund të kërkoni një kopje të informacionit personal që mbajmë për ju.</li>
+                        <li><strong>E drejta për korrigjim</strong>: Ju mund të kërkoni që ne të korrigjojmë informacionin e pasaktë ose të paplotë që mbajmë për ju.</li>
+                        <li><strong>E drejta për fshirje</strong>: Ju mund të kërkoni që ne të fshijmë informacionin tuaj personal në rrethana të caktuara.</li>
+                        <li><strong>E drejta për të kufizuar përpunimin</strong>: Ju mund të kërkoni që ne të kufizojmë përpunimin e informacionit tuaj personal në rrethana të caktuara.</li>
+                        <li><strong>E drejta për portabilitetin e të dhënave</strong>: Ju mund të kërkoni një kopje të strukturuar, të përdorshme dhe të lexueshme nga makina të informacionit tuaj personal.</li>
+                        <li><strong>E drejta për të kundërshtuar</strong>: Ju mund të kundërshtoni përpunimin e informacionit tuaj personal në rrethana të caktuara.</li>
+                    </ul>
+                    
+                    <h3>2. Si të Ushtroni të Drejtat Tuaja</h3>
+                    <p>Për të ushtruar ndonjë nga të drejtat tuaja, ju lutemi na kontaktoni duke përdorur informacionin e kontaktit të dhënë më poshtë. Ne do të përpiqemi t'i përgjigjemi kërkesave tuaja brenda 30 ditëve.</p>
+                    
+                    <h3>3. Ruajtja e të Dhënave</h3>
+                    <p>Ne do të ruajmë informacionin tuaj personal për aq kohë sa është e nevojshme për qëllimet e përcaktuara në këtë Politikë Privatësie, përveç nëse kërkohet ose lejohet një periudhë më e gjatë ruajtjeje nga ligji.</p>
+                    
+                    <h3>4. Siguria e të Dhënave</h3>
+                    <p>Ne përdorim masa të arsyeshme organizative, teknike dhe administrative për të mbrojtur informacionin personal nën kontrollin tonë. Megjithatë, asnjë transmetim elektronik ose sistem ruajtjeje i të dhënave nuk mund të garantohet të jetë 100% i sigurt.</p>
+                </div>
+            </section>
+
+            <section id="contact-info" class="terms-section">
+                <h2>Informacioni i Kontaktit</h2>
+                
+                <div class="terms-content">
+                    <p>Nëse keni pyetje ose shqetësime në lidhje me Kushtet e Përdorimit ose Politikën e Privatësisë, ju lutemi na kontaktoni:</p>
+                    
+                    <div class="contact-details">
+                        <p><strong>Rregullo Tiranen</strong></p>
+                        <p>Email: info@rregullotiranen.al</p>
+                        <p>Telefon: +355 69 123 4567</p>
+                        <p>Adresa: Rruga "Myslym Shyri", Nr. 10, Tiranë, Shqipëri</p>
+                    </div>
+                    
+                    <div class="terms-acceptance">
+                        <p>Duke përdorur platformën "Rregullo Tiranen", ju konfirmoni se keni lexuar, kuptuar dhe pranuar këto Kushte Përdorimi dhe Politikë Privatësie.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Rregullo Tiranen</h3>
+                    <p>Një iniciativë qytetare për përmirësimin e Tiranës</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Lidhje të Shpejta</h4>
+                    <ul>
+                        <li><a href="report.html">Raporto Problem</a></li>
+                        <li><a href="html/map.html">Shiko Hartën</a></li>
+                        <li><a href="about.html">Rreth Nesh</a></li>
+                        <li><a href="about.html#contact">Kontakto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Rregullo Tiranen. Të gjitha të drejtat e rezervuara. <a href="terms.html">Kushtet e Përdorimit</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data-store.js"></script>
+    <script src="js/auth-store.js"></script>
+    <script src="js/api-service.js"></script>
+    <script src="js/theme-manager.js"></script>
+    <script src="js/auth-ui.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/pwa.js"></script>
+</body>
+</html>

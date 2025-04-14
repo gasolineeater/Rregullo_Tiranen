@@ -1,0 +1,161 @@
+/**
+ * Terms of Service and Privacy Policy styles for Rregullo Tiranen
+ */
+
+.terms-container {
+    padding: 2rem 0 4rem;
+}
+
+.terms-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.terms-header h1 {
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.last-updated {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    font-style: italic;
+}
+
+.terms-navigation {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 20px;
+    z-index: 10;
+}
+
+.terms-navigation ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.terms-navigation a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.terms-navigation a:hover {
+    background-color: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+}
+
+.terms-section {
+    margin-bottom: 3rem;
+    scroll-margin-top: 100px;
+}
+
+.terms-section h2 {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.terms-content {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.terms-content h3 {
+    font-size: 1.3rem;
+    color: var(--color-heading);
+    margin: 1.5rem 0 1rem;
+}
+
+.terms-content h3:first-child {
+    margin-top: 0;
+}
+
+.terms-content p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.terms-content ul {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.terms-content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.contact-details {
+    background-color: rgba(var(--color-primary-rgb), 0.05);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.contact-details p {
+    margin-bottom: 0.5rem;
+}
+
+.terms-acceptance {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    font-weight: 600;
+}
+
+/* Dark theme specific styles */
+:root.dark-theme .terms-navigation {
+    background-color: var(--color-card-bg-dark);
+}
+
+:root.dark-theme .terms-content {
+    background-color: var(--color-card-bg-dark);
+}
+
+:root.dark-theme .contact-details {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .terms-navigation {
+        position: static;
+        margin-bottom: 1.5rem;
+    }
+    
+    .terms-navigation ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .terms-content {
+        padding: 1.5rem;
+    }
+    
+    .terms-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .terms-content h3 {
+        font-size: 1.2rem;
+    }
+}
