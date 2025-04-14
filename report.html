@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="stylesheet" href="css/dark-theme.css">
     <link rel="stylesheet" href="css/auth-ui.css">
+    <link rel="stylesheet" href="css/page-navigation.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
@@ -97,7 +98,19 @@
         </div>
     </section>
 
-    <section class="report-form-section">
+    <div class="container">
+        <div class="page-navigation">
+            <ul>
+                <li><a href="#report-form">Formular Raportimi</a></li>
+                <li><a href="#report-guidelines">Udhëzime</a></li>
+                <li><a href="#report-types">Llojet e Raportimeve</a></li>
+                <li><a href="#report-status">Statusi i Raportimeve</a></li>
+                <li><a href="html/map.html">Shiko Hartën</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <section id="report-form" class="report-form-section">
         <div class="container">
             <form id="issue-report-form" class="report-form">
                 <div class="form-group">
@@ -257,6 +270,7 @@
     <script src="js/api-service.js"></script>
     <script src="js/theme-manager.js"></script>
     <script src="js/auth-ui.js"></script>
+    <script src="js/page-navigation.js"></script>
     <script src="js/main.js"></script>
     <script src="js/report.js"></script>
     <script src="js/pwa.js"></script>
