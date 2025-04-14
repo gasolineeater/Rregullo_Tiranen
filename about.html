@@ -6,12 +6,28 @@
     <meta name="description" content="Rreth nesh - Rregullo Tiranen, platforma për raportimin e problemeve urbane në Tiranë">
     <meta name="theme-color" content="#C41E3A">
     <title>Rreth Nesh - Rregullo Tiranen</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/about.css">
-    <link rel="stylesheet" href="css/mobile.css">
-    <link rel="stylesheet" href="css/dark-theme.css">
-    <link rel="stylesheet" href="css/auth-ui.css">
-    <link rel="stylesheet" href="css/page-navigation.css">
+    <!-- Critical CSS inlined for faster page load -->
+    <style>
+        @import url('css/critical.css');
+    </style>
+
+    <!-- Non-critical CSS loaded asynchronously -->
+    <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/about.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/dark-theme.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/auth-ui.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/page-navigation.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+    <!-- Fallback for browsers that don't support preload -->
+    <noscript>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/about.css">
+        <link rel="stylesheet" href="css/mobile.css">
+        <link rel="stylesheet" href="css/dark-theme.css">
+        <link rel="stylesheet" href="css/auth-ui.css">
+        <link rel="stylesheet" href="css/page-navigation.css">
+    </noscript>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
@@ -26,6 +42,9 @@
             }
         })();
     </script>
+
+    <!-- CSS Loader script -->
+    <script src="js/css-loader.js"></script>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -111,7 +130,15 @@
                         <p>Ne angazhohemi për transparencë, bashkëpunim dhe zgjidhje efektive të problemeve urbane. Besojmë se teknologjia mund të jetë një mjet i fuqishëm për ndryshim pozitiv në komunitet.</p>
                     </div>
                     <div class="mission-image">
-                        <img src="images/mission.jpg" alt="Pamje e Tiranës">
+                        <img src="images/mission.jpg"
+                             srcset="images/responsive/mission-400.jpg 400w,
+                                     images/responsive/mission-800.jpg 800w,
+                                     images/responsive/mission-1200.jpg 1200w"
+                             sizes="(max-width: 600px) 400px,
+                                    (max-width: 1200px) 800px,
+                                    1200px"
+                             alt="Pamje e Tiranës"
+                             loading="eager">
                     </div>
                 </div>
             </div>
@@ -123,7 +150,13 @@
                 <div class="founders-grid">
                     <div class="founder-card">
                         <div class="founder-image">
-                            <img src="images/founder-maria.jpg" alt="Maria Kacani">
+                            <img src="images/founder-maria.jpg"
+                                 srcset="images/responsive/founder-maria-150.jpg 150w,
+                                         images/responsive/founder-maria-300.jpg 300w"
+                                 sizes="(max-width: 600px) 150px,
+                                        300px"
+                                 alt="Maria Kacani"
+                                 loading="lazy">
                         </div>
                         <div class="founder-info">
                             <h3>Maria Kacani</h3>
@@ -138,7 +171,13 @@
 
                     <div class="founder-card">
                         <div class="founder-image">
-                            <img src="images/founder-eliza.jpg" alt="Eliza Cepi">
+                            <img src="images/founder-eliza.jpg"
+                                 srcset="images/responsive/founder-eliza-150.jpg 150w,
+                                         images/responsive/founder-eliza-300.jpg 300w"
+                                 sizes="(max-width: 600px) 150px,
+                                        300px"
+                                 alt="Eliza Cepi"
+                                 loading="lazy">
                         </div>
                         <div class="founder-info">
                             <h3>Eliza Cepi</h3>
@@ -270,6 +309,7 @@
     <script src="js/auth-ui.js"></script>
     <script src="js/page-navigation.js"></script>
     <script src="js/image-handler.js"></script>
+    <script src="js/image-lazy-loader.js"></script>
     <script src="js/about.js"></script>
     <script src="js/main.js"></script>
     <script src="js/pwa.js"></script>

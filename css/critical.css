@@ -1,0 +1,152 @@
+/**
+ * Critical CSS for Rregullo Tiranen
+ * Contains the minimal CSS needed for the initial render of the page
+ */
+
+/* Base styles */
+:root {
+    --color-primary: #C41E3A;
+    --color-primary-rgb: 196, 30, 58;
+    --color-primary-dark: #A01930;
+    --color-secondary: #2C3E50;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-background: #F5F5F5;
+    --color-card-bg: #FFFFFF;
+    --color-border: #E0E0E0;
+    --color-success: #27AE60;
+    --color-warning: #F39C12;
+    --color-danger: #E74C3C;
+    --color-info: #3498DB;
+    
+    /* Dark theme variables */
+    --color-text-dark: #E0E0E0;
+    --color-text-light-dark: #AAAAAA;
+    --color-background-dark: #121212;
+    --color-card-bg-dark: #1E1E1E;
+    --color-border-dark: #333333;
+    
+    /* Spacing */
+    --spacing-small: 0.5rem;
+    --spacing-medium: 1rem;
+    --spacing-large: 2rem;
+    --spacing-xlarge: 4rem;
+    
+    /* Border radius */
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 16px;
+    
+    /* Transitions */
+    --transition-fast: 0.2s;
+    --transition-medium: 0.3s;
+    --transition-slow: 0.5s;
+}
+
+/* Base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-medium);
+}
+
+/* Header */
+.main-header {
+    background-color: var(--color-card-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 100;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-medium) var(--spacing-medium);
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.logo h1 a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+/* Mobile menu toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 101;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    margin: 5px 0;
+    background-color: var(--color-primary);
+    transition: all 0.3s ease;
+}
+
+/* Dark theme styles */
+:root.dark-theme {
+    color-scheme: dark;
+}
+
+:root.dark-theme body {
+    color: var(--color-text-dark);
+    background-color: var(--color-background-dark);
+}
+
+:root.dark-theme .main-header {
+    background-color: var(--color-card-bg-dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .main-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: var(--color-card-bg);
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 100;
+        padding: 5rem 1.5rem 1.5rem;
+        overflow-y: auto;
+    }
+    
+    .main-nav.active {
+        right: 0;
+    }
+}

@@ -110,7 +110,13 @@
                         </ul>
                     </div>
                     <div class="how-it-works-image">
-                        <img src="../images/platform-overview.jpg" alt="Përmbledhje e platformës Rregullo Tiranen">
+                        <img src="../images/platform-overview.jpg"
+                             srcset="../images/responsive/platform-overview-400.jpg 400w,
+                                     ../images/responsive/platform-overview-800.jpg 800w"
+                             sizes="(max-width: 600px) 400px,
+                                    800px"
+                             alt="Përmbledhje e platformës Rregullo Tiranen"
+                             loading="eager">
                     </div>
                 </div>
             </div>
@@ -202,7 +208,13 @@
                         </ul>
                     </div>
                     <div class="how-it-works-image">
-                        <img src="../images/report-tracking.jpg" alt="Ndjekja e raporteve në platformën Rregullo Tiranen">
+                        <img src="../images/report-tracking.jpg"
+                             srcset="../images/responsive/report-tracking-400.jpg 400w,
+                                     ../images/responsive/report-tracking-800.jpg 800w"
+                             sizes="(max-width: 600px) 400px,
+                                    800px"
+                             alt="Ndjekja e raporteve në platformën Rregullo Tiranen"
+                             loading="lazy">
                     </div>
                 </div>
             </div>
@@ -224,7 +236,13 @@
                         <p>Së bashku, mund të bëjmë një ndryshim të vërtetë në Tiranë!</p>
                     </div>
                     <div class="how-it-works-image">
-                        <img src="../images/community.jpg" alt="Komuniteti i Rregullo Tiranen">
+                        <img src="../images/community.jpg"
+                             srcset="../images/responsive/community-400.jpg 400w,
+                                     ../images/responsive/community-800.jpg 800w"
+                             sizes="(max-width: 600px) 400px,
+                                    800px"
+                             alt="Komuniteti i Rregullo Tiranen"
+                             loading="lazy">
                     </div>
                 </div>
             </div>
@@ -299,6 +317,7 @@
     <script src="../js/theme-manager.js"></script>
     <script src="../js/auth-ui.js"></script>
     <script src="../js/page-navigation.js"></script>
+    <script src="../js/image-lazy-loader.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/pwa.js"></script>
 </body>
